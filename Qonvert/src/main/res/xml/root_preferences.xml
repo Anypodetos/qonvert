@@ -1,0 +1,101 @@
+<!--
+Copyright 2020 Anypodetos (Michael Weber)
+
+This file is part of Qonvert.
+
+Qonvert is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Qonvert is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Qonvert. If not, see <https://www.gnu.org/licenses/>.
+
+Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
+-->
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:iconSpaceReserved="false">
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/out_header">
+
+        <ListPreference
+            app:defaultValue="300"
+            app:entries="@array/digits_entries"
+            app:entryValues="@array/digits_values"
+            app:iconSpaceReserved="false"
+            app:key="digits"
+            app:persistent="true"
+            app:title="@string/digits_title"
+            app:useSimpleSummaryProvider="true" />
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="group"
+            android:summary="@string/group_hint"
+            android:title="@string/group_title"
+            app:iconSpaceReserved="false" />
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="lowercase"
+            android:title="@string/lowercase_title"
+            app:iconSpaceReserved="false" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/feedback_header">
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="range"
+            android:title="@string/range_title"
+            app:iconSpaceReserved="false" />
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="wrongDigits"
+            android:summary="@string/wrongDigits_hint"
+            android:title="@string/wrongDigits_title"
+            app:iconSpaceReserved="false" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/appearance_header">
+
+        <MultiSelectListPreference
+            app:defaultValue="@array/buttons_def_values"
+            app:entries="@array/buttons_entries"
+            app:entryValues="@array/buttons_values"
+            app:iconSpaceReserved="false"
+            app:key="buttons"
+            app:title="@string/buttons_title" />
+        <ListPreference
+            app:defaultValue="20"
+            app:entries="@array/size_entries"
+            app:entryValues="@array/size_values"
+            app:iconSpaceReserved="false"
+            app:key="size"
+            app:title="@string/size_title"
+            app:useSimpleSummaryProvider="true" />
+        <ListPreference
+            app:defaultValue="LA"
+            app:entries="@array/theme_entries"
+            app:entryValues="@array/theme_values"
+            app:iconSpaceReserved="false"
+            app:key="theme"
+            app:title="@string/theme_title"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

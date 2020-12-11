@@ -1,0 +1,106 @@
+<!--
+Copyright 2020 Anypodetos (Michael Weber)
+
+This file is part of Qonvert.
+
+Qonvert is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Qonvert is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Qonvert. If not, see <https://www.gnu.org/licenses/>.
+
+Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
+-->
+
+<resources>
+    <string-array name="base_inout">
+        <item>in</item>
+        <item>out</item>
+    </string-array>
+
+    <string-array name="digits_entries">
+        <item>10</item>
+        <item>30</item>
+        <item>100</item>
+        <item>300</item>
+        <item>1000</item>
+        <item>3000 (may be slow)</item>
+        <item>10000 (may freeze the app)</item>
+    </string-array>
+    <string-array name="digits_values">
+        <item>10</item>
+        <item>30</item>
+        <item>100</item>
+        <item>300</item>
+        <item>1000</item>
+        <item>3000</item>
+        <item>10000</item>
+    </string-array>
+
+    <string-array name="buttons_entries">
+        <item>binary (2)</item>
+        <item>ternary (3)</item>
+        <item>senary (6)</item>
+        <item>octal (8)</item>
+        <item>decimal (10)</item>
+        <item>dozenal (12)</item>
+        <item>hexadecimal (16)</item>
+        <item>vigesimal (20)</item>
+    </string-array>
+    <string-array name="buttons_values">
+        <item>2</item>
+        <item>3</item>
+        <item>6</item>
+        <item>8</item>
+        <item>10</item>
+        <item>12</item>
+        <item>16</item>
+        <item>20</item>
+    </string-array>
+    <string-array name="buttons_def_values">
+        <item>2</item>
+        <item>8</item>
+        <item>10</item>
+        <item>12</item>
+        <item>16</item>
+    </string-array>
+
+    <string-array name="size_entries">
+        <item>Tiny</item>
+        <item>Small</item>
+        <item>Medium</item>
+        <item>Large</item>
+        <item>Huge</item>
+    </string-array>
+    <string-array name="size_values">
+        <item>10</item>
+        <item>14</item>
+        <item>20</item>
+        <item>28</item>
+        <item>40</item>
+    </string-array>
+
+    <string-array name="theme_entries">
+        <item>Light</item>
+        <item>Dark</item>
+        <item>System</item>
+<!--        <item>Light blue</item>
+        <item>Dark blue</item>
+        <item>System blue</item>-->
+    </string-array>
+    <string-array name="theme_values">
+        <item>LA</item>
+        <item>DA</item>
+        <item>SA</item>
+<!--        <item>LB</item>
+        <item>DB</item>
+        <item>SB</item>-->
+    </string-array>
+</resources>

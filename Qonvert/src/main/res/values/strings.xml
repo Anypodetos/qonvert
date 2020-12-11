@@ -1,0 +1,221 @@
+<!--
+Copyright 2020 Anypodetos (Michael Weber)
+
+This file is part of Qonvert.
+
+Qonvert is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Qonvert is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Qonvert. If not, see <https://www.gnu.org/licenses/>.
+
+Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
+-->
+
+<resources>
+    <string name="app_name">Qonvert</string>
+
+    <!-- Main view -->
+    <string name="b2">bin</string>
+    <string name="b3">ter</string>
+    <string name="b6">sen</string>
+    <string name="b8">oct</string>
+    <string name="b10">dec</string>
+    <string name="b12">doz</string>
+    <string name="b16">hex</string>
+    <string name="b20">vig</string>
+
+    <string name="complement">base’s complement</string>
+    <string name="balanced">balanced</string>
+    <string name="edit_hint">type a number ∈ ℚ</string>
+    <string name="clear_hint">clear input</string>
+    <string name="base">%1$s: base %2$d</string>
+    <string name="range_toast">%1$s: digit range %2$s..%3$s</string>
+    <string name="to_clipboard">Copied to clipboard</string>
+    <string name="to_fraction">Converted to fraction to preserve precision</string>
+
+    <string name="err_quote">only at start of input, please</string>
+    <string name="err_bracket">only around continued fraction, please</string>
+    <string name="err_semicolon">in continued fraction only once and before any commas, please</string>
+    <string name="err_comma">in continued fraction only after \";\", please</string>
+    <string name="err_underscore">in mixed number only once and before \"/\", please</string>
+    <string name="err_slash">in fraction only once, please</string>
+    <string name="err_twoPoints">– the radix point – only once, please</string>
+    <string name="err_twoReps">– the repetition mark – only once, please</string>
+    <string name="err_baseToken">only at start of number, please</string>
+    <string name="err_infinity">[Those having problems with infinities] aren’t nearly appreciative enough of projective geometry. (Grant Sanderson)</string>
+    <string name="err_undefined">Does your input have Buddha-nature?</string>
+    <string name="err_generic">isn’t a valid character</string>
+
+    <string name="menu_history">History</string>
+    <string name="no_history">The history is empty. Type a number and tap Enter, or delete it with the “🗑” button, to store it here.</string>
+    <string name="clear_history">Clear history</string>
+    <string name="clear_history_q">Clear the history?</string>
+    <string name="menu_settings">Settings</string>
+    <string name="menu_interval">Play interval</string>
+    <string name="no_interval">Number must be in the range\n1/%1$s..%1$s</string>
+    <string name="menu_help">Help</string>
+    <string name="menu_about">About &amp; Licenses</string>
+    <string name="title_about">About</string>
+
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="close">Close</string>
+
+    <string name="logo_hint">The Qonvert logo is a dashing version of ℚ, the symbol for the set of rational numbers.</string>
+    <string name="back_hint">Go back</string>
+
+    <!-- Preferences -->
+    <string name="out_header">Output</string>
+    <string name="digits_title">Maximum digits in fractional part</string>
+    <string name="group_title">Group digits</string>
+    <string name="group_hint">by 4 in bases 2, 4, 8, 16, 32, else by 3</string>
+    <string name="lowercase_title">Lower case digits</string>
+
+    <string name="feedback_header">Feedback</string>
+    <string name="range_title">Show digit range on base change</string>
+    <string name="wrongDigits_title">Warn on non-standard digit</string>
+    <string name="wrongDigits_hint">turns input orange if a digit is out of range</string>
+
+    <string name="appearance_header">Appearance</string>
+    <string name="buttons_title">Show base buttons</string>
+    <string name="size_title">Text size</string>
+    <string name="theme_title">Theme</string>
+
+    <!-- CSS -->
+    <string name="css"><![CDATA[
+<style>
+    body {padding-top: 1.5em}
+    h2 {border-radius: 0.2em; background: rgb(224, 224, 224); font-family: serif}
+    a {color: rgb(224, 83, 0)} /* orange_light */
+    code {border: 1px solid rgb(224, 224, 224); border-bottom-color: rgb(224, 83, 0); border-radius: 2px}
+</style>
+    ]]></string>
+    <string name="css_dark"><![CDATA[
+<style>
+    body {color: white; background: rgb(18, 18, 18)}
+    h2 {background: rgb(32, 32, 32)}
+    code {border-color: rgb(64, 64, 64); border-bottom-color: rgb(168, 62, 0)} /* orange_dark */
+</style>
+    ]]></string>
+    <string name="css_blue"><![CDATA[
+<style>
+    a {color: rgb(0, 157, 224)} /* azure_light */
+    code {border-bottom-color: rgb(0, 118, 168)} /* azure_dark */
+</style>
+    ]]></string>
+
+    <!-- Help -->
+    <string name="help"><![CDATA[
+<h2>Overview</h2>
+<p>This app lets you convert numbers from the set ℚ of rational numbers between different bases (including balanced ones, on which more below),
+and between different representations such as positional notation and improper, mixed and continued fractions. The numbers can have basically arbitrary size and
+precision.</p>
+<p>To copy a result to the input line, short-tap it, and to copy it to the clipboard, long-tap it.</p>
+
+<h2>Basics: positional notation</h2>
+<p>Choose an input <a href="https://en.wikipedia.org/wiki/Radix">base</a> from 2 to 36 via the slider or the shortcut buttons in the lower part of the screen,
+and an output base via the corresponding controls in the upper part. If you choose to convert from DECimal (base 10) to HEXadecimal (base 16), an input of (say)
+<code>345</code> is interpreted as <strong>3</strong>×10<sup>2</sup>+<strong>4</strong>×10<sup>1</sup>+<strong>5</strong>×10<sup>0</sup> and converted to
+<strong>1</strong>×16<sup>2</sup>+<strong>5</strong>×16<sup>1</sup>+<strong>9</strong>×16<sup>0</sup>, which is displayed as 159.</p>
+<p>Digits from <code>0</code> to <code>9</code> work as expected. Those with values higher than 9 are represented by letters, from <code>A</code>&nbsp;=&nbsp;10
+to <code>Z</code>&nbsp;=&nbsp;35; and they are case insensitive so you don’t have to use Shift for your input. Spaces are ignored.</p>
+<p>Tap “in: base” or “out: base” to display the digit range for the currently selected base.</p>
+
+<h2>Balanced numeral systems</h2>
+<p>Qonvert also supports balanced numeral systems (the best-known being <a href="https://en.wikipedia.org/wiki/Balanced_ternary">balanced ternary</a>, i.e.
+base 3) for odd bases via the switches next to the base buttons: when switched on, the letters <code>J</code> to <code>Z</code> have <em>negative</em> values, with
+<code>Z</code>&nbsp;=&nbsp;−1, <code>Y</code>&nbsp;=&nbsp;−2, down to <code>J</code>&nbsp;=&nbsp;−17. Thus, in balanced ternary, <code>10Z</code> means
+<strong>1</strong>×3<sup>2</sup>+<strong>0</strong>×3<sup>1</sup><strong>−1</strong>×3<sup>0</sup>&nbsp;=&nbsp;8.</p>
+
+<h2>Non-integers in positional notation</h2>
+<p>Digits after a radix point <code>.</code> are of course interpreted as the fractional part of the number: <code>1.A6</code> in DOZenal (base 12) is
+<strong>1</strong>×12<sup>0</sup>+<strong>10</strong>×12<sup>−1</sup>+<strong>6</strong>×12<sup>−2</sup>&nbsp;=&nbsp;1.875. If there is a
+<a href="https://en.wikipedia.org/wiki/Repeating_decimal">repeating part</a>, mark its start with a single quote <code>\'</code>:
+For example, <code>0.1\'486</code> means 0.1486486486…, and <code>21\'3.4</code> means 213.43434….</p>
+<p>The result of your conversion has always either a finite number of digits after the radix point or a repeating part. Sometimes, though, the representation
+can be very long. To keep the app from freezing, the search for an exact representation stops after 300 digits by default. You can change this value in
+the settings.</p>
+<p>If your screen is too small to show all the output formats (positional, fraction, mixed number, continued fraction), you can swipe the output area up and down.</p>
+
+<h2>Fractions</h2>
+<p>Type a numerator and a denominator separated with a slash <code>/</code>, as in <code>6/8</code> or <code>1.5/2</code>. Fractions are reduced or expanded
+as necessary, so both of these inputs will result in 3/4.</p>
+<p>For mixed numbers, separate integer and fractional part with an underscore <code>_</code>: for example, <code>1_9/8</code> or
+<code>1.\'3&nbsp;_&nbsp;1/3</code>. Fractions with an absolute value over 1 will be shown both as improper fractions (17/8 or 5/3 in our examples)
+and as mixed numbers (2_1/8 or 1_2/3).</p>
+
+<h2>Continued fractions</h2>
+<p><a href="https://en.wikipedia.org/wiki/Continued_fraction">Continued fractions</a> start with an integer part, followed by a semicolon <code>;</code> and
+a comma-separated list of denominators. Square brackets are used for output but are optional for input.</p>
+<p><code>2;3,4</code>, for example, means 2&nbsp;+&nbsp;1/(3&nbsp;+&nbsp;1/4), which evaluates to 2.\'307692, 30/13, and 2_4/13.</p>
+<p>Input of non-integer numbers, including fractions, is okay: <code>1.5;&nbsp;2/3,&nbsp;1_1/5</code> is simplified to [2;&nbsp;6].
+All continued fractions are displayed with positive denominators, so <code>-3;-1,-1,-18</code> becomes [−4;&nbsp;2,&nbsp;18].</p>
+
+<h2>Negative numbers</h2>
+<p>Apropos negative numbers: you can type them either in ordinary notation with a leading minus <code>-</code>, or in
+<a href="https://en.wikipedia.org/wiki/Method_of_complements">complement notation</a> with two leading points <code>..</code>: these points basically mean
+“the highest digit in this base repeated all the way to the left”. Complement notation is known from computing, where −1 is represented as hexadecimal FFFFFFFF,
+−2 as FFFFFFFE, and so on (with as many F’s as there is space). So, typing <code>..D</code> in hexadecimal or <code>..7</code> in decimal both mean −3.</p>
+<p>Output of negative numbers is either in ordinary or complement notation, depending on the switch at the top right.</p>
+
+<h2>Input with base tokens</h2>
+<p>You can type in numbers in binary, octal, decimal, dozenal and hexadecimal without changing the input base, and even use different bases for integer part,
+numerator and denominator of a fraction, or for the numbers in a continued fraction. To do this, prefix a number with one of these tokens:</p>
+<ul>
+ <li>binary: <code>@</code></li>
+ <li>octal: <code>⋕</code></li>
+ <li>decimal: <code>$</code>, <code>€</code>, <code>£</code>, or <code>¥</code></li>
+ <li>dozenal: <code>%</code></li>
+ <li>hexadecimal: <code>&</code></li>
+</ul>
+<p>Try typing <code>@10010&nbsp;/&nbsp;&13</code> or <code>⋕12;&nbsp;@1010,&nbsp;$10</code>.</p>
+
+<h2>Unicode characters</h2>
+<p>Inputs that are integers between hexadecimal <code>20</code> and <code>32000</code> (decimal <code>32</code> and <code>204800</code>) are not only converted
+to their representation in the output base, but also to the corresponding <a href="https://en.wikipedia.org/wiki/Unicode">Unicode</a> character.</p>
+<p>Conversely, type double quotes <code>\"</code> followed by any character to find its Unicode encoding. This only works for single characters,
+not composed ones such as certain letter-<a href="https://en.wikipedia.org/wiki/Diacritic">diacritic</a> combinations, people with skin tones, or flags.</p>
+<p>The Web has excellent sources to find Unicode characters by name; but if you want to know the Unicode representation of the tortoise in balanced undecimal,
+Qonvert is your <strong>only</strong> source. (The answer is 1YX215.)</p>
+<p>And if anybody asks “why”, the answer is “because”.</p>
+    ]]></string>
+
+    <!-- About -->
+    <string name="about"><![CDATA[
+<h2>Thank you for using Qonvert!</h2>
+<p>Qonvert is a toy and maybe an educational tool, and it’s free. It was written by me, Anypodetos, because I couldn’t find an app that could do that kind of stuff.</p>
+<p>If you have any suggestions or questions, or you want to report a bug, or you just want to tell me whether you like this app, please
+<a href="https://lemizh.conlang.org/home/contact.php?about=qonvert">contact me</a>.</p>
+<p>My Wikipedia page is <a href="https://en.wikipedia.org/wiki/User:Anypodetos">here</a>. My homepage is <a href="https://lemizh.conlang.org/">here</a>;
+it is about something almost, but not quite, entirely unrelated.</p>
+
+<h2>GNU General Public License</h2>
+<p>Copyright 2020 Anypodetos (Michael Weber)</p>
+<p>Qonvert is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or (at your option) any later version.</p>
+<p>Qonvert is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</p>
+<p>You should have received a copy of the GNU General Public License along with Qonvert.
+If not, see <a href="https://www.gnu.org/licenses/">https://www.gnu.org/licenses/</a>.</p>
+
+<h2>SIL Open Font License</h2>
+<p>The logo is a modification of the letter Ꝙ (“capital Q with diagonal stroke”) in the font <a href="https://software.sil.org/doulos/">Doulos SIL</a>,
+which is available under the <a href="https://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=ofl">SIL Open Font License</a>.</p>
+
+<h2>Creative Commons License</h2>
+<p>The history icon in the title bar is modified from <a href="https://commons.wikimedia.org/wiki/File:Clock_(CoreUI_Icons_v1.0.0).svg">a file at Wikimedia Commons</a>,
+which is available under the <a href="https://creativecommons.org/licenses/by/4.0/deed.en">Creative Commons Attribution 4.0 International</a> license.</p>
+
+<h2>Probably some free License</h2>
+<p>I used Maddie Abboud’s really neat <a href="https://mabboud.net/android-tonebuzzer-generator/">Tone/Buzzer Generator</a> for playing intervals. It seems to be free,
+but I couldn’t find an actual license on her page.</p>
+    ]]></string>
+</resources>
