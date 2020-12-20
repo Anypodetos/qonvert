@@ -149,25 +149,25 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
             </LinearLayout>
 
             <SeekBar
-                android:id="@+id/outBaseBar"
-                style="@style/Widget.AppCompat.SeekBar.Discrete"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:max="34"
-                android:progress="0"
-                app:layout_constraintBottom_toTopOf="@+id/textOutput0"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                    android:id="@+id/outBaseBar"
+                    style="@style/Widget.AppCompat.SeekBar.Discrete"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:max="34"
+                    android:progress="0"
+                    app:layout_constraintBottom_toTopOf="@+id/textOutput0"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
 
             <Switch
                 android:id="@+id/complementSwitch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/complement"
-                app:layout_constraintBottom_toBottomOf="@+id/outBaseView"
+                app:layout_constraintBottom_toBottomOf="@+id/outBaseText"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/outBaseView" />
+                app:layout_constraintTop_toTopOf="@+id/outBaseText" />
 
             <Switch
                 android:id="@+id/outBalancedSwitch"
@@ -179,7 +179,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
                 app:layout_constraintTop_toTopOf="@+id/outLinearLayout" />
 
             <TextView
-                android:id="@+id/outBaseView"
+                android:id="@+id/outBaseText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
@@ -325,12 +325,12 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:background="?android:attr/listDivider"
-        app:layout_constraintBottom_toTopOf="@+id/inBaseView"
+        app:layout_constraintBottom_toTopOf="@+id/inBaseText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/inBaseView"
+        android:id="@+id/inBaseText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
@@ -454,16 +454,16 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
         app:layout_constraintTop_toTopOf="@+id/inLinearLayout" />
 
     <SeekBar
-        android:id="@+id/inBaseBar"
-        style="@style/Widget.AppCompat.SeekBar.Discrete"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:max="34"
-        android:progress="0"
-        app:layout_constraintBottom_toTopOf="@+id/editInput"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
+            android:id="@+id/inBaseBar"
+            style="@style/Widget.AppCompat.SeekBar.Discrete"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:max="34"
+            android:progress="0"
+            app:layout_constraintBottom_toTopOf="@+id/editInput"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
         android:id="@+id/editInput"
