@@ -47,6 +47,14 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
             android:key="lowercase"
             android:title="@string/lowercase_title"
             app:iconSpaceReserved="false" />
+        <ListPreference
+                android:defaultValue="0"
+                android:title="@string/apostrophus_title"
+                android:entries="@array/apostrophus_entries"
+                android:entryValues="@array/apostrophus_values"
+                android:key="apostrophus"
+                app:iconSpaceReserved="false"
+                app:useSimpleSummaryProvider="true" />
 
     </PreferenceCategory>
 
