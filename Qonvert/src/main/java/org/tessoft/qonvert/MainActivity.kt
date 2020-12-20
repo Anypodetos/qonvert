@@ -29,10 +29,7 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.Gravity
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
+import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.widget.*
 import android.widget.SeekBar.OnSeekBarChangeListener
@@ -44,10 +41,8 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.preference.PreferenceManager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import net.mabboud.android_tone_player.OneTimeBuzzer
 import java.math.BigInteger
 import java.math.BigInteger.ONE
-import java.math.BigInteger.ZERO
 import java.util.*
 import kotlin.concurrent.schedule
 import kotlin.math.*
@@ -58,11 +53,12 @@ val monster = BigInteger("808017424794512875886459904961710757005754368000000000
 val buttonBases = arrayOf(2, 3, 6, 8, 10, 12, 16, 20)
 val defaultButtons = setOf("2", "8", "10", "12", "16")
 val historyList = mutableListOf<QNumber>()
-var lastQNumber = QNumber(ZERO, ONE)
+var lastQNumber = QNumber()
 
 var maxDigitsAfter = 0
 var groupDigits = false
 var lowerDigits = false
+var apostrophus = 0
 var warnInvalidDigits = true
 
 enum class AppTheme {
@@ -98,13 +94,14 @@ class MainActivity : AppCompatActivity() {
     private lateinit var balancedSwitches: Array<Switch>
     @SuppressLint("UseSwitchCompatOrMaterialCode")
     private lateinit var complementSwitch: Switch
-    private lateinit var baseViews: Array<TextView>
+    private lateinit var baseTexts: Array<TextView>
     private lateinit var baseBars: Array<SeekBar>
     private lateinit var outputView: ScrollView
     private lateinit var outputLayout: ConstraintLayout
     private lateinit var editInput: EditText
     private lateinit var clearButton: FloatingActionButton
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this)
@@ -115,8 +112,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(findViewById(R.id.toolbar))
 
-        val clipboard: ClipboardManager? = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager?
+        val clipboard = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager?
         var rangeToast: Toast? = null
+        var flingWhichBar = 0
 
         textOutputs = arrayOf(
             findViewById(R.id.textOutput0),
@@ -147,9 +145,9 @@ class MainActivity : AppCompatActivity() {
             findViewById(R.id.outBalancedSwitch)
         )
         complementSwitch = findViewById(R.id.complementSwitch)
-        baseViews = arrayOf(
-            findViewById(R.id.inBaseView),
-            findViewById(R.id.outBaseView)
+        baseTexts = arrayOf(
+            findViewById(R.id.inBaseText),
+            findViewById(R.id.outBaseText)
         )
         baseBars = arrayOf(
             findViewById(R.id.inBaseBar),
@@ -182,20 +180,20 @@ class MainActivity : AppCompatActivity() {
                     in 0x23..0x26, 0x40, 0xA3, 0xA5, 0x20AC, 0x2D -> getString(R.string.err_baseToken)
                     0x221E -> getString(R.string.err_infinity)
                     0x7121 -> getString(R.string.err_undefined)
+                    0x39B, 0x3BB -> getString(R.string.err_empty)
                     else -> getString(R.string.err_generic)
                 }
             }
-            textOutputs[1].text = if (q.denominator > ONE) q.toFraction() else
-                if (0x20.toBigInteger() < q.numerator && q.numerator < 0x32000.toBigInteger()) String(Character.toChars(q.numerator.toInt())) else ""
+            textOutputs[1].text = if (q.denominator > ONE) q.toFraction() else q.toRoman()
             textOutputs[2].text = if (q.denominator > ONE) {
-                    if (q.numerator.abs() > q.denominator) q.toMixed() else ""
-                } else when (q.numerator) {
+                if (q.numerator.abs() > q.denominator) q.toMixed() else ""
+            } else q.toUnicode()
+            textOutputs[3].text = if (q.denominator > ONE) q.toContinued() else when (q.numerator) {
                 hg2g.toBigInteger() -> "🐋💐"
                 taxiCab.toBigInteger() -> "🚕"
                 monster -> "👾"
                 else -> ""
             }
-            textOutputs[3].text = if (q.denominator > ONE) q.toContinued() else ""
             for (i in 0..3) textOutputs[i].visibility = if (textOutputs[i].text == "") View.GONE else View.VISIBLE
         }
 
@@ -212,28 +210,33 @@ class MainActivity : AppCompatActivity() {
         }
 
         for (i in 0..3) textOutputs[i].setOnClickListener {
-            if (textOutputs[i].text != "") {
-                editInput.setText(textOutputs[if (i > 0 || !textOutputs[0].text.endsWith('…')) i else {
-                    val toast = Toast.makeText(applicationContext, getString(R.string.to_fraction), Toast.LENGTH_SHORT)
-                    toast.view.findViewById<TextView>(android.R.id.message).gravity = Gravity.CENTER
-                    toast.show()
-                    if (textOutputs[2].text == "") 1 else 2
-                }].text)
-                balancedSwitches[0].isChecked = balancedSwitches[1].isChecked
-                baseBars[0].progress = baseBars[1].progress
-            }
+            if (textOutputs[i].text != "") copyToInput(lastQNumber, textOutputs[i].text,
+                if (balancedSwitches[1].isChecked) NumSystem.BALANCED else NumSystem.STANDARD, baseBars[1].progress + 2)
         }
         for (i in 0..3) textOutputs[i].setOnLongClickListener {
             if (textOutputs[i].text != "") {
-                clipboard?.setPrimaryClip(ClipData.newPlainText(null, textOutputs[i].text))
+                clipboard?.setPrimaryClip(ClipData.newPlainText(null, textOutputs[i].text.let { if (i == 0) it else it.trim('"') }))
                 Toast.makeText(applicationContext, getString(R.string.to_clipboard), Toast.LENGTH_SHORT).show()
             }
             true
+        }
+
+        val gestureDetector = GestureDetector(this, object : GestureDetector.SimpleOnGestureListener() {
+            override fun onFling(e1: MotionEvent?, e2: MotionEvent?, velocityX: Float, velocityY: Float): Boolean {
+                if (flingWhichBar in 0..1) baseBars[flingWhichBar].progress += velocityX.sign.toInt()
+                return true
+            }
+        })
+        for (i in 0..1) for (j in buttonBases.indices) toggleButtons[buttonBases.size * i + j].setOnTouchListener { _, event ->
+            flingWhichBar = i
+            gestureDetector.onTouchEvent(event)
+            return@setOnTouchListener false
         }
         for (i in 0..1) for (j in buttonBases.indices) toggleButtons[buttonBases.size * i + j].setOnClickListener {
             baseBars[i].progress = buttonBases[j] - 2
             toggleButtons[buttonBases.size * i + j].isChecked = true /* push down again in case it was pushed before */
         }
+
         complementSwitch.setOnClickListener {
             if (complementSwitch.isChecked) balancedSwitches[1].isChecked = false
             changeInput()
@@ -243,23 +246,26 @@ class MainActivity : AppCompatActivity() {
             toastRangeHint(i)
             changeInput()
         }
+
         for (i in 0..1) baseBars[i].setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
-            override fun onStartTrackingTouch(seekBar: SeekBar) {}
-            override fun onStopTrackingTouch(seekBar: SeekBar) {}
+            override fun onStartTrackingTouch(seekBar: SeekBar) { }
+            override fun onStopTrackingTouch(seekBar: SeekBar) { }
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-                baseViews[i].text = getString(R.string.base, resources.getStringArray(R.array.base_inout)[i], progress + 2)
+                baseTexts[i].text = getString(R.string.base, resources.getStringArray(R.array.base_inout)[i], progress + 2)
                 balancedSwitches[i].isEnabled = progress % 2 == 1
                 for (j in buttonBases.indices) toggleButtons[buttonBases.size * i + j].isChecked = progress == buttonBases[j] - 2
                 toastRangeHint(i)
                 changeInput()
             }
         })
-        for (i in 0..1) baseViews[i].setOnClickListener {
+
+        for (i in 0..1) baseTexts[i].setOnClickListener {
             toastRangeHint(i, true)
         }
+
         editInput.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
-            override fun afterTextChanged(s: Editable) {}
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) { }
+            override fun afterTextChanged(s: Editable) { }
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 val small = outputLayout.height - textOutputs[0].height / 3 < outputView.height
                 changeInput()
@@ -267,13 +273,31 @@ class MainActivity : AppCompatActivity() {
             }
         })
         editInput.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE && editInput.text.toString() != "" && lastQNumber.error == 0) historyList.add(lastQNumber)
-            false
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                if (editInput.text.toString() != "" && lastQNumber.error == 0) historyList.add(lastQNumber)
+                editInput.selectAll()
+                true
+            } else false
         }
+
         clearButton.setOnClickListener {
             if (editInput.text.toString() != "" && lastQNumber.error == 0 &&
-                (historyList.size == 0 || historyList.last().toString() != lastQNumber.toString())) historyList.add(lastQNumber)
+                (historyList.size == 0 || historyList.last().toString(withBase = true) != lastQNumber.toString(withBase = true)))
+                    historyList.add(lastQNumber)
             editInput.setText("")
+        }
+    }
+
+    private fun copyToInput(q: QNumber, st: CharSequence = q.toString(), system: NumSystem = q.system, base: Int = q.base) {
+        editInput.setText(if (!st.endsWith('…')) st else {
+            val toast = Toast.makeText(applicationContext, getString(R.string.to_fraction), Toast.LENGTH_SHORT)
+            toast.view.findViewById<TextView>(android.R.id.message).gravity = Gravity.CENTER
+            toast.show()
+            q.toMixed()
+        })
+        if (!editInput.text.startsWith('"')) {
+            balancedSwitches[0].isChecked = system == NumSystem.BALANCED
+            baseBars[0].progress = base - 2
         }
     }
 
@@ -291,13 +315,7 @@ class MainActivity : AppCompatActivity() {
                 if (itemsList.isNotEmpty()) {
                     historyDialog.setSingleChoiceItems(itemsList.toTypedArray(), -1) { dialog, which ->
                         if (editInput.text.toString() != "" && lastQNumber.error == 0) historyList.add(lastQNumber)
-                        balancedSwitches[0].isChecked = historyList[which].system == NumSystem.BALANCED
-                        baseBars[0].progress = historyList[which].base - 2
-                        editInput.setText(historyList[which].toString(
-                            aFormat = if (itemsList[which].indexOf('…') == -1) historyList[which].format else {
-                                Toast.makeText(applicationContext, getString(R.string.to_fraction), Toast.LENGTH_SHORT).show()
-                                QFormat.MIXED
-                            }))
+                        copyToInput(historyList[which])
                         historyList.removeAt(which)
                         dialog.dismiss()
                     }
@@ -315,9 +333,9 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.playItem -> {
                 val ratio = (lastQNumber.numerator.toDouble() / lastQNumber.denominator.toDouble()).absoluteValue
-                if (1/128.0 <= ratio && ratio <= 128.0) {
+                val message = if (ratio in 1/128.0..128.0) {
                     val buzzer1 = OneTimeBuzzer()
-                    buzzer1.duration = 3.4
+                    buzzer1.duration = 1.0
                     buzzer1.toneFreqInHz = 440 / 2.0.pow(round(ln(ratio) / 2))
                     buzzer1.play()
                     Timer().schedule(1000) {
@@ -326,13 +344,16 @@ class MainActivity : AppCompatActivity() {
                         buzzer2.toneFreqInHz = buzzer1.toneFreqInHz * ratio
                         buzzer2.play()
                     }
-                    //Toast.makeText(applicationContext, , Toast.LENGTH_SHORT).show()  /// display interval name
-                } else {
-                    val toast = Toast.makeText(applicationContext, getString(R.string.no_interval, QNumber(128.toBigInteger(), ONE,
-                        baseBars[0].progress + 2, if (balancedSwitches[0].isChecked) NumSystem.BALANCED else NumSystem.STANDARD).toString(true)), Toast.LENGTH_SHORT)
-                    toast.view.findViewById<TextView>(android.R.id.message).gravity = Gravity.CENTER
-                    toast.show()
-                }
+                    Timer().schedule(2000) {
+                        buzzer1.duration = 1.5
+                        buzzer1.play()
+                    }
+                    lastQNumber.toInterval(resources)
+                } else getString(R.string.no_interval, QNumber(128.toBigInteger(), ONE,
+                    baseBars[0].progress + 2, if (balancedSwitches[0].isChecked) NumSystem.BALANCED else NumSystem.STANDARD).toString(withBase = true))
+                val toast = Toast.makeText(applicationContext, message, Toast.LENGTH_SHORT)
+                toast.view.findViewById<TextView>(android.R.id.message).gravity = Gravity.CENTER
+                if (message != "") toast.show()
             }
             R.id.settingsItem, R.id.helpItem, R.id.aboutItem -> {
                 val intent = Intent(this@MainActivity, if (item.itemId == R.id.settingsItem) SettingsActivity::class.java else HelpActivity::class.java)
@@ -348,24 +369,25 @@ class MainActivity : AppCompatActivity() {
         maxDigitsAfter = (preferences.getString("digits", "300") ?: "300").toIntOrNull() ?: 300
         groupDigits = preferences.getBoolean("group", false)
         lowerDigits = preferences.getBoolean("lowercase", false)
+        apostrophus = (preferences.getString("apostrophus", "0") ?: "0").toIntOrNull() ?: 0
         warnInvalidDigits = preferences.getBoolean("wrongDigits", true)
-        val textSize = (preferences.getString("size", "20") ?: "20").toFloat()
+        val textSize = (preferences.getString("size", "20") ?: "20").toFloatOrNull() ?: 20.toFloat()
         editInput.textSize = textSize
         for (i in 0..3) textOutputs[i].textSize = textSize
         for (j in buttonBases.indices) {
             val visibility = if (buttonBases[j].toString() in preferences.getStringSet("buttons", defaultButtons) ?: defaultButtons)
                 View.VISIBLE else View.GONE
-            toggleButtons[j]                .visibility = visibility
+            toggleButtons[j].visibility = visibility
             toggleButtons[j + buttonBases.size].visibility = visibility
         }
 
-        if (historyList.size == 0) for (i in 0 until preferences.getInt("historySize", 0)) {
-            val q = QNumber(preferences.getString("history$i", ""))
-            if (q.error == 0) historyList.add(q)
-        }
+        if (historyList.size == 0) for (i in 0 until preferences.getInt("historySize", 0))
+            QNumber(preferences.getString("history$i", "") ?: "").let { if (it.error == 0) historyList.add(it) }
         complementSwitch.isChecked = preferences.getBoolean("outComplement", false)
         balancedSwitches[0].isChecked = preferences.getString("inSystem",  "") == NumSystem.BALANCED.toString()
         balancedSwitches[1].isChecked = preferences.getString("outSystem", "") == NumSystem.BALANCED.toString()
+        baseBars[0].progress = 1 /* fire onProgressChanged */
+        baseBars[1].progress = 1
         baseBars[0].progress = preferences.getInt("inBase",  10) - 2
         baseBars[1].progress = preferences.getInt("outBase", 10) - 2
         editInput.setText(preferences.getString("input", "1_5/6"))

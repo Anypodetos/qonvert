@@ -28,7 +28,6 @@ import androidx.preference.ListPreference
 import androidx.preference.MultiSelectListPreference
 import androidx.preference.PreferenceFragmentCompat
 import java.util.*
-import kotlin.math.min
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -38,9 +37,9 @@ class SettingsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_settings)
         if (savedInstanceState == null) {
             supportFragmentManager
-                    .beginTransaction()
-                    .replace(R.id.settings, SettingsFragment())
-                    .commit()
+                .beginTransaction()
+                .replace(R.id.settings, SettingsFragment())
+                .commit()
         }
         setSupportActionBar(findViewById(R.id.settingsToolbar))
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -52,24 +51,25 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         private fun buttonSummary() {
-            val buttonSelect = findPreference<MultiSelectListPreference>("buttons")
-            if (buttonSelect != null) {
-                var st = ""
-                for (i in buttonSelect.values.sortedBy {id -> id.toInt()})
-                    st += " • " + getString(resources.getIdentifier("b$i", "string", context?.packageName)).toUpperCase(Locale.ROOT)
-                buttonSelect.summary = st.substring(min(3, st.length))
+            findPreference<MultiSelectListPreference>("buttons")?.let {
+                it.summary = it.values.sortedBy { i -> i.toInt() }.joinToString(" • ") { i ->
+                    getString(resources.getIdentifier("b$i", "string", context?.packageName)).toUpperCase(Locale.ROOT)
+                }
             }
         }
 
         private val listener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
             when (key) {
+            /*   "lowercase" -> {                                   //////////         case of apostrophus
+                    findPreference<ListPreference>("apostrophus")?.entries =
+                        resources.getStringArray(R.array.apostrophus_entries).map {
+                            if (findPreference<SwitchPreference>("lowercase")?.isChecked == true) it.toLowerCase(Locale.ROOT) else it
+                        }.toTypedArray()
+                }*/
                 "buttons" -> buttonSummary()
-                "theme" -> {
-                    val thisActivity = activity
-                    if (thisActivity != null) {
-                        setQonvertTheme(thisActivity, findPreference<ListPreference>("theme")?.value ?: "")
-                        thisActivity.recreate()
-                    }
+                "theme" -> activity?.let {
+                    setQonvertTheme(it, findPreference<ListPreference>("theme")?.value ?: "")
+                    it.recreate()
                 }
             }
         }
