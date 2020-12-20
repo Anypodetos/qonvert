@@ -31,8 +31,9 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     <string name="b12">doz</string>
     <string name="b16">hex</string>
     <string name="b20">vig</string>
+    <string name="b26">hxv</string>
 
-    <string name="complement">base’s complement</string>
+    <string name="complement">complement</string>
     <string name="balanced">balanced</string>
     <string name="edit_hint">type a number ∈ ℚ</string>
     <string name="clear_hint">clear input</string>
@@ -52,6 +53,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     <string name="err_baseToken">only at start of number, please</string>
     <string name="err_infinity">[Those having problems with infinities] aren’t nearly appreciative enough of projective geometry. (Grant Sanderson)</string>
     <string name="err_undefined">Does your input have Buddha-nature?</string>
+    <string name="err_empty">on its own denotes an empty string</string>
     <string name="err_generic">isn’t a valid character</string>
 
     <string name="menu_history">History</string>
@@ -60,6 +62,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     <string name="clear_history_q">Clear the history?</string>
     <string name="menu_settings">Settings</string>
     <string name="menu_interval">Play interval</string>
+    <string name="octaves">%d octaves</string>
     <string name="no_interval">Number must be in the range\n1/%1$s..%1$s</string>
     <string name="menu_help">Help</string>
     <string name="menu_about">About &amp; Licenses</string>
@@ -78,6 +81,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     <string name="group_title">Group digits</string>
     <string name="group_hint">by 4 in bases 2, 4, 8, 16, 32, else by 3</string>
     <string name="lowercase_title">Lower case digits</string>
+    <string name="apostrophus_title">Roman apostrophus</string>
 
     <string name="feedback_header">Feedback</string>
     <string name="range_title">Show digit range on base change</string>
@@ -122,8 +126,9 @@ precision.</p>
 
 <h2>Basics: positional notation</h2>
 <p>Choose an input <a href="https://en.wikipedia.org/wiki/Radix">base</a> from 2 to 36 via the slider or the shortcut buttons in the lower part of the screen,
-and an output base via the corresponding controls in the upper part. If you choose to convert from DECimal (base 10) to HEXadecimal (base 16), an input of (say)
-<code>345</code> is interpreted as <strong>3</strong>×10<sup>2</sup>+<strong>4</strong>×10<sup>1</sup>+<strong>5</strong>×10<sup>0</sup> and converted to
+and an output base via the corresponding controls in the upper part. (You can swipe over the buttons left or right to decrease or increase the base by 1.)</p>
+<p>If you choose to convert from DECimal (base 10) to HEXadecimal (base 16), an input of (say) <code>345</code> is interpreted as
+<strong>3</strong>×10<sup>2</sup>+<strong>4</strong>×10<sup>1</sup>+<strong>5</strong>×10<sup>0</sup> and converted to
 <strong>1</strong>×16<sup>2</sup>+<strong>5</strong>×16<sup>1</sup>+<strong>9</strong>×16<sup>0</sup>, which is displayed as 159.</p>
 <p>Digits from <code>0</code> to <code>9</code> work as expected. Those with values higher than 9 are represented by letters, from <code>A</code>&nbsp;=&nbsp;10
 to <code>Z</code>&nbsp;=&nbsp;35; and they are case insensitive so you don’t have to use Shift for your input. Spaces are ignored.</p>
@@ -178,9 +183,13 @@ numerator and denominator of a fraction, or for the numbers in a continued fract
 </ul>
 <p>Try typing <code>@10010&nbsp;/&nbsp;&13</code> or <code>⋕12;&nbsp;@1010,&nbsp;$10</code>.</p>
 
+<h2>Roman numerals</h2>
+<p>Inputs that are integers between decimal <code>1</code> and <code>399&nbsp;999</code> are also displayed as Roman numerals.
+Currently, input of Roman numerals is not supported.</p>
+
 <h2>Unicode characters</h2>
-<p>Inputs that are integers between hexadecimal <code>20</code> and <code>32000</code> (decimal <code>32</code> and <code>204800</code>) are not only converted
-to their representation in the output base, but also to the corresponding <a href="https://en.wikipedia.org/wiki/Unicode">Unicode</a> character.</p>
+<p>Inputs that are integers between hexadecimal <code>20</code> and <code>31FFF</code> (decimal <code>32</code> and <code>204&nbsp;799</code>) are not only
+converted to their representation in the output base, but also to the corresponding <a href="https://en.wikipedia.org/wiki/Unicode">Unicode</a> character.</p>
 <p>Conversely, type double quotes <code>\"</code> followed by any character to find its Unicode encoding. This only works for single characters,
 not composed ones such as certain letter-<a href="https://en.wikipedia.org/wiki/Diacritic">diacritic</a> combinations, people with skin tones, or flags.</p>
 <p>The Web has excellent sources to find Unicode characters by name; but if you want to know the Unicode representation of the tortoise in balanced undecimal,

@@ -25,6 +25,48 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
         <item>out</item>
     </string-array>
 
+    <string-array name="systems">
+        <item>standard</item>
+        <item>balanced</item>
+        <item>bijective (1)</item>
+        <item>bijective (A)</item>
+        <item>Roman</item>
+    </string-array>
+    <string-array name="systems_short">
+        <item>std</item>
+        <item>bal</item>
+        <item>bj1</item>
+        <item>bja</item>
+        <item>rom</item>
+    </string-array>
+
+    <string-array name="intervals">
+        <item>perfect unison</item>
+        <item>minor second</item>
+        <item>major second</item>
+        <item>minor third</item>
+        <item>major third</item>
+        <item>perfect fourth</item>
+        <item>tritone</item>
+        <item>perfect fifth</item>
+        <item>minor sixth</item>
+        <item>major sixth</item>
+        <item>minor seventh</item>
+        <item>major seventh</item>
+        <item>perfect octave</item>
+        <item>minor ninth</item>
+        <item>major ninth</item>
+        <item>minor tenth</item>
+        <item>major tenth</item>
+        <item>perfect eleventh</item>
+        <item>octave plus tritone</item>
+        <item>perfect twelfth</item>
+        <item>minor thirteenth</item>
+        <item>major thirteenth</item>
+        <item>minor fourteenth</item>
+        <item>perfect double octave</item>
+    </string-array>
+
     <string-array name="digits_entries">
         <item>10</item>
         <item>30</item>
@@ -42,6 +84,19 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
         <item>1000</item>
         <item>3000</item>
         <item>10000</item>
+    </string-array>
+
+    <string-array name="apostrophus_entries">
+        <item>ↁMDC</item>
+        <item>ↁↀDC</item>
+        <item>IↃↃ MDC</item>
+        <item>IↃↃ CIↃ IↃ C</item>
+    </string-array>
+    <string-array name="apostrophus_values">
+        <item>0</item>
+        <item>1000</item>
+        <item>4</item>
+        <item>6</item>
     </string-array>
 
     <string-array name="buttons_entries">
