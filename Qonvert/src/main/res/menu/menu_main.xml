@@ -40,6 +40,13 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
         android:id="@+id/helpItem"
         android:title="@string/menu_help" />
     <item
+        android:title="@string/menu_cheatSheet"
+        android:id="@+id/cheatSheetItem" />
+    <item
+            android:title="@string/menu_whatsNew"
+            android:id="@+id/whatsNewItem"
+            android:icon="@android:drawable/star_big_on" />
+    <item
         android:id="@+id/aboutItem"
         android:title="@string/menu_about" />
 </menu>
