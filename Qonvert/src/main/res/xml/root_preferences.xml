@@ -54,7 +54,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
                 android:entryValues="@array/apostrophus_values"
                 android:key="apostrophus"
                 app:iconSpaceReserved="false"
-                app:useSimpleSummaryProvider="true" />
+                app:useSimpleSummaryProvider="false" />
 
     </PreferenceCategory>
 
