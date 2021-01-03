@@ -27,12 +27,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.ListPreference
 import androidx.preference.MultiSelectListPreference
 import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.SwitchPreference
 import java.util.*
 
 class SettingsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        setQonvertTheme(this)
+        MainActivity.setQonvertTheme(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
         if (savedInstanceState == null) {
@@ -50,6 +51,16 @@ class SettingsActivity : AppCompatActivity() {
             setPreferencesFromResource(R.xml.root_preferences, rootKey)
         }
 
+        private fun apostrophusSummary() {
+            val lowercase = findPreference<SwitchPreference>("lowercase")
+            val apostrophus = findPreference<ListPreference>("apostrophus")
+            apostrophus?.entries = resources.getStringArray(R.array.apostrophus_entries).map {
+                    if (lowercase?.isChecked == true) it.toLowerCase(Locale.ROOT) else it
+                }.toTypedArray()
+            apostrophus?.summary = if (lowercase?.isChecked == true) apostrophus?.entry.toString().toLowerCase(Locale.ROOT)
+                else apostrophus?.entry.toString().toUpperCase(Locale.ROOT)
+        }
+
         private fun buttonSummary() {
             findPreference<MultiSelectListPreference>("buttons")?.let {
                 it.summary = it.values.sortedBy { i -> i.toInt() }.joinToString(" • ") { i ->
@@ -60,15 +71,10 @@ class SettingsActivity : AppCompatActivity() {
 
         private val listener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
             when (key) {
-            /*   "lowercase" -> {                                   //////////         case of apostrophus
-                    findPreference<ListPreference>("apostrophus")?.entries =
-                        resources.getStringArray(R.array.apostrophus_entries).map {
-                            if (findPreference<SwitchPreference>("lowercase")?.isChecked == true) it.toLowerCase(Locale.ROOT) else it
-                        }.toTypedArray()
-                }*/
+               "lowercase", "apostrophus" -> apostrophusSummary()
                 "buttons" -> buttonSummary()
                 "theme" -> activity?.let {
-                    setQonvertTheme(it, findPreference<ListPreference>("theme")?.value ?: "")
+                    MainActivity.setQonvertTheme(it, findPreference<ListPreference>("theme")?.value ?: "")
                     it.recreate()
                 }
             }
@@ -77,6 +83,7 @@ class SettingsActivity : AppCompatActivity() {
         override fun onResume() {
             super.onResume()
             preferenceManager.sharedPreferences.registerOnSharedPreferenceChangeListener(listener)
+            apostrophusSummary()
             buttonSummary()
          }
 

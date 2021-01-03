@@ -105,14 +105,15 @@ public abstract class TonePlayer {
         int idx = 0;
         int i = 0;
 
-        // Amplitude ramp as a percent of sample count
-        int ramp = numSamples / 10;
+        // Amplitude ramps as a percent of sample count
+        int rampUp = numSamples / 20;
+        int rampDown = numSamples / 4;
 
         // Ramp amplitude up (to avoid clicks)
-        for (i = 0; i < ramp; ++i) {
+        for (i = 0; i < rampUp; ++i) {
             double dVal = sample[i];
             // Ramp up to maximum
-            final short val = (short) ((dVal * 32767 * (1 + cos((i - ramp) * Math.PI / ramp)) / 2));
+            final short val = (short) ((dVal * 32767 * (1 + cos((i - rampUp) * Math.PI / rampUp)) / 2));
             // in 16 bit wav PCM, first byte is the low order byte
             soundData[idx++] = (byte) (val & 0x00ff);
             soundData[idx++] = (byte) ((val & 0xff00) >>> 8);
@@ -120,7 +121,7 @@ public abstract class TonePlayer {
 
 
         // Max amplitude for most of the samples
-        for (i = i; i < numSamples - ramp; ++i) {
+        for (i = i; i < numSamples - rampDown; ++i) {
             double dVal = sample[i];
             // scale to maximum amplitude
             final short val = (short) ((dVal * 32767));
@@ -133,7 +134,7 @@ public abstract class TonePlayer {
         for (i = i; i < numSamples; ++i) {
             double dVal = sample[i];
             // Ramp down to zero
-            final short val = (short) ((dVal * 32767 * (1 + cos((i - numSamples + ramp) * Math.PI / ramp)) / 2));
+            final short val = (short) ((dVal * 32767 * (1 + cos((i - numSamples + rampDown) * Math.PI / rampDown)) / 2));
             // in 16 bit wav PCM, first byte is the low order byte
             soundData[idx++] = (byte) (val & 0x00ff);
             soundData[idx++] = (byte) ((val & 0xff00) >>> 8);

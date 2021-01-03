@@ -5,11 +5,15 @@ package org.tessoft.qonvert;
  * Default duration is 5 seconds.
  * created by Maddie Abboud, based on a Stack Overflow thread
  * <https://mabboud.net/android-tonebuzzer-generator/>
+ * minor modifications by Anypodetos for the Qonvert app
+ * Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
  */
+
 public class OneTimeBuzzer extends TonePlayer {
     protected double duration = 5;
 
-    public OneTimeBuzzer(double duration) {
+    public OneTimeBuzzer(double toneFreqInHz, double duration) {
+        this.toneFreqInHz = toneFreqInHz;
         this.duration = duration;
     }
 

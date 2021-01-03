@@ -1,30 +1,30 @@
 
-* beta-test
+v1.1
+* display musical interval names
+* (tweak interval sound)
+* λ ex?
 
-* Sign
-  + C:\Users\Michael\AppData\Local\Android\Sdk\build-tools\29.0.2\apksigner.bat
-  + C:\Users\Michael\AppData\Local\Android\Sdk\tools\lib\find_java.bat
-  + apksigner sign --ks qonvert.jks "C:\Users\Michael\Documents\Qonvert\Qonvert\build\outputs\apk\release\Qonvert-release-unsigned-aligned.apk"
-  + working on it
-    - https://stackoverflow.com/questions/4853011/how-to-sign-an-android-apk-file
-    - https://stackoverflow.com/questions/20268520/generate-signed-apk-android-studio
+* beta-test (COMBINATIONS OF in/out, bases, systems, complement, formats, toastRange, history, Egyptian, …)
+* test updating from v1.0.0 release to v1.1.0 release on actual phone
 
-V 1.1+
-* DMS
-* Roman numerals input
-  + lowercase in settings
-* SCI/ENG input/output
-* other non-standard positional systems (s. WP), e.g. bijective numerals, non-adjacent forms, Egyptian fractions, factorial base, quote notation, …
-* alternative positional notation output (0.1 = 0.0'9, balanced ternary: 0.'Z = Z.'1)
-* display musical interval name: https://de.wikipedia.org/wiki/Tonstruktur_(mathematische_Beschreibung)
-* copy error message to input → base isn’t copied, but id of incriminating char is
-* base symbols $%&... customisable
-* themes/colours
-  + colour of title bar in overview
+* themes/colours?
+  + changing theme does not always work for main activity
+  + colour of title bar in overview (works in Nexus & Pixel): https://stackoverflow.com/questions/56649575/changing-the-taskdescription-bar-color-with-flutter
   + icon adaptive (blue): https://www.youtube.com/watch?v=ts98gL1JCQU
   + icon shadowed, C in Q
 
-V 2+
+v1.2+
+* Tabs/swipe between help pages
+* system change by swiping
+* DMS, factorial base
+* SCI/ENG input/output
+* additional Roman numerals for input (e.g. ↅ=6, various dots, fractions < 1/12, https://www.unicode.org/charts/PDF/U2150.pdf)
+* other non-standard number systems (s. WP), e.g. non-adjacent forms, Egyptian fractions, quote notation, …
+* custom digit sets (Base32, Base64 & their variants…)
+* base symbols $%&... customisable
+* alternative positional notation output (0.1 = 0.0'9, balanced ternary: 0.'Z = Z.'1)
+
+v2+
 * simple calculations?
 
 
@@ -38,4 +38,6 @@ NOTES FOR RELEASE PROCEDURE
   + build release variant (View > Tool Windows > Build Variants)
   + zipalign with C:\Users\Michael\AppData\Local\Android\Sdk\build-tools\29.0.2\zipalign.exe
     - zipalign -p 4 "C:\Users\Michael\Documents\Qonvert\Qonvert\build\outputs\apk\release\Qonvert-release-unsigned.apk" "Qonvert-release-unsigned-aligned.apk"
-  + Sign ??
+  + sign with C:\Users\Michael\AppData\Local\Android\Sdk\build-tools\29.0.2\apksigner.bat
+    - LINE 30: if not defined java_exe set java_exe="C:\Users\Michael\.jdks\corretto-1.8.0_275\jre\bin\java.exe" (or wherever a java.exe is)
+    - apksigner sign --ks qonvert.jks "C:\Users\Michael\Documents\Qonvert\Qonvert\build\outputs\apk\release\Qonvert-release-unsigned-aligned.apk"
