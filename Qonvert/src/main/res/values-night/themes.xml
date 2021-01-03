@@ -32,6 +32,8 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
         <item name="colorSecondary">@color/orange_light</item>
         <item name="colorSecondaryVariant">@color/orange_dark</item>
         <item name="colorOnSecondary">@color/white</item>
+        <!-- Other -->
+        <item name="editTextColor">@color/white</item>
         <item name="alertDialogTheme">@style/AlertDialogTheme</item>
    </style>
 
@@ -46,6 +48,8 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
         <item name="colorSecondary">@color/azure_light</item>
         <item name="colorSecondaryVariant">@color/azure_dark</item>
         <item name="colorOnSecondary">@color/white</item>
+        <!-- Other -->
+        <item name="editTextColor">@color/white</item>
         <item name="alertDialogTheme">@style/AlertDialogThemeBlue</item>
    </style>
 </resources>
