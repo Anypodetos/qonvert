@@ -26,12 +26,14 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
         <item name="android:statusBarColor" tools:targetApi="l">@color/brown_dark</item>
         <!-- Primary brand colors -->
         <item name="colorPrimary">@color/brown_light</item>
-        <item name="colorPrimaryVariant">@color/brown_dark</item>
+        <item name="colorPrimaryVariant">@color/brown_medium</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand colors -->
         <item name="colorSecondary">@color/orange_light</item>
         <item name="colorSecondaryVariant">@color/orange_dark</item>
         <item name="colorOnSecondary">@color/white</item>
+        <!-- Other -->
+        <item name="editTextColor">@color/black</item>
         <item name="alertDialogTheme">@style/AlertDialogTheme</item>
     </style>
 
@@ -49,13 +51,15 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
         <item name="android:statusBarColor" tools:targetApi="l">@color/blue_dark</item>
         <!-- Primary brand colors -->
         <item name="colorPrimary">@color/blue_light</item>
-        <item name="colorPrimaryVariant">@color/blue_dark</item>
+        <item name="colorPrimaryVariant">@color/blue_medium</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand colors -->
         <item name="colorSecondary">@color/azure_light</item>
         <item name="colorSecondaryVariant">@color/azure_dark</item>
         <item name="colorOnSecondary">@color/white</item>
-        <item name="alertDialogTheme">@style/AlertDialogTheme</item>
+        <!-- Other -->
+        <item name="editTextColor">@color/black</item>
+        <item name="alertDialogTheme">@style/AlertDialogThemeBlue</item>
     </style>
 
     <style name="AlertDialogThemeBlue" parent="ThemeOverlay.AppCompat.Dialog.Alert">

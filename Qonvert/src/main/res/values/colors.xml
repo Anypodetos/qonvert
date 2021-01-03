@@ -36,5 +36,6 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     <color name="azure_dark">#FF0076A8</color>
 
     <color name="black">#FF000000</color>
+    <color name="grey">#FF808080</color>
     <color name="white">#FFFFFFFF</color>
 </resources>
