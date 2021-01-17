@@ -12,8 +12,9 @@ package org.tessoft.qonvert;
 public class OneTimeBuzzer extends TonePlayer {
     protected double duration = 5;
 
-    public OneTimeBuzzer(double toneFreqInHz, double duration) {
+    public OneTimeBuzzer(double toneFreqInHz, int volume, double duration) {
         this.toneFreqInHz = toneFreqInHz;
+        this.volume = volume;
         this.duration = duration;
     }
 
