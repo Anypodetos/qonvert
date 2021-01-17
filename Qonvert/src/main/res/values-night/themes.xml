@@ -23,9 +23,9 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     <!-- Base application theme -->
     <style name="Theme.Qonvert" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Status bar color -->
-        <item name="android:statusBarColor" tools:targetApi="l">@color/brown_medium</item>
+        <item name="android:statusBarColor" tools:targetApi="l">@color/brown_dark</item>
         <!-- Primary brand colors -->
-        <item name="colorPrimary">@color/brown_dark</item>
+        <item name="colorPrimary">@color/brown_medium</item>
         <item name="colorPrimaryVariant">@color/brown_light</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand colors -->
@@ -39,9 +39,9 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
 
     <style name="Theme.QonvertBlue" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Status bar color -->
-        <item name="android:statusBarColor" tools:targetApi="l">@color/blue_medium</item>
+        <item name="android:statusBarColor" tools:targetApi="l">@color/blue_dark</item>
         <!-- Primary brand colors -->
-        <item name="colorPrimary">@color/blue_dark</item>
+        <item name="colorPrimary">@color/blue_medium</item>
         <item name="colorPrimaryVariant">@color/blue_light</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand colors -->
