@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <!--
-Copyright 2020 Anypodetos (Michael Weber)
+Copyright 2021 Anypodetos (Michael Weber)
 
 This file is part of Qonvert.
 
@@ -22,73 +22,55 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
 -->
 
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    tools:context=".HelpActivity">
-
-    <ScrollView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        tools:context=".HelpActivity"
+        android:foregroundGravity="fill_horizontal">
 
-        <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+    <androidx.appcompat.widget.Toolbar
+            android:id="@+id/helpToolbar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorPrimary"
+            android:elevation="4dp"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_weight="1" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
 
-                <androidx.appcompat.widget.Toolbar
-                        android:id="@+id/helpToolbar"
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:background="?attr/colorPrimary"
-                        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                        app:buttonGravity="center_vertical"
-                        app:layout_constraintBottom_toBottomOf="@+id/imageView"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:titleTextColor="?attr/colorOnPrimary" />
+    <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabs"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="?attr/colorPrimary"
+            android:elevation="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/helpToolbar"
+            app:tabIconTint="@color/tab_icons"
+            app:tabIndicatorColor="?attr/colorSecondary"
+            app:tabIndicatorHeight="2dp"
+            android:layout_weight="4"
+            app:layout_constraintStart_toEndOf="@+id/helpToolbar">
 
-                <ImageView
-                        android:id="@+id/imageView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:contentDescription="@string/logo_hint"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:srcCompat="@drawable/ic_launcher_foreground"
-                        app:layout_constraintCircleRadius="100dp" />
+        <com.google.android.material.tabs.TabItem
+                android:id="@+id/tabItem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.tabs.TabLayout>
 
-            <WebView
-                    android:id="@+id/webView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/logoImage">
-
-            </WebView>
-
-            <ImageButton
-                    android:id="@+id/backButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:contentDescription="@string/back_hint"
-                    android:scaleType="fitStart"
-                    android:tint="?android:attr/colorForeground"
-                    app:srcCompat="?attr/homeAsUpIndicator" />
-
-        </LinearLayout>
-    </ScrollView>
-
+    <androidx.viewpager.widget.ViewPager
+            android:id="@+id/pager"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/helpToolbar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

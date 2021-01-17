@@ -21,7 +21,8 @@ along with Qonvert. If not, see <https://www.gnu.org/licenses/>.
 Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
 -->
 
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -46,105 +47,133 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
             android:layout_height="wrap_content">
 
             <LinearLayout
-                android:id="@+id/outLinearLayout"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
-                android:layout_marginStart="4dp"
-                android:minHeight="36dp"
-                android:orientation="horizontal"
-                app:layout_constraintBottom_toTopOf="@id/outBaseBar"
-                app:layout_constraintEnd_toStartOf="@+id/outBalancedSwitch"
-                app:layout_constraintHeight_min="36dp"
-                app:layout_constraintStart_toStartOf="parent">
+                    android:id="@+id/outLinearLayout"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginStart="4dp"
+                    android:minHeight="36dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintBottom_toTopOf="@id/outBaseBar"
+                    app:layout_constraintHeight_min="36dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginRight="4dp"
+                    android:layout_marginEnd="4dp">
 
                 <ToggleButton
-                    android:id="@+id/outToggleButton2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:ellipsize="none"
-                    android:singleLine="true"
-                    android:textColor="@color/base_buttons"
-                    android:textOff="@string/b2"
-                    android:textOn="@string/b2" />
+                        android:id="@+id/outToggleButton2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ellipsize="none"
+                        android:singleLine="true"
+                        android:textColor="@color/base_buttons"
+                        android:textOff="@string/b2"
+                        android:textOn="@string/b2" />
 
                 <ToggleButton
-                    android:id="@+id/outToggleButton3"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:ellipsize="none"
-                    android:singleLine="true"
-                    android:textColor="@color/base_buttons"
-                    android:textOff="@string/b3"
-                    android:textOn="@string/b3" />
+                        android:id="@+id/outToggleButton3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ellipsize="none"
+                        android:singleLine="true"
+                        android:textColor="@color/base_buttons"
+                        android:textOff="@string/b3"
+                        android:textOn="@string/b3" />
 
                 <ToggleButton
-                    android:id="@+id/outToggleButton6"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:ellipsize="none"
-                    android:singleLine="true"
-                    android:textColor="@color/base_buttons"
-                    android:textOff="@string/b6"
-                    android:textOn="@string/b6" />
+                        android:id="@+id/outToggleButton6"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ellipsize="none"
+                        android:singleLine="true"
+                        android:textColor="@color/base_buttons"
+                        android:textOff="@string/b6"
+                        android:textOn="@string/b6" />
 
                 <ToggleButton
-                    android:id="@+id/outToggleButton8"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:ellipsize="none"
-                    android:singleLine="true"
-                    android:textColor="@color/base_buttons"
-                    android:textOff="@string/b8"
-                    android:textOn="@string/b8" />
+                        android:id="@+id/outToggleButton8"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ellipsize="none"
+                        android:singleLine="true"
+                        android:textColor="@color/base_buttons"
+                        android:textOff="@string/b8"
+                        android:textOn="@string/b8" />
 
                 <ToggleButton
-                    android:id="@+id/outToggleButton10"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:ellipsize="none"
-                    android:singleLine="true"
-                    android:textColor="@color/base_buttons"
-                    android:textOff="@string/b10"
-                    android:textOn="@string/b10" />
+                        android:id="@+id/outToggleButton10"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ellipsize="none"
+                        android:singleLine="true"
+                        android:textColor="@color/base_buttons"
+                        android:textOff="@string/b10"
+                        android:textOn="@string/b10" />
 
                 <ToggleButton
-                    android:id="@+id/outToggleButton12"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:ellipsize="none"
-                    android:singleLine="true"
-                    android:textColor="@color/base_buttons"
-                    android:textOff="@string/b12"
-                    android:textOn="@string/b12" />
+                        android:id="@+id/outToggleButton12"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ellipsize="none"
+                        android:singleLine="true"
+                        android:textColor="@color/base_buttons"
+                        android:textOff="@string/b12"
+                        android:textOn="@string/b12" />
 
                 <ToggleButton
-                    android:id="@+id/outToggleButton16"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:ellipsize="none"
-                    android:singleLine="true"
-                    android:textColor="@color/base_buttons"
-                    android:textOff="@string/b16"
-                    android:textOn="@string/b16" />
+                        android:id="@+id/outToggleButton16"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ellipsize="none"
+                        android:singleLine="true"
+                        android:textColor="@color/base_buttons"
+                        android:textOff="@string/b16"
+                        android:textOn="@string/b16" />
 
                 <ToggleButton
-                    android:id="@+id/outToggleButton20"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:ellipsize="none"
-                    android:singleLine="true"
-                    android:textColor="@color/base_buttons"
-                    android:textOff="@string/b20"
-                    android:textOn="@string/b20" />
+                        android:id="@+id/outToggleButton20"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ellipsize="none"
+                        android:singleLine="true"
+                        android:textColor="@color/base_buttons"
+                        android:textOff="@string/b20"
+                        android:textOn="@string/b20" />
+
+                <ToggleButton
+                        android:id="@+id/outToggleButton26"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ellipsize="none"
+                        android:singleLine="true"
+                        android:textColor="@color/base_buttons"
+                        android:textOff="@string/b26"
+                        android:textOn="@string/b26" />
+
+                <Button
+                        android:id="@+id/outSystemButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ellipsize="none"
+                        android:singleLine="true"
+                        android:paddingLeft="4dp"
+                        android:paddingRight="4dp"
+                        app:iconGravity="end"
+                        app:iconPadding="0dp"
+                        app:iconSize="10dp"
+                        app:backgroundTint="?attr/colorPrimary"
+                        app:icon="@drawable/ic_dropdown" />
 
             </LinearLayout>
 
@@ -161,22 +190,13 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
                     app:layout_constraintStart_toStartOf="parent" />
 
             <Switch
-                android:id="@+id/complementSwitch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/complement"
-                app:layout_constraintBottom_toBottomOf="@+id/outBaseText"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/outBaseText" />
-
-            <Switch
-                android:id="@+id/outBalancedSwitch"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/balanced"
-                app:layout_constraintBottom_toBottomOf="@+id/outLinearLayout"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/outLinearLayout" />
+                    android:id="@+id/complementSwitch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/complement"
+                    app:layout_constraintBottom_toBottomOf="@+id/outBaseText"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/outBaseText" />
 
             <TextView
                 android:id="@+id/outBaseText"
@@ -190,32 +210,32 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
                 app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
-                android:id="@+id/textOutput0"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginStart="8dp"
-                android:focusable="true"
-                android:textSize="20sp"
-                app:layout_constraintBottom_toTopOf="@+id/textOutput1"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                    android:id="@+id/textOutput0"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginStart="8dp"
+                    android:focusable="true"
+                    android:textSize="20sp"
+                    app:layout_constraintBottom_toTopOf="@+id/textOutput1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
-                android:id="@+id/textOutput1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginStart="8dp"
-                android:focusable="true"
-                android:textSize="20sp"
-                app:layout_constraintBottom_toTopOf="@+id/textOutput2"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                    android:id="@+id/textOutput1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginStart="8dp"
+                    android:focusable="true"
+                    android:textSize="20sp"
+                    app:layout_constraintBottom_toTopOf="@+id/textOutput2"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
                 android:id="@+id/textOutput2"
@@ -298,20 +318,21 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
                 app:layout_constraintStart_toStartOf="parent" />
 
             <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="?attr/colorPrimary"
-                android:minHeight="?attr/actionBarSize"
-                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                app:contentInsetStartWithNavigation="16dp"
-                app:layout_constraintBottom_toTopOf="@+id/complementSwitch"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.DayNight"
-                app:title="@string/app_name"
-                app:titleTextColor="@color/white" />
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/colorPrimary"
+                    android:minHeight="?attr/actionBarSize"
+                    app:layout_constraintBottom_toTopOf="@+id/complementSwitch"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:title="@string/app_name"
+                    app:titleTextColor="@color/white"
+                    app:contentInsetStartWithNavigation="16dp"
+                    android:elevation="4dp"
+                    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                    app:popupTheme="@style/ThemeOverlay.AppCompat.DayNight" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
@@ -341,117 +362,135 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
         app:layout_constraintStart_toStartOf="parent" />
 
     <LinearLayout
-        android:id="@+id/inLinearLayout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="4dp"
-        android:layout_marginStart="4dp"
-        android:minHeight="36dp"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/inBaseBar"
-        app:layout_constraintEnd_toStartOf="@+id/inBalancedSwitch"
-        app:layout_constraintHeight_min="36dp"
-        app:layout_constraintStart_toStartOf="parent">
+            android:id="@+id/inLinearLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:layout_marginStart="4dp"
+            android:minHeight="36dp"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toTopOf="@+id/inBaseBar"
+            app:layout_constraintHeight_min="36dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginRight="4dp"
+            android:layout_marginEnd="4dp">
 
         <ToggleButton
-            android:id="@+id/inToggleButton2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ellipsize="none"
-            android:singleLine="true"
-            android:textColor="@color/base_buttons"
-            android:textOff="@string/b2"
-            android:textOn="@string/b2" />
+                android:id="@+id/inToggleButton2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ellipsize="none"
+                android:singleLine="true"
+                android:textColor="@color/base_buttons"
+                android:textOff="@string/b2"
+                android:textOn="@string/b2" />
 
         <ToggleButton
-            android:id="@+id/inToggleButton3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ellipsize="none"
-            android:singleLine="true"
-            android:textColor="@color/base_buttons"
-            android:textOff="@string/b3"
-            android:textOn="@string/b3" />
+                android:id="@+id/inToggleButton3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ellipsize="none"
+                android:singleLine="true"
+                android:textColor="@color/base_buttons"
+                android:textOff="@string/b3"
+                android:textOn="@string/b3" />
 
         <ToggleButton
-            android:id="@+id/inToggleButton6"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ellipsize="none"
-            android:singleLine="true"
-            android:textColor="@color/base_buttons"
-            android:textOff="@string/b6"
-            android:textOn="@string/b6" />
+                android:id="@+id/inToggleButton6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ellipsize="none"
+                android:singleLine="true"
+                android:textColor="@color/base_buttons"
+                android:textOff="@string/b6"
+                android:textOn="@string/b6" />
 
         <ToggleButton
-            android:id="@+id/inToggleButton8"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ellipsize="none"
-            android:singleLine="true"
-            android:textColor="@color/base_buttons"
-            android:textOff="@string/b8"
-            android:textOn="@string/b8" />
+                android:id="@+id/inToggleButton8"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ellipsize="none"
+                android:singleLine="true"
+                android:textColor="@color/base_buttons"
+                android:textOff="@string/b8"
+                android:textOn="@string/b8" />
 
         <ToggleButton
-            android:id="@+id/inToggleButton10"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ellipsize="none"
-            android:singleLine="true"
-            android:textColor="@color/base_buttons"
-            android:textOff="@string/b10"
-            android:textOn="@string/b10" />
+                android:id="@+id/inToggleButton10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ellipsize="none"
+                android:singleLine="true"
+                android:textColor="@color/base_buttons"
+                android:textOff="@string/b10"
+                android:textOn="@string/b10" />
 
         <ToggleButton
-            android:id="@+id/inToggleButton12"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ellipsize="none"
-            android:singleLine="true"
-            android:textColor="@color/base_buttons"
-            android:textOff="@string/b12"
-            android:textOn="@string/b12" />
+                android:id="@+id/inToggleButton12"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ellipsize="none"
+                android:singleLine="true"
+                android:textColor="@color/base_buttons"
+                android:textOff="@string/b12"
+                android:textOn="@string/b12" />
 
         <ToggleButton
-            android:id="@+id/inToggleButton16"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:checked="false"
-            android:ellipsize="none"
-            android:singleLine="true"
-            android:textColor="@color/base_buttons"
-            android:textOff="@string/b16"
-            android:textOn="@string/b16" />
+                android:id="@+id/inToggleButton16"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:checked="false"
+                android:ellipsize="none"
+                android:singleLine="true"
+                android:textColor="@color/base_buttons"
+                android:textOff="@string/b16"
+                android:textOn="@string/b16" />
 
         <ToggleButton
-            android:id="@+id/inToggleButton20"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ellipsize="none"
-            android:singleLine="true"
-            android:textColor="@color/base_buttons"
-            android:textOff="@string/b20"
-            android:textOn="@string/b20" />
+                android:id="@+id/inToggleButton20"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ellipsize="none"
+                android:singleLine="true"
+                android:textColor="@color/base_buttons"
+                android:textOff="@string/b20"
+                android:textOn="@string/b20" />
+
+        <ToggleButton
+                android:id="@+id/inToggleButton26"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ellipsize="none"
+                android:singleLine="true"
+                android:textColor="@color/base_buttons"
+                android:textOff="@string/b26"
+                android:textOn="@string/b26" />
+
+        <Button
+                android:id="@+id/inSystemButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ellipsize="none"
+                android:singleLine="true"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                app:icon="@drawable/ic_dropdown"
+                app:iconPadding="0dp"
+                app:iconSize="10dp"
+                app:iconGravity="end" />
 
     </LinearLayout>
-
-    <Switch
-        android:id="@+id/inBalancedSwitch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/balanced"
-        app:layout_constraintBottom_toBottomOf="@+id/inLinearLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/inLinearLayout" />
 
     <SeekBar
             android:id="@+id/inBaseBar"
@@ -466,35 +505,35 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
             app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
-        android:id="@+id/editInput"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="4dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
-        android:ems="10"
-        android:hint="@string/edit_hint"
-        android:importantForAutofill="no"
-        android:inputType="textNoSuggestions"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/clearButton"
-        app:layout_constraintStart_toStartOf="parent" />
+            android:id="@+id/editInput"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginStart="12dp"
+            android:ems="10"
+            android:hint="@string/edit_hint"
+            android:importantForAutofill="no"
+            android:inputType="textNoSuggestions"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/clearButton"
+            app:layout_constraintStart_toStartOf="parent" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/clearButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="2dp"
-        android:layout_marginEnd="4dp"
-        android:layout_marginRight="4dp"
-        android:clickable="true"
-        android:contentDescription="@string/clear_hint"
-        android:focusable="true"
-        android:foregroundGravity="left|bottom"
-        app:fabSize="mini"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@android:drawable/ic_menu_delete" />
+            android:id="@+id/clearButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="2dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginRight="4dp"
+            android:clickable="true"
+            android:contentDescription="@string/clear_hint"
+            android:focusable="true"
+            android:foregroundGravity="left|bottom"
+            app:fabSize="mini"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:srcCompat="@android:drawable/ic_menu_delete" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
