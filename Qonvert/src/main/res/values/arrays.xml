@@ -105,9 +105,9 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     </string-array>
     <string-array name="apostrophus_values">
         <item>0</item>
-        <item>1000</item>
-        <item>4</item>
-        <item>6</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
     </string-array>
 
     <string-array name="buttons_entries">
