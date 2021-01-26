@@ -11,4 +11,4 @@ Qonvert will be available soon. It will be free, contain no ads, and need no per
 * Plus: Unicode characters, intput of Egyptian fractions – and it plays musical intervals with a given frequency ratio
 * Light and dark colour schemes
 
-<img src="screenshots/integer.png" width="300px" alt="Converting an integer number"> <img src="screenshots/rational.png" width="300px" alt="Converting a rational number"> <img src="screenshots/settings.png" width="300px" alt="App settings">
+<img src="screenshots/integer.png" width="250px" alt="Converting an integer number"> <img src="screenshots/rational.png" width="250px" alt="Converting a rational number"> <img src="screenshots/settings.png" width="250px" alt="App settings">
