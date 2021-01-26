@@ -34,14 +34,11 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
         <item name="colorOnSecondary">@color/white</item>
         <!-- Other -->
         <item name="editTextColor">@color/black</item>
-        <item name="alertDialogTheme">@style/AlertDialogTheme</item>
-    </style>
-
-    <style name="AlertDialogTheme" parent="ThemeOverlay.AppCompat.Dialog.Alert">
         <item name="buttonBarNegativeButtonStyle">@style/AlertButtonStyle</item>
         <item name="buttonBarNeutralButtonStyle">@style/AlertButtonStyle</item>
         <item name="buttonBarPositiveButtonStyle">@style/AlertButtonStyle</item>
     </style>
+
     <style name="AlertButtonStyle" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
         <item name="android:textColor">@color/orange_light</item>
     </style>
@@ -59,14 +56,11 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
         <item name="colorOnSecondary">@color/white</item>
         <!-- Other -->
         <item name="editTextColor">@color/black</item>
-        <item name="alertDialogTheme">@style/AlertDialogThemeBlue</item>
-    </style>
-
-    <style name="AlertDialogThemeBlue" parent="ThemeOverlay.AppCompat.Dialog.Alert">
         <item name="buttonBarNegativeButtonStyle">@style/AlertButtonStyleBlue</item>
         <item name="buttonBarNeutralButtonStyle">@style/AlertButtonStyleBlue</item>
         <item name="buttonBarPositiveButtonStyle">@style/AlertButtonStyleBlue</item>
     </style>
+
     <style name="AlertButtonStyleBlue" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
         <item name="android:textColor">@color/azure_light</item>
     </style>

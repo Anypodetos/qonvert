@@ -236,7 +236,7 @@ for even higher powers. Qonvert uses pipes <code>|</code> for this purpose:
 <code style=\"white-space: nowrap\">|VI|((I))MM</code>&nbsp;=&nbsp;<span class="roman-frame">VI</span>ↂMM&nbsp;=&nbsp;6&nbsp;12000.
 You can omit the leading pipes, and replace pipes with exclamation marks for better accessibility:
 <code style=\"white-space: nowrap\">||V|M|II</code>&nbsp;=&nbsp;<code style=\"white-space: nowrap\">V!M!II</code>&nbsp;=&nbsp;5&nbsp;01000&nbsp;00002.
-(The Romans certainly wouldn’t have understood the notation with repeated frames, but there doesn’t seem to be any valid way of expressing huge numbers in Roman.)</p>
+(The Romans certainly wouldn’t have understood the notation with nested frames, but there doesn’t seem to be any valid way of expressing huge numbers in Roman.)</p>
 <p>The integer part may be followed by <code>S</code> (<i>semis</i>) for a half and one or more dots (use for example <code>.</code>’s and <code>:</code>’s)
 for a twelfth each. <code>N</code> for <i>nulla</i> or <i>nihil</i> means zero.</p>
 <p>When Roman input is set, Arabic (i.e. standard decimal) input is also accepted so you need less switching between input systems.</p>

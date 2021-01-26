@@ -20,7 +20,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
 -->
 
 <resources>
-    <string-array name="base_inout">
+    <string-array name="base_inOut">
         <item>in</item>
         <item>out</item>
     </string-array>
@@ -32,44 +32,63 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
         <item>bijective A</item>
         <item>Roman</item>
     </string-array>
+    <string-array name="num_systems_short">
+        <item>std</item>
+        <item>bal</item>
+        <item>bj1</item>
+        <item>bja</item>
+        <item>rom</item>
+    </string-array>
+    <string-array name="num_systems_super">
+        <item />
+        <item>ᵇᵃˡ</item>
+        <item>ᵇʲ¹</item>
+        <item>ᵇʲᵃ</item>
+        <item>ʳᵒᵐ</item>
+    </string-array>
 
     <string-array name="interval_names">
-        <item>00</item>
-        <item>minor 01 (Pythagorean)</item>
-        <item>major 01 (Pythagorean)</item>
-        <item>minor 02 (Pythagorean)</item>
-        <item>minor 02 (just)</item>
-        <item>major 02 (just)</item>
-        <item>major 02 (Pythagorean)</item>
-        <item>perfect 03</item>
-        <item>04 (Pythagorean)</item>
-        <item>perfect 05</item>
-        <item>minor 06 (Pythagorean)</item>
-        <item>minor 06 (just)</item>
-        <item>major 06 (just)</item>
-        <item>major 06 (Pythagorean)</item>
-        <item>minor 07 (Pythagorean)</item>
-        <item>major 07 (Pythagorean)</item>
-        <item>08</item>
+        <!-- must have a "+" each to separate interval id and qualifier (order doesn’t matter) -->
+        <!-- tuning at end, separated by space and in round brackets -->
+        <item>+00</item>
+        <item>minor+01 (just intonation)</item>
+        <item>minor+01 (Pythagorean tuning)</item>
+        <item>lesser major+01 (just intonation)</item>
+        <item>greater major+01 (Pythagorean &amp; just intonation)</item>
+        <item>minor+02 (Pythagorean tuning)</item>
+        <item>minor+02 (just intonation)</item>
+        <item>major+02 (just intonation)</item>
+        <item>major+02 (Pythagorean tuning)</item>
+        <item>perfect+03 (Pythagorean &amp; just intonation)</item>
+        <item>+04 (just intonation)</item>
+        <item>+04 (Pythagorean tuning)</item>
+        <item>perfect+05 (Pythagorean &amp; just intonation)</item>
+        <item>minor+06 (Pythagorean tuning)</item>
+        <item>minor+06 (just intonation)</item>
+        <item>major+06 (just intonation)</item>
+        <item>major+06 (Pythagorean tuning)</item>
+        <item>minor+07 (Pythagorean tuning)</item>
+        <item>minor+07 (just intonation)</item>
+        <item>major+07 (just intonation)</item>
+        <item>major+07 (Pythagorean tuning)</item>
     </string-array>
     <string-array name="basic_intervals">
-        <item>unison</item>
-        <item>second</item>
-        <item>third</item>
-        <item>fourth</item>
-        <item>tritone</item>
-        <item>fifth</item>
-        <item>sixth</item>
-        <item>seventh</item>
-        <item>octave</item>
-        <item>ninth</item>
-        <item>tenth</item>
-        <item>eleventh</item>
-        <item>octave + tritone</item>
-        <item>twelfth</item>
-        <item>thirteenth</item>
-        <item>fourteenth</item>
-        <item>double octave</item>
+        <!-- 00 --><item>unison</item>
+        <!-- 01 --><item>second</item>
+        <!-- 02 --><item>third</item>
+        <!-- 03 --><item>fourth</item>
+        <!-- 04 --><item>tritone</item>
+        <!-- 05 --><item>fifth</item>
+        <!-- 06 --><item>sixth</item>
+        <!-- 07 --><item>seventh</item>
+        <!-- 00 --><item>octave</item>
+        <!-- 01 --><item>ninth</item>
+        <!-- 02 --><item>tenth</item>
+        <!-- 03 --><item>eleventh</item>
+        <!-- 04 --><item>octave + tritone</item>
+        <!-- 05 --><item>twelfth</item>
+        <!-- 06 --><item>thirteenth</item>
+        <!-- 07 --><item>fourteenth</item>
     </string-array>
     <string-array name="octaves">
         <item>double octave</item>
@@ -159,7 +178,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
         <item>Light</item>
         <item>Dark</item>
         <item>System</item>
-<!--        <item>Light blue</item>
+ <!--       <item>Light blue</item>
         <item>Dark blue</item>
         <item>System blue</item>-->
     </string-array>
@@ -167,7 +186,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
         <item>LA</item>
         <item>DA</item>
         <item>SA</item>
-<!--        <item>LB</item>
+ <!--       <item>LB</item>
         <item>DB</item>
         <item>SB</item>-->
     </string-array>

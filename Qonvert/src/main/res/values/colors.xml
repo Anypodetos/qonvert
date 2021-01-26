@@ -21,7 +21,6 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
 -->
 
 <resources>
-    <color name="ic_launcher_background">#821F08</color>
     <color name="brown_light">#FF6A1907</color>
     <color name="brown_medium">#FF521305</color>
     <color name="brown_dark">#FF350C03</color>
