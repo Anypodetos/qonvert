@@ -49,11 +49,11 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
                 android:layout_height="160dp"
                 android:id="@+id/logoView"
                 android:contentDescription="@string/logo_hint"
-                android:background="@mipmap/ic_launcher_round"
                 app:layout_constraintTop_toBottomOf="@+id/webView"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginTop="16dp" />
+                android:layout_marginTop="16dp"
+                app:srcCompat="@mipmap/ic_launcher_round" />
 
         <View
                 android:id="@+id/divider4"

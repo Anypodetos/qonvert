@@ -199,15 +199,18 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
                     app:layout_constraintTop_toTopOf="@+id/outBaseText" />
 
             <TextView
-                android:id="@+id/outBaseText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginStart="8dp"
-                android:textColor="?colorSecondary"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toTopOf="@+id/outLinearLayout"
-                app:layout_constraintStart_toStartOf="parent" />
+                    android:id="@+id/outBaseText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginStart="8dp"
+                    android:textColor="?colorSecondary"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toTopOf="@+id/outLinearLayout"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackground" />
 
             <TextView
                     android:id="@+id/textOutput0"
@@ -221,7 +224,9 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
                     android:textSize="20sp"
                     app:layout_constraintBottom_toTopOf="@+id/textOutput1"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:clickable="true"
+                    android:background="?attr/selectableItemBackground" />
 
             <TextView
                     android:id="@+id/textOutput1"
@@ -235,35 +240,41 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
                     android:textSize="20sp"
                     app:layout_constraintBottom_toTopOf="@+id/textOutput2"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:clickable="true"
+                    android:background="?attr/selectableItemBackground" />
 
             <TextView
-                android:id="@+id/textOutput2"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginStart="8dp"
-                android:focusable="true"
-                android:textSize="20sp"
-                app:layout_constraintBottom_toTopOf="@+id/textOutput3"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                    android:id="@+id/textOutput2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginStart="8dp"
+                    android:focusable="true"
+                    android:textSize="20sp"
+                    app:layout_constraintBottom_toTopOf="@+id/textOutput3"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:clickable="true"
+                    android:background="?attr/selectableItemBackground" />
 
             <TextView
-                android:id="@+id/textOutput3"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginStart="8dp"
-                android:focusable="true"
-                android:textSize="20sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                    android:id="@+id/textOutput3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginStart="8dp"
+                    android:focusable="true"
+                    android:textSize="20sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    android:clickable="true"
+                    android:background="?attr/selectableItemBackground" />
 
             <View
                 android:id="@+id/divider0"
@@ -305,17 +316,17 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
                 app:layout_constraintStart_toStartOf="parent" />
 
             <View
-                android:id="@+id/divider3"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginStart="8dp"
-                android:background="?android:attr/listDivider"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                    android:id="@+id/divider3"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginStart="8dp"
+                    android:background="?android:attr/listDivider"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
 
             <androidx.appcompat.widget.Toolbar
                     android:id="@+id/toolbar"
@@ -351,15 +362,18 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/inBaseText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
-        android:textColor="?colorSecondary"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toTopOf="@+id/inLinearLayout"
-        app:layout_constraintStart_toStartOf="parent" />
+            android:id="@+id/inBaseText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:textColor="?colorSecondary"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toTopOf="@+id/inLinearLayout"
+            app:layout_constraintStart_toStartOf="parent"
+            android:background="?attr/selectableItemBackground"
+            android:focusable="true"
+            android:clickable="true" />
 
     <LinearLayout
             android:id="@+id/inLinearLayout"
