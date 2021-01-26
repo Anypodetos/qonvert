@@ -65,21 +65,21 @@ val ROMAN_1_R       = listOf("", "I", "II", "III", "(IV|IIII)", "V", "VI", "VII"
 val ROMAN_1_12      = listOf("", "·", ":", "∴", "∷", "⁙", "S", "S·", "S:", "S∴", "S∷", "S⁙")
 const val ROMAN_ID_CHAR = '\u200B'
 
-val INTERVALS = listOf(Pair(1, 1),                                         ///////////  more intervals (mail from 2021-01-07 08:22)
-    /* 2 */ Pair(256, 243),/*Pair(16, 15),*/ Pair(9, 8),
+val INTERVALS = listOf(Pair(1, 1),
+    /* 2 */ Pair(25, 24), Pair(256, 243), /*Pair(16, 15),*/ Pair(10, 9), Pair(9, 8),
     /* 3 */ Pair(32, 27), Pair(6, 5), Pair(5, 4), Pair(81, 64),
     /* 4 */ Pair(4, 3),
-    /* T */ /*Pair(7, 5),*/ Pair(729, 512), /*Pair(10, 7),*/
+    /* T */ Pair(25, 18), Pair(729, 512),
     /* 5 */ Pair(3, 2),
     /* 6 */ Pair(128, 81), Pair(8, 5), Pair(5, 3), Pair(27, 16),
-    /* 7 */ Pair(16, 9), /*Pair(9, 5),*/ /*Pair(15, 8),*/ Pair(243, 128),
-    /* 8 */ Pair(2, 1)).map { Pair(it.first.toBigInteger(), it.second.toBigInteger()) }
+    /* 7 */ Pair(16, 9), Pair(9, 5), Pair(15, 8), Pair(243, 128),
+    ).map { Pair(it.first.toBigInteger(), it.second.toBigInteger()) }
 
 
 fun lnBigInteger(a: BigInteger): Double { /* Thanks to leonbloy @ https://stackoverflow.com/questions/6827516/logarithm-for-biginteger ! */
     if (a.signum() < 1) return if (a.signum() < 0) Double.NaN else Double.NEGATIVE_INFINITY
-    val blex: Int = a.bitLength() - 977 /* max binary digits; any value in 60..1023 works here */
-    val res = ln((if (blex > 0) a.shiftRight(blex) else a).toDouble())
+    val blex: Int = a.bitLength() - 977
+    val res = ln((if (blex > 0) a.shiftRight(blex) else a).toDouble()) /* numbers larger than 2^977 are considered too big for floating point operations */
     return if (blex > 0) res + blex * ln(2.0) else res
 }
 fun complementDigits(a: BigInteger, base: Int) = if (a > ZERO) ceil(lnBigInteger(a) / ln(base.toDouble())).roundToInt() else 0
@@ -94,8 +94,8 @@ fun reduceFraction(numer: BigInteger, denom: BigInteger): BigFraction {
 enum class QFormat {
     POSITIONAL, FRACTION, MIXED, CONTINUED, EGYPTIAN, UNICODE
 }
-enum class NumSystem(val short: String) {
-    STANDARD("std"), BALANCED("bal"), BIJECTIVE_1("bj1"), BIJECTIVE_A("bja"), /*DMS("dms"), FACTORIAL("fact"),*/ ROMAN("rom")
+enum class NumSystem {
+    STANDARD, BALANCED, BIJECTIVE_1, BIJECTIVE_A, /*DMS, FACTORIAL,*/ ROMAN
 }
 
 fun digitToChar(digit: Int, base: Int, system: NumSystem) = ((if (system != NumSystem.BIJECTIVE_A || base > 26) when (digit) {
@@ -163,42 +163,41 @@ class QNumber(numerator: BigInteger = ZERO, denominator: BigInteger = ONE, base:
 
     constructor(st: String, base: Int, system: NumSystem): this(base = base, system = system) {
         var stTrimmed = st.trimStart()
-        if (stTrimmed.startsWith('"')) {
-            var code = if (stTrimmed.length < 2) 0 else stTrimmed[1].toInt()
-            if (stTrimmed.hasSurrogatePairAt(1)) code = (code - 0xD800) * 0x400 + (stTrimmed[2].toInt() - 0xDC00) + 0x10000
-            store(code.toBigInteger())
-            if (code > 0) format = QFormat.UNICODE
-        } else when (stTrimmed.trimEnd()) {
+        if (stTrimmed.startsWith('"'))
+            store(if (stTrimmed.length > 1) { format = QFormat.UNICODE; stTrimmed.codePointAt(1).toBigInteger() } else ZERO)
+        else when (stTrimmed.trimEnd()) {
             "🐋💐" -> store(38607030735492.toBigInteger())
             "🚕"   -> store(77002143071279.toBigInteger())
             "👾"   -> store(2985842461868634769.toBigInteger())
             else -> {
                 stTrimmed = stTrimmed.filterNot { it in " \t\n\r" }
+                val bracketMinus = stTrimmed.startsWith("-{") || stTrimmed.startsWith("-[")
+                if (bracketMinus) stTrimmed = stTrimmed.substring(1)
                 val egyptian = stTrimmed.startsWith('{') || stTrimmed.endsWith('}')
                 stTrimmed = if (egyptian) stTrimmed.removePrefix("{").removeSuffix("}") else stTrimmed.removePrefix("[").removeSuffix("]")
                 val semi = stTrimmed.indexOf(';')
+                var x = Pair(ONE, ZERO)
                 when {
-                    semi == -1 -> store(parseFraction(stTrimmed))
-                    egyptian -> {
-                        var x = parseFraction(stTrimmed.substring(0, semi))
+                    semi == -1 -> x = parseFraction(stTrimmed)
+                    egyptian -> { /* Egyptian fraction */
+                        x = parseFraction(stTrimmed.substring(0, semi))
                         for ((i, subSt) in stTrimmed.substring(semi + 1).split(',').reversed().withIndex()) {
                             val c = parseFraction(subSt, if (i > 0) Pair(ZERO, ONE) else Pair(ONE, ZERO))
                             x = reduceFraction(c.first * x.first + c.second * x.second, c.first * x.second)
                         }
-                        store(x)
                         format = QFormat.EGYPTIAN
                     }
-                    else -> {
-                        var x = Pair(ONE, ZERO)
+                    else -> { /* continued fraction */
                         for ((i, subSt) in ((stTrimmed.substring(semi + 1).split(',')).reversed() + stTrimmed.substring(0, semi)).withIndex()) {
-                        val c = parseFraction(subSt, if (i > 0) Pair(ZERO, ONE) else Pair(ONE, ZERO))
-                        x = reduceFraction(c.first * x.first + c.second * x.second, c.second * x.first)
+                            val c = parseFraction(subSt, if (i > 0) Pair(ZERO, ONE) else Pair(ONE, ZERO))
+                            x = reduceFraction(c.first * x.first + c.second * x.second, c.second * x.first)
                         }
-                        store(x)
                         format = QFormat.CONTINUED
                     }
                 }
-                if (numerator >= ZERO) complement = false /* shouldn’t be necessary, but feels safer */
+                if (bracketMinus) x = reduceFraction(-x.first, x.second)
+                if (x.first >= ZERO) complement = false /* shouldn’t be necessary, but feels safer */
+                store(x)
             }
         }
     }
@@ -209,11 +208,11 @@ class QNumber(numerator: BigInteger = ZERO, denominator: BigInteger = ONE, base:
             store(split[0].toBigInteger(), split[1].toBigInteger())
             changeBase(split[2].toInt(), NumSystem.valueOf(split[3]), split[4].toBoolean())
             format = QFormat.valueOf(split[5])
-        } catch (e: Exception) { error = "/" }
+        } catch (e: Exception) { error = "\u0015" }
     }
 
-    fun copy() = QNumber(numerator, denominator, base, system, complement, format, error)
     fun toPreferencesString() = "$numerator/$denominator/$base/$system/$complement/$format"
+    fun copy() = QNumber(numerator, denominator, base, system, complement, format, error)
 
     /*   I n p u t   */
 
@@ -316,9 +315,9 @@ class QNumber(numerator: BigInteger = ZERO, denominator: BigInteger = ONE, base:
     }
 
     private fun parseRoman(st: String): BigFraction {
-        if ('ß' in st) return Pair(ZERO, ZERO) /* would get upper-cased to SS */
+        if (st.isEmpty() /*|| 'ß' in st*/) return Pair(ZERO, ZERO) /* would get upper-cased to SS */
         val negative = if (st.startsWith('-')) 1 else if (st.startsWith("..") && !st.all { it == '.'}) { complement = true; 2 } else 0
-        val stTrimmed = st.substring(negative).toUpperCase(Locale.ROOT).replace('!', '|')
+        val stTrimmed = st.substring(negative).toUpperCase(Locale.ENGLISH).replace('!', '|')
         val fracPos = stTrimmed.indexOfAny(ROMAN_UNCIAE.keys.toCharArray())
         var stInt = (if (fracPos == -1) stTrimmed else stTrimmed.substring(0, fracPos)) + "N"
         for ((key, value) in ROMAN_APOSTROPHUS + ROMAN_OTHER) stInt = stInt.replace(key, value)
@@ -363,15 +362,7 @@ class QNumber(numerator: BigInteger = ZERO, denominator: BigInteger = ONE, base:
         QFormat.UNICODE    -> toUnicode()
     } + if (withBaseSystem && aFormat != QFormat.UNICODE) ((if (system != NumSystem.ROMAN) (base.toString().map {
         SUBSCRIPT_DIGITS[it.toInt() - 48]
-    }.joinToString("")) else " ") + when (system) {
-        NumSystem.STANDARD    -> ""
-        NumSystem.BALANCED    -> "ᵇᵃˡ"
-        NumSystem.BIJECTIVE_1 -> "ᵇʲ¹"
-        NumSystem.BIJECTIVE_A -> "ᵇʲᵃ"
-        //NumSystem.DMS         -> "ᵈᵐˢ"
-        //NumSystem.FACTORIAL   -> "!"
-         NumSystem.ROMAN      -> "ʳᵒᵐ"
-    }) else ""
+    }.joinToString("")) else " ") + MainActivity.numSystemsSuper[system.ordinal]) else ""
 
     fun toFraction() = if (denominator != ONE) "${intToBase(numerator)}/${intToBase(denominator)}" else intToBase(numerator)
     fun toMixed() = if (denominator > ONE && numerator.abs() > denominator) {
@@ -445,10 +436,10 @@ class QNumber(numerator: BigInteger = ZERO, denominator: BigInteger = ONE, base:
     }
 
     private tailrec fun continuedFraction(numer: BigInteger, denom: BigInteger, pre: String = ""): String {
-        var i: BigInteger = numer / denom
-        if (numer < ZERO && numer % denom != ZERO) i--
-        val st = "$pre, ${intToBase(i)}"
-        return if (i * denom == numer) '[' + st.substring(2).replaceFirst(',', ';') + ']' else continuedFraction(denom, numer - i * denom, st)
+        var n: BigInteger = numer / denom
+        if (numer < ZERO && numer % denom != ZERO) n--
+        val st = "$pre, ${intToBase(n)}"
+        return if (n * denom == numer) '[' + st.substring(2).replaceFirst(',', ';') + ']' else continuedFraction(denom, numer - n * denom, st)
     }
 
     fun toRoman(numer: BigInteger = numerator, denom: BigInteger = denominator, showNonPositive: Boolean = true): String {
@@ -477,18 +468,15 @@ class QNumber(numerator: BigInteger = ZERO, denominator: BigInteger = ONE, base:
         for ((key, value) in ROMAN_APOSTROPHUS)
             if (APOSTROPHUS_OPTIONS[MainActivity.apostrophus][i++] == '+') result = result.replace(value, key + if (i > 1) " " else "")
         return (if (numer >= ZERO) "" else if (complement) ".." else "-") +
-            if (MainActivity.lowerDigits) result.toLowerCase(Locale.ROOT) else result
+            if (MainActivity.lowerDigits) result.toLowerCase(Locale.ENGLISH) else result
     }
 
     fun toUnicode() = if (denominator == ONE && numerator in 0x20.toBigInteger()..0x31FFF.toBigInteger())
-        numerator.toInt().let {
-            if (it < 0x10000) "\"${it.toChar()}\"" else
-                "\"${((it - 0x10000) / 0x400 + 0xD800).toChar()}${((it - 0x10000) % 0x400 + 0xDC00).toChar()}\""
-        } else ""
+        "\"${String(Character.toChars(numerator.toInt()))}\"" else ""
 
     fun toInterval(resources: Resources): String {
-        return "" // hide for now
-        /*if (numerator == ZERO || denominator == ZERO) return ""
+        return ""
+        if (numerator == ZERO || denominator == ZERO) return ""
         val toleranceNumer = 87.toBigInteger()
         val toleranceDenom = 86.toBigInteger()  /* 87/86 ≈ 20¢ */
         val numer = numerator.abs().max(denominator)
@@ -499,56 +487,70 @@ class QNumber(numerator: BigInteger = ZERO, denominator: BigInteger = ONE, base:
             denom *= TWO
             octaves++
         }
-        // names of musical intervals: https://de.wikipedia.org/wiki/Tonstruktur_(mathematische_Beschreibung)
-        // 4.1 "double octave + between unison and minor second", 8.1 ditto
-        // 7.9 "double octave + between major seventh and octave"
-        // 7.99 "~ double octave + octave" vs. 8.01 "~ triple octave"
-
-        val intervalNames = resources.getStringArray(R.array.interval_names)
-        var intervalName = if (octaves < 2) "" else with(resources.getStringArray(R.array.octaves)) {
-            if (octaves - 2 < size) this[octaves - 2] else resources.getString(R.string.octaves, octaves)
-        } + " + "
-        for (i in INTERVALS.indices) {
-            val ratioNumer = numer * INTERVALS[i].second
-            val ratioDenom = denom * INTERVALS[i].first
+        var intervalName = ""
+        for ((i, interval) in (INTERVALS + Pair(TWO, ONE)).withIndex()) {
+            val ratioNumer = numer * interval.second
+            val ratioDenom = denom * interval.first
             if (ratioNumer * toleranceDenom <= ratioDenom * toleranceNumer) {
+                val index = i + INTERVALS.size * octaves
                 intervalName = when {
-                    ratioNumer == ratioDenom -> intervalName + intervalNames[i]
-                    ratioNumer * toleranceNumer >= ratioDenom * toleranceDenom -> "~ " + intervalName + intervalNames[i].substringBefore(" (")
-                    else -> intervalName + resources.getString(R.string.between_intervals,
-                        intervalNames[i - 1].substringBefore(" ("), intervalNames[i].substringBefore(" ("))
+                    ratioNumer == ratioDenom -> getIntervalName(index, true, resources).joinToString(" ")
+                    ratioNumer * toleranceNumer >= ratioDenom * toleranceDenom ->
+                                                getIntervalName(index, false, resources).joinToString(" ")
+                    else -> {
+                        val name1 = getIntervalName(index - 1, false, resources)
+                        val name2 = getIntervalName(index, false, resources)
+                        if (name1[1] == name2[1]) name2[1] = ""
+                        if (name1[2] == name2[2]) name2[2] = ""
+                        if (name1[3] == name2[3]) name1[3] = ""
+                        resources.getString(R.string.between_intervals, name1.drop(1).joinToString(" "), name2.drop(1).joinToString(" "))
+                    }
                 }
                 break
             }
         }
-        return intervalName.removeSuffix(" + " + intervalNames[0]).replace(Regex("0[0-9]")) {
-            resources.getStringArray(R.array.basic_intervals)[it.value.toInt() + if (octaves == 1) 8 else 0]
-        }*/
+        return intervalName.replace(Regex("( )+"), " ")
     }
 
-    fun errorMessage(resources: Resources) = "\"$error\" " + (
-        if (error.length == 1 || (error.length == 2 && error.hasSurrogatePairAt(0)))
-            "(${intToBase((if (error.length == 1) error[0].toInt() else ((error[0].toInt() - 0xD800) * 0x400 + (error[1].toInt() - 0xDC00) + 0x10000))
-                .toBigInteger())}) " else ""
-        ) + resources.getString(when (error.singleOrNull() ?: ' ') {
-        '"' -> R.string.err_quote
-        '[', ']' -> R.string.err_bracket
-        '{', '}' -> R.string.err_brace
-        ';' -> R.string.err_semicolon
-        ',' -> R.string.err_comma
-        '_' -> R.string.err_underscore
-        '/' -> R.string.err_slash
-        '.' -> R.string.err_twoPoints
-        '\'' -> R.string.err_twoReps
-        in "@#$€£¥%&-" -> R.string.err_baseTokenOrMinus
-        '…' -> R.string.err_ellipsis
-        '∞' -> R.string.err_infinity
-        '無' -> R.string.err_undefined
-        'λ' -> R.string.err_empty
-        in FRACTION_CHARS.keys -> R.string.err_fraction
-        in ROMAN_CHARS -> R.string.err_onlyRoman
-        else -> if (error.lastOrNull() == ROMAN_ID_CHAR) R.string.err_noRoman else R.string.err_generic
-    })
+    private fun getIntervalName(index: Int, exact: Boolean, resources: Resources): Array<String> {
+        val intervalNames = resources.getStringArray(R.array.interval_names)
+        if (INTERVALS.size != intervalNames.size) return arrayOf("", "WRONG NUMBER", "OF INTERVAL NAMES", "IN RESOURCES")
+        val octaves = index / INTERVALS.size
+        val basicIndex = index % INTERVALS.size
+        val basicInterval = if (basicIndex > 0 || octaves <= 1) intervalNames[basicIndex].replace(Regex("0[0-7]")) {
+            resources.getStringArray(R.array.basic_intervals)[it.value.toInt() + if (octaves == 1) 8 else 0]
+        }.split('+') else listOf("", "")
+        return try { arrayOf(
+            if (exact) "" else "~",
+            if (octaves < 2) "" else with(resources.getStringArray(R.array.octaves)) {
+                if (octaves - 2 < size) this[octaves - 2] else resources.getString(R.string.octaves, octaves)
+            } + if ((basicInterval[0] + basicInterval[1]).isNotEmpty()) " +" else "",
+            basicInterval[0],
+            if (exact) basicInterval[1] else basicInterval[1].substringBefore(" (")
+        )} catch (e: Exception) { arrayOf("", "INVALID", "INTERVAL NAMES", "IN RESOURCES") }
+    }
+
+    fun errorMessage(resources: Resources) = "\"$error\" " +
+        (if (error.codePointCount(0, error.length) == 1) "(${intToBase(error.codePointAt(0).toBigInteger())}) " else "") +
+        resources.getString(when (error.singleOrNull() ?: ' ') {
+            '"' -> R.string.err_quote
+            '[', ']' -> R.string.err_bracket
+            '{', '}' -> R.string.err_brace
+            ';' -> R.string.err_semicolon
+            ',' -> R.string.err_comma
+            '_' -> R.string.err_underscore
+            '/' -> R.string.err_slash
+            '.' -> R.string.err_twoPoints
+            '\'' -> R.string.err_twoReps
+            in "@#$€£¥%&-" -> R.string.err_baseTokenOrMinus
+            '…' -> R.string.err_ellipsis
+            '∞' -> R.string.err_infinity
+            '無' -> R.string.err_undefined
+            'λ' -> R.string.err_empty
+            in FRACTION_CHARS.keys -> R.string.err_fraction
+            in ROMAN_CHARS -> R.string.err_onlyRoman
+            else -> if (error.lastOrNull() == ROMAN_ID_CHAR) R.string.err_noRoman else R.string.err_generic
+        })
 
             /*  C a l c  -  maybe for V 2.0  */
 /*

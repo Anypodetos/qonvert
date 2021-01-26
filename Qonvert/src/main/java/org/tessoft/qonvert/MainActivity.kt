@@ -83,12 +83,17 @@ class MainActivity : AppCompatActivity() {
     private lateinit var clearButton: FloatingActionButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         preferences = PreferenceManager.getDefaultSharedPreferences(this)
         setQonvertTheme(this, if (appTheme == AppTheme.UNSET) preferences.getString("theme", "LA") ?: "LA" else "")
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(findViewById(R.id.toolbar))
+
+        if (numSystemsSuper[0] == null) resources.getStringArray(R.array.num_systems_super).let {
+            for (i in numSystemsSuper.indices) numSystemsSuper[i] = it[i]
+        }
 
         textOutputs = arrayOf(
             findViewById(R.id.textOutput0),
@@ -140,8 +145,8 @@ class MainActivity : AppCompatActivity() {
             override fun onStartTrackingTouch(seekBar: SeekBar) { }
             override fun onStopTrackingTouch(seekBar: SeekBar) { }
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                if (fromUser) calculate(inputChanged = i == 0)
                 baseAndSystemFeedback(i)
-                calculate(inputChanged = i == 0)
             }
         })
 
@@ -149,16 +154,18 @@ class MainActivity : AppCompatActivity() {
         for (i in 0..1) toggleButtonGestureDetectors[i] = GestureDetector(this, object : GestureDetector.SimpleOnGestureListener() {
             override fun onFling(e1: MotionEvent?, e2: MotionEvent?, velocityX: Float, velocityY: Float): Boolean {
                 baseBars[i].progress += velocityX.sign.toInt()
+                calculate(inputChanged = i == 0)
                 return true
             }
         })
-        for (i in 0..1) for (j in BUTTON_BASES.indices) toggleButtons[BUTTON_BASES.size * i + j].setOnTouchListener { view, event ->
+        for (i in 0..1) for (j in BUTTON_BASES.indices) toggleButtons[BUTTON_BASES.size * i + j].setOnTouchListener { _, event ->
             toggleButtonGestureDetectors[i]?.onTouchEvent(event)
             return@setOnTouchListener false
         }
         for (i in 0..1) for (j in BUTTON_BASES.indices) toggleButtons[BUTTON_BASES.size * i + j].setOnClickListener {
             baseBars[i].progress = BUTTON_BASES[j] - 2
             toggleButtons[BUTTON_BASES.size * i + j].isChecked = true /* push down again in case it was down before */
+            calculate(inputChanged = i == 0)
         }
 
         for (i in 0..1) systemButtons[i].setOnClickListener { view ->
@@ -167,14 +174,16 @@ class MainActivity : AppCompatActivity() {
                 popupMenu.menu.add(1, Menu.NONE, j, res).isChecked = j == numSystems[i].ordinal
             popupMenu.menu.setGroupCheckable(1, true, true)
             popupMenu.setOnMenuItemClickListener { item: MenuItem ->
-                with(NumSystem.values()[item.order]) { setBaseAndSystem(i, allowedBase(baseBars[i].progress + 2, this), this, true) }
+                val sys = NumSystem.values()[item.order]
+                setBaseAndSystem(i, allowedBase(baseBars[i].progress + 2, sys), sys, recalculate = true)
                 true
             }
             popupMenu.show()
         }
         for (i in 0..1) systemButtons[i].setOnLongClickListener {
+            it.playSoundEffect(SoundEffectConstants.CLICK)
             val sys = if (numSystems[i] == NumSystem.STANDARD) NumSystem.BALANCED else NumSystem.STANDARD
-            setBaseAndSystem(i, allowedBase(baseBars[i].progress + 2, sys), sys, true)
+            setBaseAndSystem(i, allowedBase(baseBars[i].progress + 2, sys), sys, recalculate = true)
             true
         }
 
@@ -186,7 +195,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         for (i in 0..3) textOutputs[i].setOnClickListener {
-            val roman = i == 1 && textOutputs[i].typeface == Typeface.SERIF
+            val roman = i == 1 && textOutputs[1].typeface == Typeface.SERIF
             copyToInput(lastQNumber, textOutputs[i].text,
                 if (roman) 10 else baseBars[1].progress + 2, if (roman) NumSystem.ROMAN else numSystems[1],
                 complementSwitch.isChecked, switchBases = true)
@@ -215,7 +224,6 @@ class MainActivity : AppCompatActivity() {
                     }.joinToString("") + '⁄' + altText.substring(slash + 1).map {
                         if (it in '0'..'9') SUBSCRIPT_DIGITS[it.toInt() - 48] else '\u202F'
                     }.joinToString("")
-
                 altMenuTitle = R.string.clipboard_fraction
             }
             /*if (altText == text && i == 0 && numSystems[1] !in setOf(NumSystem.BIJECTIVE_1, NumSystem.BIJECTIVE_A, NumSystem.ROMAN) &&
@@ -253,24 +261,24 @@ class MainActivity : AppCompatActivity() {
         })
         editInput.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                if (editInput.text.toString() != "" && lastQNumber.isValid) historyList.add(lastQNumber)
+                if (editInput.text.isNotBlank() && lastQNumber.isValid) historyList.add(lastQNumber)
                 editInput.selectAll()
                 resources.configuration.orientation != Configuration.ORIENTATION_LANDSCAPE
             } else false
         }
 
         clearButton.setOnClickListener {
-            if (editInput.text.toString() != "" && lastQNumber.isValid &&
+            if (editInput.text.isNotBlank() && lastQNumber.isValid &&
                 (historyList.size == 0 || historyList.last().toString(withBaseSystem = true) != lastQNumber.toString(withBaseSystem = true)))
                     historyList.add(lastQNumber)
             editInput.setText("")
         }
         clearButton.setOnLongClickListener {
+            it.playSoundEffect(SoundEffectConstants.CLICK)
             complementSwitch.isChecked = false
-            for (i in 1 downTo 0) setBaseAndSystem(i, 10, NumSystem.STANDARD, i == 0)
+            for (i in 1 downTo 0) setBaseAndSystem(i, 10, NumSystem.STANDARD, recalculate = i == 0)
             true
         }
-
     }
 
     /*   O t h e r   e v e n t s   */
@@ -283,13 +291,12 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.historyItem -> {
-                val itemsList = mutableListOf<String>()
-                for (q in historyList) itemsList.add(q.toString(withBaseSystem = true))
+                val itemsArray = Array(historyList.size) { i -> historyList[i].toString(withBaseSystem = true) }
                 val historyDialog = AlertDialog.Builder(this)
                 historyDialog.setTitle(R.string.menu_history)
-                if (itemsList.isNotEmpty()) {
-                    historyDialog.setSingleChoiceItems(itemsList.toTypedArray(), -1) { dialog, which ->
-                        if (editInput.text.toString() != "" && lastQNumber.isValid) historyList.add(lastQNumber)
+                if (itemsArray.isNotEmpty()) {
+                    historyDialog.setSingleChoiceItems(itemsArray, -1) { dialog, which ->
+                        if (editInput.text.isNotBlank() && lastQNumber.isValid) historyList.add(lastQNumber)
                         copyToInput(historyList[which])
                         historyList.removeAt(which)
                         dialog.dismiss()
@@ -310,7 +317,7 @@ class MainActivity : AppCompatActivity() {
             R.id.playItem -> {
                 val ratio = (lastQNumber.numerator.toDouble() / lastQNumber.denominator.toDouble()).absoluteValue
                 val message = if (ratio in 1/128.0..128.0) {
-                    val baseFrequency = 440 / 2.0.pow(round(ln(ratio) / ln(2.0)))
+                    val baseFrequency = 440 / 1.5.pow(round(ln(ratio) / ln(1.5) / 2))
                     OneTimeBuzzer(baseFrequency, 100, 1.5).play()
                     Timer().schedule(1500) { OneTimeBuzzer(baseFrequency * ratio, 100, 1.5).play() }
                     Timer().schedule(3000) {
@@ -321,7 +328,7 @@ class MainActivity : AppCompatActivity() {
                 } else getString(R.string.no_interval,
                     QNumber(ONE, 128.toBigInteger(), baseBars[0].progress + 2, numSystems[0], format = QFormat.FRACTION).toString(),
                     QNumber(128.toBigInteger(), ONE, baseBars[0].progress + 2, numSystems[0]).toString(withBaseSystem = true))
-                if (message != "") {
+                if (message.isNotBlank()) {
                     val toast = Toast.makeText(applicationContext, message, Toast.LENGTH_LONG)
                     toast.view.findViewById<TextView>(android.R.id.message).gravity = Gravity.CENTER
                     toast.show()
@@ -350,21 +357,21 @@ class MainActivity : AppCompatActivity() {
         editInput.textSize = textSize
         for (i in 0..3) textOutputs[i].textSize = textSize
         clearButton.size = if (textSize < 25) FloatingActionButton.SIZE_MINI else FloatingActionButton.SIZE_NORMAL
-        with(preferences.getStringSet("buttons", null) ?: DEFAULT_BUTTONS) {
-            for (j in BUTTON_BASES.indices) {
-                val visibility = if (BUTTON_BASES[j].toString() in this) View.VISIBLE else View.GONE
-                toggleButtons[j].visibility = visibility
-                toggleButtons[j + BUTTON_BASES.size].visibility = visibility
-            }
+        val buttons = preferences.getStringSet("buttons", null) ?: DEFAULT_BUTTONS
+        for (j in BUTTON_BASES.indices) {
+            val visibility = if (BUTTON_BASES[j].toString() in buttons) View.VISIBLE else View.GONE
+            toggleButtons[j].visibility = visibility
+            toggleButtons[j + BUTTON_BASES.size].visibility = visibility
         }
         if (historyList.size == 0) for (i in 0 until preferences.getInt("historySize", 0))
             with(QNumber(preferencesEntry = preferences.getString("history$i", null) ?: "")) { if (isValid) historyList.add(this) }
         complementSwitch.isChecked = preferences.getBoolean("outComplement", false)
-        setBaseAndSystem(0, preferences.getInt("inBase",  10),
-            try { NumSystem.valueOf(preferences.getString("inSystem",  null) ?: "") } catch (e: Exception) { NumSystem.STANDARD }, false)
-        setBaseAndSystem(1, preferences.getInt("outBase",  10),
-            try { NumSystem.valueOf(preferences.getString("outSystem", null) ?: "") } catch (e: Exception) { NumSystem.STANDARD }, false)
+        setBaseAndSystem(0, preferences.getInt("inBase", 10),
+            try { NumSystem.valueOf(preferences.getString("inSystem",  null) ?: "") } catch (e: Exception) { NumSystem.STANDARD }, recalculate = false)
+        setBaseAndSystem(1, preferences.getInt("outBase", 10),
+            try { NumSystem.valueOf(preferences.getString("outSystem", null) ?: "") } catch (e: Exception) { NumSystem.STANDARD }, recalculate = false)
         editInput.setText(preferences.getString("input", "1_5/6"))
+        editInput.setSelection(preferences.getInt("selStart", 0), preferences.getInt("selEnd", 0))
         showWhatsNewStar = preferences.getInt("version", 0) < BuildConfig.VERSION_CODE &&
             preferences.getString("input", null) != null /* don’t show star if there was no old version */
     }
@@ -377,6 +384,8 @@ class MainActivity : AppCompatActivity() {
         editor.putInt("historySize", prunedSize)
         for (i in 0 until prunedSize) editor.putString("history$i", historyList[historyList.size - prunedSize + i].toPreferencesString())
         editor.putString("input", editInput.text.toString())
+        editor.putInt("selStart", editInput.selectionStart)
+        editor.putInt("selEnd", editInput.selectionEnd)
         editor.putInt("inBase",  baseBars[0].progress + 2)
         editor.putInt("outBase", baseBars[1].progress + 2)
         editor.putString("inSystem",  numSystems[0].toString())
@@ -432,7 +441,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setBaseAndSystem(i: Int, base: Int, system: NumSystem, recalculate: Boolean) {
         numSystems[i] = system
-        systemButtons[i].text = system.short
+        systemButtons[i].text = resources.getStringArray(R.array.num_systems_short)[system.ordinal]
         baseBars[i].progress = base - 2
         if (recalculate) calculate(inputChanged = i == 0)
         baseAndSystemFeedback(i)
@@ -441,12 +450,12 @@ class MainActivity : AppCompatActivity() {
     private fun baseAndSystemFeedback(i: Int) {
         val base = baseBars[i].progress + 2
         val baseAllowed = allowedBase(base, numSystems[i]) == base
-        baseTexts[i].text = getString(R.string.base, resources.getStringArray(R.array.base_inout)[i], base,
-            resources.getStringArray(R.array.num_systems)[if (baseAllowed) numSystems[i].ordinal else 0])
+        val actualNumSystem = if (baseAllowed) numSystems[i] else NumSystem.STANDARD
+        baseTexts[i].text = getString(R.string.base, resources.getStringArray(R.array.base_inOut)[i], base,
+            resources.getStringArray(R.array.num_systems)[actualNumSystem.ordinal])
         for (j in BUTTON_BASES.indices) toggleButtons[BUTTON_BASES.size * i + j].isChecked = BUTTON_BASES[j] == base
         systemButtons[i].setBackgroundColor(ContextCompat.getColor(applicationContext,
             if (baseAllowed) resolveColor(R.attr.colorPrimaryVariant) else R.color.grey))
-        val actualNumSystem = if (baseAllowed) numSystems[i] else NumSystem.STANDARD
         if (i == 0) editInput.typeface = if (actualNumSystem == NumSystem.ROMAN) Typeface.SERIF else Typeface.DEFAULT
         if (i == 1) complementSwitch.isEnabled = actualNumSystem != NumSystem.BALANCED
         toastRangeHint(i)
@@ -459,7 +468,7 @@ class MainActivity : AppCompatActivity() {
             rangeToast?.cancel()
             rangeToast = Toast.makeText(applicationContext, getString(
                 if (numSystems[i] == NumSystem.ROMAN && base == 10) { if (i == 0) R.string.range_toast_roman else R.string.range_toast_onlyRoman }
-                else R.string.range_toast, resources.getStringArray(R.array.base_inout)[i],
+                else R.string.range_toast, resources.getStringArray(R.array.base_inOut)[i],
                 digitToChar(minDigit, base, numSystems[i]), digitToChar(minDigit + base - 1, base, numSystems[i])), Toast.LENGTH_SHORT)
             rangeToast?.setGravity(Gravity.TOP, 0, 0)
             rangeToast?.show()
@@ -477,8 +486,8 @@ class MainActivity : AppCompatActivity() {
             q.toMixed()
         } else st)
         if (!(editInput.text.startsWith('"') && editInput.text.endsWith('"'))) {
-            if (switchBases) setBaseAndSystem(1, baseBars[0].progress + 2, numSystems[0], false)
-            setBaseAndSystem(0, base, system, true)
+            if (switchBases) setBaseAndSystem(1, baseBars[0].progress + 2, numSystems[0], recalculate = false)
+            setBaseAndSystem(0, base, system, recalculate = true)
         }
     }
 
@@ -497,6 +506,7 @@ class MainActivity : AppCompatActivity() {
             private set
         var apostrophus = 0
             private set
+        val numSystemsSuper = arrayOfNulls<String>(NumSystem.values().size)
 
         fun tokenBaseSystem(token: Char): Pair<Int, NumSystem>? = // could be made customisable
             when (token) {

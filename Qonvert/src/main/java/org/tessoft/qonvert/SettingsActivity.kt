@@ -55,16 +55,16 @@ class SettingsActivity : AppCompatActivity() {
             val lowercase = findPreference<SwitchPreference>("lowercase")
             val apostrophus = findPreference<ListPreference>("apostrophus")
             apostrophus?.entries = resources.getStringArray(R.array.apostrophus_entries).map {
-                    if (lowercase?.isChecked == true) it.toLowerCase(Locale.ROOT) else it
+                    if (lowercase?.isChecked == true) it.toLowerCase(Locale.ENGLISH) else it
                 }.toTypedArray()
-            apostrophus?.summary = if (lowercase?.isChecked == true) apostrophus?.entry.toString().toLowerCase(Locale.ROOT)
-                else apostrophus?.entry.toString().toUpperCase(Locale.ROOT)
+            apostrophus?.summary = if (lowercase?.isChecked == true) apostrophus?.entry.toString().toLowerCase(Locale.ENGLISH)
+                else apostrophus?.entry.toString().toUpperCase(Locale.ENGLISH)
         }
 
         private fun buttonSummary() {
-            findPreference<MultiSelectListPreference>("buttons")?.let {
-                it.summary = it.values.sortedBy { i -> i.toInt() }.joinToString(" • ") { i ->
-                    getString(resources.getIdentifier("b$i", "string", context?.packageName)).toUpperCase(Locale.ROOT)
+            findPreference<MultiSelectListPreference>("buttons")?.apply {
+                summary = values.sortedBy { i -> i.toInt() }.joinToString(" • ") { i ->
+                    getString(resources.getIdentifier("b$i", "string", context?.packageName)).toUpperCase(Locale.ENGLISH)
                 }
             }
         }
@@ -73,9 +73,9 @@ class SettingsActivity : AppCompatActivity() {
             when (key) {
                "lowercase", "apostrophus" -> apostrophusSummary()
                 "buttons" -> buttonSummary()
-                "theme" -> activity?.let {
-                    MainActivity.setQonvertTheme(it, findPreference<ListPreference>("theme")?.value ?: "")
-                    it.recreate()
+                "theme" -> activity?.apply {
+                    MainActivity.setQonvertTheme(this, findPreference<ListPreference>("theme")?.value ?: "")
+                    recreate()
                 }
             }
         }
