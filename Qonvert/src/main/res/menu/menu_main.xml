@@ -29,13 +29,13 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
         android:title="@string/menu_history"
         app:showAsAction="always" />
     <item
-        android:id="@+id/playItem"
-        android:icon="@drawable/ic_interval"
-        android:title="@string/menu_interval"
-        app:showAsAction="ifRoom" />
+            android:id="@+id/playItem"
+            android:icon="@drawable/ic_interval"
+            android:title="@string/menu_interval"
+            app:showAsAction="ifRoom" />
     <item
-        android:id="@+id/settingsItem"
-        android:title="@string/menu_settings" />
+            android:id="@+id/settingsItem"
+            android:title="@string/menu_settings" />
     <item
             android:id="@+id/helpItem"
             android:title="@string/menu_help" />
