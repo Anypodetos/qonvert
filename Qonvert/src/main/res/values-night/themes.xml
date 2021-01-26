@@ -34,7 +34,9 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
         <item name="colorOnSecondary">@color/white</item>
         <!-- Other -->
         <item name="editTextColor">@color/white</item>
-        <item name="alertDialogTheme">@style/AlertDialogTheme</item>
+        <item name="buttonBarNegativeButtonStyle">@style/AlertButtonStyle</item>
+        <item name="buttonBarNeutralButtonStyle">@style/AlertButtonStyle</item>
+        <item name="buttonBarPositiveButtonStyle">@style/AlertButtonStyle</item>
    </style>
 
     <style name="Theme.QonvertBlue" parent="Theme.MaterialComponents.DayNight.NoActionBar">
@@ -50,6 +52,8 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
         <item name="colorOnSecondary">@color/white</item>
         <!-- Other -->
         <item name="editTextColor">@color/white</item>
-        <item name="alertDialogTheme">@style/AlertDialogThemeBlue</item>
+        <item name="buttonBarNegativeButtonStyle">@style/AlertButtonStyleBlue</item>
+        <item name="buttonBarNeutralButtonStyle">@style/AlertButtonStyleBlue</item>
+        <item name="buttonBarPositiveButtonStyle">@style/AlertButtonStyleBlue</item>
    </style>
 </resources>
