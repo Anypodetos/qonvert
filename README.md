@@ -1,5 +1,5 @@
 # Qonvert
-Qonvert will be available soon. It will be free, contain no ads, and need no permissions.
+Qonvert is available on <a href="https://play.google.com/store/apps/details?id=org.tessoft.qonvert">Google Play</a>. It is free, contains no ads, and needs no special permissions.
 
 * Converting between bases 2 to 36
 * Converting rational numbers between positional notation (including repeating digits) and fractions (including improper, mixed and continued fractions)
