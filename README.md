@@ -7,7 +7,7 @@ Qonvert is available on <a href="https://play.google.com/store/apps/details?id=o
 * Converting between minus (-2) and complement notation (FFFFFFFE)
 * Balanced numeral systems such as balanced ternary
 * Bijective numeration
-* Roman numerals
+* Roman numerals including unciae (twelfths)
 * Plus: Unicode characters, input of Egyptian fractions – and it plays musical intervals with a given frequency ratio!
 * Light and dark colour schemes
 
