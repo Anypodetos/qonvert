@@ -1,0 +1,102 @@
+<!--
+Copyright 2021, 2022 Anypodetos (Michael Weber)
+
+This file is part of Qonvert.
+
+Qonvert is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Qonvert is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Qonvert. If not, see <https://www.gnu.org/licenses/>.
+
+Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
+-->
+
+<resources>
+    <string-array name="base_inOut">
+        <item>Eingabe</item>
+        <item>Ausgabe</item>
+    </string-array>
+
+    <string-array name="num_systems">
+        <item>Standard</item>
+        <item>balanciert</item>
+        <item>bijektiv 1</item>
+        <item>bijektiv A</item>
+        <item>römisch</item>
+    </string-array>
+    <string-array name="num_systems_short">
+        <item>std</item>
+        <item>bal</item>
+        <item>bj1</item>
+        <item>bja</item>
+        <item>röm</item>
+    </string-array>
+
+    <string-array name="formats">
+        <item>Stellenwertsystem</item>
+        <item>Stellenwertsystem (alternativ)</item>
+        <item>Bruch</item>
+        <item>Gemischter Bruch</item>
+        <item>Kettenbruch</item>
+        <item>Ägyptischer Bruch</item>
+        <item>Römische Zahl</item>
+        <item>Unicode-Zeichen</item>
+    </string-array>
+
+   <!-- Preferences -->
+   <string-array name="digits_entries">
+        <item>10</item>
+        <item>30</item>
+        <item>100</item>
+        <item>300</item>
+        <item>1 000</item>
+        <item>3 000</item>
+        <item>10 000 (langsam)</item>
+        <item>30 000 (kann abstürzen)</item>
+    </string-array>
+
+    <string-array name="egyptian_entries">
+        <item>Gierige Methode (älteste)</item>
+        <item>Binäre Rest-Methode (schnellste)</item>
+        <item>Golombs Methode (gleiche Ergebnisse wie Kettenbruch-Methode)</item>
+        <item>Paar-Methode</item>
+        <item>Nicht anzeigen</item>
+    </string-array>
+
+    <string-array name="buttons_entries">
+        <item>Binär (2)</item>
+        <item>Ternär (3)</item>
+        <item>Senär (6)</item>
+        <item>Oktal (8)</item>
+        <item>Dezimal (10)</item>
+        <item>Dozenal (12)</item>
+        <item>Hexadezimal (16)</item>
+        <item>Vigesimal (20)</item>
+        <item>Hexavigesimal (26)</item>
+    </string-array>
+
+    <string-array name="size_entries">
+        <item>Winzig</item>
+        <item>Klein</item>
+        <item>Mittel</item>
+        <item>Groß</item>
+        <item>Riesig</item>
+    </string-array>
+
+    <string-array name="theme_entries">
+        <item>Hell</item>
+        <item>Dunkel</item>
+        <item>System</item>
+<!--        <item>Hellblau</item>
+        <item>Dunkelblau</item>
+        <item>System blau</item>-->
+    </string-array>
+</resources>
