@@ -1,7 +1,7 @@
 package org.tessoft.qonvert
 
 /*
-Copyright 2020 Anypodetos (Michael Weber)
+Copyright 2020, 2021 Anypodetos (Michael Weber)
 
 This file is part of Qonvert.
 
@@ -23,6 +23,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
 
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.ListPreference
 import androidx.preference.MultiSelectListPreference
@@ -46,9 +47,20 @@ class SettingsActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
+    override fun onOptionsItemSelected(item: MenuItem) = if (item.itemId == android.R.id.home) {
+         finish()
+         true
+    } else false
+
     class SettingsFragment : PreferenceFragmentCompat() {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey)
+        }
+
+        private fun formatsSummary() {
+            findPreference<MultiSelectListPreference>("formats")?.apply {
+                summary = values.joinToString(" • ")
+            }
         }
 
         private fun apostrophusSummary() {
@@ -71,7 +83,8 @@ class SettingsActivity : AppCompatActivity() {
 
         private val listener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
             when (key) {
-               "lowercase", "apostrophus" -> apostrophusSummary()
+                "formats" -> formatsSummary()
+                "lowercase", "apostrophus" -> apostrophusSummary()
                 "buttons" -> buttonSummary()
                 "theme" -> activity?.apply {
                     MainActivity.setQonvertTheme(this, findPreference<ListPreference>("theme")?.value ?: "")
@@ -83,6 +96,7 @@ class SettingsActivity : AppCompatActivity() {
         override fun onResume() {
             super.onResume()
             preferenceManager.sharedPreferences.registerOnSharedPreferenceChangeListener(listener)
+            formatsSummary()
             apostrophusSummary()
             buttonSummary()
          }

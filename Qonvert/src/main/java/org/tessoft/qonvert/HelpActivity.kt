@@ -21,7 +21,6 @@ along with Qonvert. If not, see <https://www.gnu.org/licenses/>.
 Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
 */
 
-import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.view.*
@@ -66,7 +65,7 @@ class HelpFragment : Fragment() {
             root.findViewById<WebView>(R.id.webView).loadData(
                 getString(R.string.css) +
                 (if (isNightModeActive()) getString(R.string.css_dark) else "") +
-                (if (MainActivity.appTheme == AppTheme.BLUE) getString(R.string.css_blue) else "") +
+                (if (MainActivity.themeId == ThemeId.BLUE) getString(R.string.css_blue) else "") +
                 "<h1>" + when(it) {
                     0 -> getString(R.string.menu_help)
                     1 -> getString(R.string.menu_cheatSheet)
@@ -82,7 +81,6 @@ class HelpFragment : Fragment() {
         })
         return root
     }
-
 
     private fun isNightModeActive() = when (AppCompatDelegate.getDefaultNightMode()) {
         AppCompatDelegate.MODE_NIGHT_NO -> false
@@ -139,21 +137,14 @@ class HelpActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        //menuInflater.inflate(R.menu.menu_help, menu)
+        menuInflater.inflate(R.menu.menu_help, menu)
         return true
     }
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.shareItem -> {
-                val sendIntent: Intent = Intent().apply {
-                    action = Intent.ACTION_SEND
-                    putExtra(Intent.EXTRA_TEXT, getString(R.string.share_app))
-                    type = "text/plain"
-                }
-                startActivity(Intent.createChooser(sendIntent, null))
-                return true
-            }
-            else -> return false
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        R.id.shareQonvert -> {
+            shareText(this, getString(R.string.share_app))
+            true
         }
+        else -> false
     }
 }
