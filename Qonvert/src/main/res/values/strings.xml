@@ -1,5 +1,5 @@
 <!--
-Copyright 2020, 2021 Anypodetos (Michael Weber)
+Copyright 2020, 2021, 2022 Anypodetos (Michael Weber)
 
 This file is part of Qonvert.
 
@@ -20,30 +20,35 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
 -->
 
 <resources>
-    <string name="app_name">Qonvert</string>
+    <string name="app_name" translatable="false">Qonvert</string>
 
     <!-- Main -->
-    <string name="b2">bin</string>
-    <string name="b3">ter</string>
-    <string name="b6">sen</string>
-    <string name="b8">oct</string>
-    <string name="b10">dec</string>
-    <string name="b12">doz</string>
-    <string name="b16">hex</string>
-    <string name="b20">vig</string>
-    <string name="b26">hxv</string>
+    <string name="b2" translatable="false">bin</string>
+    <string name="b3" translatable="false">ter</string>
+    <string name="b6" translatable="false">sen</string>
+    <string name="b8" translatable="false">oct</string>
+    <string name="b10" translatable="false">dec</string>
+    <string name="b12" translatable="false">doz</string>
+    <string name="b16" translatable="false">hex</string>
+    <string name="b20" translatable="false">vig</string>
+    <string name="b26" translatable="false">hxv</string>
 
     <string name="complement">complement</string>
-    <string name="edit_hint">type a number ∈ ℚ</string>
-    <string name="clear_hint">clear input</string>
+    <string name="edit_hint">Type a number ∈ ℚ</string>
+    <string name="clear_hint">Clear input</string>
+    <string name="keyboard_hint">Toggle keyboard</string>
     <string name="base">%1$s: base %2$d, %3$s</string>
     <string name="clipboard_asIs">Copy to clipboard as is</string>
+    <string name="clipboard_rep">… with overlined repeating part</string>
     <string name="clipboard_fraction">… as pretty fraction</string>
-    <string name="to_clipboard">Copied to clipboard</string>
+    <string name="clipboard_ok">Copied to clipboard</string>
     <string name="to_fraction">Converted to fraction to preserve precision</string>
+    <string name="to_history_indep">Removed reference to history entry</string>
     <string name="range_toast">%1$s: digit range %2$s..%3$s</string>
     <string name="range_toast_roman">%1$s: Roman numerals or digit range %2$s..%3$s</string>
     <string name="range_toast_onlyRoman">%1$s: Roman numerals</string>
+    <string name="no_q_number">This button would show all available formats. However, there is no valid number in the input line.</string>
+    <string name="no_history">The history is empty. Type a number, then tap Enter or delete it with the 🗑 button, to store it there.</string>
 
     <string name="err_quote">is only valid at start of input.</string>
     <string name="err_bracket">is only valid around continued fraction.</string>
@@ -55,6 +60,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     <string name="err_twoPoints">– the radix point – is only valid once.</string>
     <string name="err_twoReps">– the repetition mark – is only valid once.</string>
     <string name="err_baseTokenOrMinus">is only valid at start of number.</string>
+    <string name="err_notInHistory">denotes a history entry that doesn’t exist.</string>
     <string name="err_ellipsis">denotes a number that’s been cut off.</string>
     <string name="err_infinity">[Those having problems with infinities] aren’t nearly appreciative enough of projective geometry. (Grant Sanderson)</string>
     <string name="err_undefined">Does your input have Buddha-nature?</string>
@@ -64,26 +70,43 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     <string name="err_fraction">is only valid at end of integer.</string>
     <string name="err_generic">isn’t a valid character.</string>
 
+    <string name="menu_formats">All formats</string>
     <string name="menu_history">History</string>
-    <string name="no_history">The history is empty. Type a number, then tap Enter or delete it with the “🗑” button, to store it here.</string>
-    <string name="clear_history">Clear history</string>
-    <string name="clear_history_q">Clear the history?</string>
-    <string name="clear_history_sub">This can’t be undone.</string>
     <string name="menu_interval">Play interval</string>
-    <string name="octaves">%d octaves</string>
-    <string name="between_intervals">between %1$s and %2$s</string>
-    <string name="no_interval">Number must be in the range\n%1$s..%2$s</string>
-
     <string name="menu_settings">Settings</string>
     <string name="menu_help">Help</string>
     <string name="menu_cheatSheet">Cheat sheet</string>
     <string name="menu_whatsNew">What’s new</string>
     <string name="menu_about">About &amp; Licenses</string>
-    <string name="title_about">About Qonvert v%s</string>
 
+    <string name="intervals">Musical intervals</string>
+    <string name="octaves">%d octaves</string>
+    <string name="between_intervals">between %1$s and %2$s</string>
+    <string name="no_interval">Number must be in the range %1$s..%2$s</string>
+
+    <!-- Lists / Dialogs -->
+    <string name="menu_dots" translatable="false">⋮</string>
+    <string name="formats_hint">Show all formats</string>
+    <string name="expand_hint">Expand / collapse</string>
+    <string name="item_header" translatable="false">%s =</string>
+    <string name="egyptian_method">Egyptian fraction: %s</string>
+    <string name="select_all">Select all</string>
+    <string name="copy">Copy</string>
+    <string name="clipboard_all_ok">Copied all entries to clipboard</string>
+    <string name="share">Share</string>
+    <string name="share_all">Share all entries with</string>
+    <string name="delete">Delete</string>
+    <string name="delete_history_q">Delete the complete history?</string>
+    <plurals name="delete_q">
+        <item quantity="one">Delete the selected entry?</item>
+        <item quantity="other">Delete the selected entries?</item>
+    </plurals>
+    <string name="delete_this_q">Delete this entry?</string>
+    <string name="cant_be_undone">This can’t be undone.</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="close">Close</string>
+    <string name="pretty_output">pretty output, hide base</string>
 
     <!-- Preferences -->
     <string name="out_header">Output</string>
@@ -92,6 +115,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     <string name="group_hint">by 4 in bases 2, 4, 8, 16, 32, else by 3</string>
     <string name="lowercase_title">Lower case digits</string>
     <string name="apostrophus_title">Roman apostrophus</string>
+    <string name="egyptian_title">Egyptian fractions</string>
 
     <string name="feedback_header">Feedback</string>
     <string name="range_title">Show digit range on base change</string>
@@ -105,13 +129,11 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
 
     <!-- Help -->
     <string name="logo_hint">The Qonvert logo is a dashing version of ℚ, the symbol for the set of rational numbers.</string>
-    <string name="share_app">Convert rational numbers between different bases and different representations:\n
-https://github.com/Anypodetos/qonvert\n
-— or —\n
-https://……</string>
+    <string name="share_app">Convert rational numbers between different bases and different representations:\n\nhttps://play.google.com/store/apps/details?id=org.tessoft.qonvert\n\nor\n\nhttps://qonvert.en.uptodown.com/android</string>
+    <string name="title_about">About Qonvert v%s</string>
 
     <!-- CSS -->
-    <string name="css"><![CDATA[
+    <string name="css" translatable="false"><![CDATA[
 <style>
     body {padding-top: 1.5em}
     h1, h2, h3 {font-family: serif}
@@ -124,7 +146,7 @@ https://……</string>
     .roman-frame {border: 1px solid black; border-bottom: none}
 </style>
     ]]></string>
-    <string name="css_dark"><![CDATA[
+    <string name="css_dark" translatable="false"><![CDATA[
 <style>
     body {color: white; background: rgb(18, 18, 18)}
     h2 {background: rgb(32, 32, 32)}
@@ -132,7 +154,7 @@ https://……</string>
     .roman-frame {border-color: white}
 </style>
     ]]></string>
-    <string name="css_blue"><![CDATA[
+    <string name="css_blue" translatable="false"><![CDATA[
 <style>
     a {color: rgb(0, 157, 224)} /* azure_light */
     code {border-bottom-color: rgb(0, 118, 168)} /* azure_dark */
@@ -143,9 +165,9 @@ https://……</string>
     <string name="help"><![CDATA[
 <h2>Overview</h2>
 <p>This app lets you convert numbers from the set ℚ of rational numbers between different bases (including nonstandard numeral systems),
-and between different representations such as positional notation and fractions (including improper, mixed and continued ones).
+and between different representations such as positional notation and fractions (including improper, mixed, continued and Egyptian ones).
 The numbers can have basically arbitrary size and precision.</p>
-<p>To copy a result to the input line, short-tap it, and to copy it to the clipboard, long-tap it.</p>
+<p>Short-tap a result to copy it to the input line, and long-tap to copy it to the clipboard.</p>
 
 <h2>Choosing input and output systems</h2>
 <p>Choose an input <a href="https://en.wikipedia.org/wiki/Radix">base</a> from 2 to 36 via the slider or the shortcut buttons in the lower part of the screen,
@@ -168,13 +190,14 @@ For example, <code>0.1\'486</code> means 0.1486486486…, and <code>21\'3.4</cod
 <p>The result of your conversion has always either a finite number of digits after the radix point or a repeating part. Sometimes, though, the representation
 can be very long. To keep the app from freezing, the search for an exact representation stops after 300 digits by default. You can change this value in
 the settings.</p>
-<p>If your screen is too small to show all the output formats (positional, fraction, mixed number, continued fraction), you can swipe the output area up and down.</p>
+<p>If your screen is too small to show all the output formats (positional, fraction, mixed number, continued fraction, Egyptian fraction),
+you can swipe the output area up and down.</p>
 
 <h2>Fractions</h2>
 <p>Type a numerator and a denominator separated with a slash <code>/</code>, as in <code>6/8</code> or <code>1.5/2</code>. Fractions are reduced or expanded
 as necessary, so both of these inputs will result in 3/4.</p>
-<p>For mixed numbers, separate integer and fractional part with an underscore <code>_</code>: for example, <code>1_9/8</code> or
-<code>1.\'3&nbsp;_&nbsp;1/3</code>. Fractions with an absolute value over 1 will be shown both as improper fractions (17/8 or 5/3 in our examples)
+<p>For mixed numbers, separate integer and fractional part with an underscore <code>_</code>: for example <code>1_9/8</code>, or something more complicated
+such as <code>1.\'3&nbsp;_&nbsp;1/3</code>. Fractions with an absolute value over 1 will be shown both as improper fractions (17/8 or 5/3 in our examples)
 and as mixed numbers (2_1/8 or 1_2/3).</p>
 
 <h3>Continued fractions</h3>
@@ -185,10 +208,14 @@ a comma-separated list of denominators. Square brackets are used for output but 
 <p>Input of non-integer numbers, including fractions, is okay: <code>1.5;&nbsp;2/3,&nbsp;1_1/5</code> is simplified to [2;&nbsp;6].
 All continued fractions are displayed with positive denominators, so <code>-3;-1,-1,-18</code> becomes [−4;&nbsp;2,&nbsp;18].</p>
 
-<h3>Egyptian fractions (input only)</h3>
+<h3>Egyptian fractions</h3>
 <p><a href="https://en.wikipedia.org/wiki/Egyptian_fraction">Egyptian fractions</a> are sums of unit fractions. Input works as with continued fractions,
 only with curly braces: <code>{2;3,4}</code> is interpreted as <strong>2</strong>&nbsp;+&nbsp;1/<strong>3</strong>&nbsp;+&nbsp;1/<strong>4</strong>,
 evaluating to 2.58\'3, 31/12, 2_7/12, and [2;&nbsp;1,&nbsp;1,&nbsp;2,&nbsp;2].</p>
+<p>For every rational number there are infinitely many Egyptian fraction representations. In the settings you can choose between various calculation methods
+for the main screen. The results of the other methods show up when you tap ⛶ in the title bar – they are identical for some numbers,
+while for others they differ wildly.</p>
+<p>Calculation of an Egyptian fraction may be cut off if it gets too long; the limit depends on the “Maximum digits in fractional part” in the settings.</p>
 
 <h2>Negative numbers</h2>
 <p>You can type negative numbers either in ordinary notation with a leading minus <code>-</code>, or in
@@ -199,7 +226,7 @@ evaluating to 2.58\'3, 31/12, 2_7/12, and [2;&nbsp;1,&nbsp;1,&nbsp;2,&nbsp;2].</
 
 <h2>Input with base tokens</h2>
 <p>You can type in numbers in standard binary, octal, decimal, dozenal and hexadecimal without changing the input base, and even use different bases for integer part,
-numerator and denominator of a fraction, or for the numbers in a continued fraction. To do this, prefix a number with one of these tokens:</p>
+numerator and denominator of a fraction, or for the numbers in a continued or Egyptian fraction. To do this, prefix a number with one of these tokens:</p>
 <ul>
  <li>binary: <code>@</code></li>
  <li>octal: <code>%23</code></li>
@@ -257,12 +284,12 @@ Qonvert is your <strong>only</strong> source. (The answer is 1YX215.)</p>
     <string name="cheatSheet"><![CDATA[
 <h2>Gestures</h2>
 <ul>
- <li><strong>Output area</strong>: short-tap copies to input line, long-tap copies to clipboard.</li>
+ <li><strong>Output area</strong>: short-tap copies to input line and switches input and output bases, long-tap copies to clipboard.</li>
  <li><strong>Base buttons</strong>: left/right swipe decreases/increases base by 1.</li>
  <li>“<strong>in: base</strong>” and “<strong>out: base</strong>”: tap displays digit range for currently selected base and number system.</li>
  <li><strong>Number system buttons</strong>: long-tap toggles between standard and balanced.</li>
- <li><strong>Clear button</strong>: long-tap sets input and output to standard decimal.</li>
- <li><strong>History</strong>: tap copies to input line.</li>
+ <li><strong>Clear button (🗑)</strong>: long-tap sets input and output to standard decimal.</li>
+ <li><strong>List entries</strong> in history etc.: short-tap copies to input line, long-tap toggles selection.</li>
 </ul>
 
 <h2>Input syntax</h2>
@@ -314,35 +341,47 @@ Qonvert is your <strong>only</strong> source. (The answer is 1YX215.)</p>
     ]]></string>
 
     <!-- What’s new -->
+<!--<p>Tap ♫ in the title bar to play a musical interval with the given frequency ratio. As of this version, the <strong>name of the interval</strong>,
+or the nearest named interval, is displayed.</p>-->
     <string name="whatsNew"><![CDATA[
+<h2>Version 1.2.0</h2>
+<p>There is a new screen called <strong>All formats</strong> which opens when you tap ⛶. It lets you copy and share your calculation results.
+The appearance of the history is new, providing the same functionality as the all formats screen.</p>
+<p>Output of <strong>Egyptian fractions</strong> is supported now. You can choose a calculation method for the main screen in the settings;
+the results of the other methods are available on the all formats screen.</p>
+<p>Support for <strong>German</strong> was added. Also, the speed has been improved significantly.</p>
+
 <h2>Version 1.1.0</h2>
 <p>The switches for balanced numeral systems have been replaced with dropdown menus which let you choose between standard, balanced, <strong>bijective</strong>
 and <strong>Roman</strong> numerals. You can still toggle between standard and balanced systems with a long tap. See the Help page for how these new systems work.</p>
 <p>On the Preferences screen, you can activate new base buttons for <strong>hexavigesimal</strong> (base 26).</p>
 <p>Input of <strong>Egyptian fractions</strong> is supported: <code>{2;3,4}</code> is interpreted as 2&nbsp;+&nbsp;1/3&nbsp;+&nbsp;1/4 = 2_7/12.</p>
-<p>You can now use <strong>fraction characters</strong> such as <code>½</code> and use them in numbers: <code>2¾</code>.</p>
-<!--<p>The “♫” button in the title bar plays a musical interval with the given frequency ratio. As of this version, the <strong>name of the interval</strong>,
-or the nearest named interval, is displayed.</p>-->
+<p>You can now use <strong>fraction characters</strong> such as <code>¾</code> and use them in numbers: <code>2¾</code>.</p>
 <p>The main menu has a new entry “<strong>Cheat sheet</strong>” with an overview over the control gestures on the main screen, as well as the input syntax.
 (Now you can swipe right to get there.)</p>
 <p>Many fixes and improvements – for example, calculating digits of long repeating parts is faster now.</p>
 
 <h2>Version 1.0.0</h2>
-<p>Initial release with standard and balanced numeral systems as well as Roman output for integers and Unicode characters.</p>
+<p>Initial release with standard and balanced numeral systems as well as Roman output for positive integers and Unicode characters,
+and playing musical intervals (by tapping ♫).</p>
     ]]></string>
 
     <!-- About -->
     <string name="about"><![CDATA[
 <h2>Thank you for using Qonvert!</h2>
-<p>This is a toy and maybe an educational tool, and it’s free. It was written by me, Anypodetos, because I couldn’t find an app that could do that kind of stuff.</p>
-<p>If you have any suggestions or questions, or you want to report a bug, or you just want to tell me whether you like this app, please
-<a href="https://lemizh.conlang.org/home/contact.php?about=qonvert">contact me</a>.</p>
+<p>This is a toy and maybe an educational tool, and it’s free. It was written by me, Anypodetos. If you have any suggestions or questions, or you want to report a bug,
+or you just want to tell me whether you like this app, please <a href="https://lemizh.conlang.org/home/contact.php?about=qonvert">contact me</a>.</p>
 <p>Source code:<br><a href="https://github.com/Anypodetos/qonvert">https://github.com/Anypodetos/qonvert</a></p>
 <p>My Wikipedia page:<br><a href="https://en.wikipedia.org/wiki/User:Anypodetos">https://en.wikipedia.org/wiki/User:Anypodetos</a></p>
 <p>My conlanging homepage:<br><a href="https://lemizh.conlang.org">https://lemizh.conlang.org</a></p>
 
+<h2>Acknowledgments</h2>
+<p>The algorithms for calculating Egyptian fractions are from <a href="https://www.ics.uci.edu/~eppstein/numth/egypt/intro.html">David Eppstein’s page</a>
+and <a href="https://ami.uni-eszterhazy.hu/uploads/papers/finalpdf/AMI_42_from129to134.pdf">a paper by Gyimesi and Nyul</a>;
+see there for explanations on how they work.</p>
+
 <h2>GNU General Public License</h2>
-<p>Copyright 2020, 2021 Anypodetos (Michael Weber)</p>
+<p>Copyright 2020, 2021, 2022 Anypodetos (Michael Weber)</p>
 <p>Qonvert is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or (at your option) any later version.</p>
 <p>Qonvert is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -351,12 +390,11 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public 
 If not, see <a href="https://www.gnu.org/licenses/">https://www.gnu.org/licenses/</a>.</p>
 
 <h2>SIL Open Font License</h2>
-<p>The logo is a modification of the letter Ꝙ (“capital Q with diagonal stroke”) in the font <a href="https://software.sil.org/doulos/">Doulos SIL</a>,
+<p>The logo is a modification of the letter Ꝙ (“Latin capital letter Q with diagonal stroke”) in the font <a href="https://software.sil.org/doulos/">Doulos SIL</a>,
 which is available under the <a href="https://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=ofl">SIL Open Font License</a>.</p>
 
 <h2>Creative Commons License</h2>
-<p>The history icon in the title bar is modified from <a href="https://commons.wikimedia.org/wiki/File:Clock_(CoreUI_Icons_v1.0.0).svg">a file at Wikimedia Commons</a>,
-and the other icons are by Google. All are available under the
+<p>The icons are mostly by Google and are available under the
 <a href="https://creativecommons.org/licenses/by/4.0/deed.en">Creative Commons Attribution 4.0 International</a> license.</p>
 
 <h2>Probably some free License</h2>
