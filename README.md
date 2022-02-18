@@ -1,5 +1,5 @@
 # Qonvert
-Qonvert is available on <a href="https://play.google.com/store/apps/details?id=org.tessoft.qonvert">Google Play</a>, <a href="https://qonvert.en.uptodown.com/android">Uptodown</a> and <a href="https://apkpure.com/de/qonvert/org.tessoft.qonvert">APKPure</a>. It is free, contains no ads, collects or shares no personal data, and needs no special permissions.
+Qonvert is available on <a href="https://play.google.com/store/apps/details?id=org.tessoft.qonvert">Google Play</a> and <a href="https://qonvert.en.uptodown.com/android">Uptodown</a>. It is free, contains no ads, collects or shares no personal data, and needs no special permissions.
 
 * Practically unlimited size and precision
 * Converting between bases 2 to 36
