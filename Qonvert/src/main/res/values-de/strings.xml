@@ -26,11 +26,12 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     <string name="complement">Komplement</string>
     <string name="edit_hint">Gib eine Zahl ∈ ℚ ein.</string>
     <string name="clear_hint">Eingabe löschen</string>
-    <string name="keyboard_hint">Tastatur wechseln</string>
     <string name="base">%1$s: Basis %2$d, %3$s</string>
     <string name="clipboard_asIs">In die Zwischenablage kopieren</string>
     <string name="clipboard_rep">… mit Überstrich für Periode</string>
     <string name="clipboard_fraction">… als formatierten Bruch</string>
+    <string name="clipboard_noQuotes">… ohne Anführungszeichen</string>
+    <string name="clipboard_compat">… möglichst kompatibel</string>
     <string name="clipboard_ok">In die Zwischenablage kopiert</string>
     <string name="to_fraction">In Bruch konvertiert, um nicht runden zu müssen</string>
     <string name="to_history_indep">Referenz auf Eintrag im Verlauf entfernt</string>
@@ -54,24 +55,27 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     <string name="err_ellipsis">kennzeichnet eine abgeschnittene Zahl.</string>
     <string name="err_infinity">[Leute, die Probleme mit Unendlichkeiten haben,] würdigen die projektive Geometrie viel zu wenig. (Grant Sanderson)</string>
     <string name="err_undefined">Hat deine Eingabe Buddha-Natur?</string>
-    <string name="err_empty">alleine bezeichnet einen leeren String.</string>
-    <string name="err_noRoman">ist weder eine römische noch eine arabische Zahl.</string>
+    <string name="err_onlyGreek">ist nur in griechischen Zahlen erlaubt.</string>
+    <string name="err_noGreek">ist weder eine gültige griechische noch eine arabische Zahl.</string>
     <string name="err_onlyRoman">ist nur in römischen Zahlen erlaubt.</string>
+    <string name="err_noRoman">ist weder eine gültige römische noch eine arabische Zahl.</string>
     <string name="err_fraction">ist nur nach einer ganzen Zahl erlaubt.</string>
     <string name="err_generic">ist kein gültiges Zeichen.</string>
 
     <string name="menu_formats">Alle Formate</string>
     <string name="menu_history">Verlauf</string>
     <string name="menu_interval">Intervall spielen</string>
+    <string name="menu_interval_list">Musik-Intervalle</string>
     <string name="menu_settings">Einstellungen</string>
     <string name="menu_help">Hilfe</string>
     <string name="menu_cheatSheet">Spickzettel</string>
     <string name="menu_whatsNew">Neues</string>
     <string name="menu_about">Info &amp; Lizenzen</string>
 
-    <string name="intervals">Intervalle</string>
     <string name="octaves">%d Oktaven</string>
     <string name="between_intervals">zwischen %1$s und %2$s</string>
+    <string name="interval_grammar_nom">kleine,große,reine</string>
+    <string name="interval_grammar_between">kleiner,großer,reiner</string>
     <string name="no_interval">Zahl muss zwischen %1$s und %2$s liegen</string>
 
     <!-- Lists / Dialogs -->
@@ -80,9 +84,9 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     <string name="egyptian_method">Ägytischer Bruch: %s</string>
     <string name="select_all">Alles auswählen</string>
     <string name="copy">Kopieren</string>
-    <string name="clipboard_all_ok">Alle Einträge in die Zwischenablage kopiert</string>
+    <string name="clipboard_all_ok">Alle %d Einträge in die Zwischenablage kopiert</string>
     <string name="share">Freigeben</string>
-    <string name="share_all">Alle Einträge freigeben über</string>
+    <string name="share_all">Alle %d Einträge freigeben über</string>
     <string name="delete">Löschen</string>
     <string name="delete_history_q">Ganzen Verlauf löschen?</string>
     <plurals name="delete_q">
@@ -94,14 +98,17 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     <string name="yes">Ja</string>
     <string name="no">Nein</string>
     <string name="close">Schließen</string>
-    <string name="pretty_output">formatiert, ohne Basis</string>
+    <string name="standard_output">standard</string>
+    <string name="pretty_output">formatierte</string>
+    <string name="compatible_output">kompatible Ausgabe</string>
 
-    <!-- Preferences -->
+    <!-- Settings -->
     <string name="out_header">Ausgabe</string>
     <string name="digits_title">Höchstzahl Nachkommastellen</string>
     <string name="group_title">Ziffern gruppieren</string>
     <string name="group_hint">Vierergruppen für Basen 2, 4, 8, 16, 32, sonst Dreiergruppen</string>
     <string name="lowercase_title">Kleinbuchstaben</string>
+    <string name="natural_title">Für natürliche Zahlen anzeigen</string>
     <string name="apostrophus_title">Römischer Apostrophus</string>
     <string name="egyptian_title">Ägyptische Brüche</string>
 
@@ -112,6 +119,8 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
 
     <string name="appearance_header">Aussehen</string>
     <string name="buttons_title">Tasten für Basen</string>
+    <string name="keyboard_title">Qonvert-Tastatur verwenden</string>
+    <string name="keyboard_hint">statt der Standard-Tastatur</string>
     <string name="size_title">Textgröße</string>
     <string name="theme_title">Farbschema</string>
 
@@ -122,9 +131,11 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
 
     <string name="help"><![CDATA[
 <h2>Überblick</h2>
-<p>Diese App konvertiert Zahlen aus der Menge ℚ der rationalen Zahlen zwischen verschiedenen Basen (einschließlich nicht-Standard-Zahlensystemen),
+<p>Diese App konvertiert Zahlen aus der Menge ℚ der rationalen Zahlen zwischen verschiedenen Basen (einschließlich nicht-Standard-Zahlensystemen)
 und zwischen verschiedenen Formaten wie Stellenwertnotation und Brüchen (einschließlich unechten, gemischten, ägyptischen und Kettenbrüchen).
 Die Zahlen können praktisch unbegrenzte Größe und Genauigkeit haben.</p>
+<p>Die Zweitbelegungen der Tastatur erreichst du durch lang antippen. Die Tastatur verschwindet mit dem ◀ auf der Navigationsleiste oder durch runter wischen;
+sie taucht wieder auf, wenn du die Eingabezeile antippst.</p>
 <p>Ein Ergebnis kurz antippen kopiert es in die Eingabezeile; lang antippen kopiert es in die Zwischenablage.</p>
 
 <h2>Eingabe- und Ausgabe-Systeme</h2>
@@ -163,8 +174,8 @@ oder etwas Komplizierteres wie <code>1.\'3&nbsp;_&nbsp;1/3</code>. Brüche mit e
 und einer Komma-getrennten Liste von Nennern. Kettenbrüche werden in eckigen Klammern angezeigt; für die Eingabe sind die Klammern optional.</p>
 <p>Beispielsweise bedeutet <code>2;3,4</code> <strong>2</strong>&nbsp;+&nbsp;1/(<strong>3</strong>&nbsp;+&nbsp;1/<strong>4</strong>), was soviel ist wie
 2.\'307692, 30/13, oder 2_4/13.</p>
-<p>Es können auch nicht-ganze Zahlen einschließlich Brüchen eingegeben werden: <code>1.5;&nbsp;2/3,&nbsp;1_1/5</code> wird zu [2;&nbsp;6].
-Die Ausgabe erfolgt immer mit positiven Nennern: <code>-3;-1,-1,-18</code> wird zu [−4;&nbsp;2,&nbsp;18].</p>
+<p>Es können auch nicht-ganze Zahlen einschließlich Brüchen eingegeben werden: <code>1.5;&nbsp;2/3,&nbsp;1_1/5</code> wird zu [2;&nbsp;6] vereinfacht,
+das nur ganze Zahlen enthält. Die Ausgabe erfolgt immer mit positiven Nennern: <code>-3;-1,-1,-18</code> wird zu [−4;&nbsp;2,&nbsp;18].</p>
 
 <h3>Ägyptische Brüche</h3>
 <p>Ägyptische Brüche sind Summen von Stammbrüchen. Sie werden wie Kettenbrüche eingegeben, aber mit geschweiften Klammern:
@@ -180,7 +191,8 @@ in den Einstellungen ab.</p>
 <p>Negative Zahlen lassen sich entweder in der gewöhnlichen Schreibweíse mit einem Minus <code>-</code> eingeben, oder in Komplement-Notation
 mit zwei Punkten <code>..</code> davor: Diese Punkte bedeuten „die höchste Ziffer in dieser Basis bis ganz nach links wiederholt“.
 Die Komplement-Notation kommt vor allem in der EDV vor, wo −1 hexadezimal als FFFFFFFF gespeichert wird, −2 als FFFFFFFE und so weiter
-(mit so vielen Fs wie Platz ist). In Qonvert bedeuten also <code>..D</code> im Hexadezimalsystem oder <code>..7</code> im Dezimalsystem beide −3.</p>
+(mit so vielen Fs wie Platz ist). In Qonvert bedeuten also <code>..FFD</code> oder einfach <code>..D</code> im Hexadezimalsystem, oder
+<code>..997</code> oder einfach <code>..7</code> im Dezimalsystem, alle −3.</p>
 <p>Ob negative Zahlen in gewöhnlicher oder Komplement-Notation ausgegeben werden, hängt vom Schalter oben rechts ab.</p>
 
 <h2>Eingabe mit Basis-Kürzeln</h2>
@@ -212,36 +224,43 @@ Negative Zahlen benötigen in dieser Notation kein Minuszeichen: <code>Z01</code
 „bijektiv A“ verwendet <code>A</code>&nbsp;=&nbsp;1, <code>B</code>&nbsp;=&nbsp;2,&nbsp;… <code>Z</code>&nbsp;=&nbsp;26 und funktioniert nur
 bis zum Hexavigesimalsystem (Basis 26). Die ersten natürlichen Zahlen im Dezimalsystem in bijektiv 1 sind also
 1, 2, 3, 4, 5, 6, 7, 8, 9, A&nbsp;(=10), 11, 12,&nbsp;…, 19, 1A, 21,&nbsp;…, die ersten natürlichen Zahlen im Hexavigesimalsystem in bijektiv A sind
-A, B, C, D,&nbsp;…, X, Y, Z, AA, AB, AC,&nbsp;…. Null ist eigentlich eine leere Zeichenkette; es wird als λ angezeigt.</p>
+A, B, C, D,&nbsp;…, X, Y, Z, AA, AB, AC,&nbsp;…. Null ist eigentlich eine leere Zeichenkette; sie wird als „/“ angezeigt.</p>
 <p>Kommazahlen funktionieren in bijektiven Systemen nicht wirklich; daher werden nicht-ganze Zahlen nur als Brüche angezeigt.</p>
+
+<h3>Griechische Zahlen</h3>
+<p>Derzeit wird nur die Ausgabe von <a href="https://de.wikipedia.org/wiki/Griechische_Zahlzeichen">griechischen (milesischen) natürlichen Zahlen</a>
+offiziell unterstützt. Zur besseren Unterscheidung von römischen Zahlen (siehe unten) werden sie von einer Keraia (ʹ) gefolgt.
+Myriaden (10&nbsp;000er) werden nach Diophant mit einem Punkt gekennzeichnet.</p>
 
 <h3>Römische Zahlen</h3>
 <p><a href="https://de.wikipedia.org/wiki/R%C3%B6mische_Zahlschrift">Römische Zahlen</a> gibt es nur in der Basis 10. Sie können die Buchstaben
-<code>I V X L C D M</code> enthalten. Symbole für größere Zahlen werden so eingegeben: <code>I))</code>&nbsp;=&nbsp;ↁ&nbsp;=&nbsp;5000,
-<code>((I))</code>&nbsp;=&nbsp;ↂ&nbsp;=&nbsp10&nbsp;000, <code>I)))</code>&nbsp;=&nbsp;ↇ&nbsp;=&nbsp;50&nbsp;000 und
-<code>(((I)))</code>&nbsp;=&nbsp;ↈ&nbsp;=&nbsp;100&nbsp;000.</p>
-<p>Tratitionellerweise werden <em>noch</em> größere Zahlen mit Rahmen geschrieben, die ihren Inhalt mit 100&nbsp;000 multiplizieren.
+<code>I V X L C D M</code> enthalten. Symbole für größere Zahlen sind <code class="apostrophus">ↁ</code>&nbsp;=&nbsp;5000,
+<code class="apostrophus">ↂ</code>&nbsp;=&nbsp10&nbsp;000, <code class="apostrophus">ↇ</code>&nbsp;=&nbsp;50&nbsp;000, und
+<code class="apostrophus">ↈ</code>&nbsp;=&nbsp;100&nbsp;000. (Wenn Du die Android-Tastatur statt der von Qonvert verwendest, kannst Du sie als
+<code>I)) ((I)) I))) (((I)))</code> eingeben.)</p>
+<p>Traditionellerweise werden <em>noch</em> größere Zahlen mit Rahmen geschrieben, die ihren Inhalt mit 100&nbsp;000 multiplizieren.
 Durch Verschachteln von Rahmen lassen sich sehr große Zahlen schreiben. Qonvert benutzt dazu den senkrechten Strich („Pipe“) <code>|</code>:
 <code style=\"white-space: nowrap\">|VI|((I))MM</code>&nbsp;=&nbsp;<span class="roman-frame">VI</span>ↂMM&nbsp;=&nbsp;6&nbsp;12000.
-Die führenden Pipes können ausgelassen werden; und alle Pipes lassen sich zur leichteren Eingabe durch Ausrufezeichen ersetzen:
+Die führenden Pipes können ausgelassen werden; und alle Pipes lassen sich durch Ausrufezeichen ersetzen:
 <code style=\"white-space: nowrap\">||V|M|II</code>&nbsp;=&nbsp;<code style=\"white-space: nowrap\">V!M!II</code>&nbsp;=&nbsp;5&nbsp;01000&nbsp;00002.
 (Die alten Römer hätten diese Schreibweise sicher nicht erkannt, aber es scheint keine antike Notation für so große Zahlen zu geben.)</p>
-<p><code>S</code> (<i>semis</i>) nach dem ganzzahligen Teil steht für ein Halb, und ein oder mehrere Punkte (zum Beispiel <code>.</code> oder
-<code>..</code> oder <code>:</code>) für jeweils ein Zwölftel. <code>N</code> für <i>nulla</i> oderr <i>nihil</i> bedeutet Null.</p>
+<p><code>S</code> (<i>semis</i>) nach dem ganzzahligen Teil steht für ein Halb, und ein oder mehrere Punkte für jeweils ein Zwölftel.
+<code>N</code> für <i>nulla</i> oderr <i>nihil</i> bedeutet Null.</p>
 <p>Wenn als Eingabe-System römische Zahlen ausgewählt sind, akzeptiert die App auch arabische Zahlen (also Standard dezimal), damit du weniger
 hin- und herschalten musst.</p>
-<p>Wenn als Ausgabe-System etwas anderes als römische Zahlen eingestellt ist, werden positive ganze Zahlen in der zweiten Ausgabe-Zeile <em>zusätzlich</em>
+<p>Wenn als Ausgabe-System etwas anderes als römische Zahlen eingestellt ist, werden positive ganze Zahlen <em>zusätzlich</em> in der dritten Ausgabe-Zeile
 als römische Zahlen angezeigt.</p>
 
 <h2>Unicode</h2>
-<p>Ganze Zahlen zwischen hexadezimal <code>20</code> und <code>31&nbsp;FFF</code> (dezimal <code>32</code> und <code>204&nbsp;799</code>) werden
-nicht nur in das entsprechende Ausgabe-System und in römische Zahlen konvertiert, sondern auch in das entsprechende
-<a href="https://de.wikipedia.org/wiki/Unicode">Unicode</a>-Zeichen.</p>
+<p>Ganze Zahlen von hexadezimal <code>20</code> bis <code>31FFF</code> (dezimal <code>32</code> bis <code>204&nbsp;799</code>) werden
+nicht nur in das entsprechende Ausgabe-System und in griechische und römische Zahlen konvertiert, sondern auch in das entsprechende
+<a href="https://de.wikipedia.org/wiki/Unicode">Unicode</a>-Zeichen. (Wenn die Anzeige für deinen Geschmack überfüllt ist, kannst
+du einiges davon in den Einstellungen deaktivieren.)</p>
 <p>Umgekehrt lässt sich durch Eingabe von <code>\"</code> plus einem Unicode-Zeichen dessen Code finden. Allerdings funktioniert das nur für
 einzelne Zeichen, nicht für Kombinationen wie Buchstaben mit <a href="https://de.wikipedia.org/wiki/Diakritisches_Zeichen">diakritischen Zeichen</a>,
 Menschen mit Hautfarben, oder Flaggen.</p>
 <p>Im Internet gibt es hervorragende Quellen, um Unicode-Zeichen über ihre Namen zu finden. Wenn du aber den Code für die Schildkröte
-im balancierten Undezimalsystem benötigst, ist Qonvert deine <strong>einzige</strong> Quelle. (Die Antwort ist 1YX215.)</p>
+im balancierten Undezimalsystem benötigst, ist Qonvert deine <strong>einzige</strong> Quelle. (Die Antwort ist 1YX&nbsp;215.)</p>
 <p>Und wenn irgendwer fragt <em>warum</em>, ist die Antwort <em>darum</em>.</p>
     ]]></string>
 
@@ -249,22 +268,24 @@ im balancierten Undezimalsystem benötigst, ist Qonvert deine <strong>einzige</s
     <string name="cheatSheet"><![CDATA[
 <h2>Gesten</h2>
 <ul>
- <li><strong>Ausgabebereich</strong>: kurz antippen kopiert in die Eingabezeile und tauscht Ein- und Augabe-Basis, lang antippen kopiert in die Zwischenablage.</li>
+ <li><strong>Ausgabebereich</strong>: kurz antippen kopiert in die Eingabezeile und tauscht Ein- und Ausgabe-Basis, lang antippen kopiert in die Zwischenablage.</li>
  <li><strong>Tasten für Basen</strong>: wischen nach links/rechts erniedrigt/erhöht Basis um 1.</li>
  <li>“<strong>Eingabe: Basis</strong>” und “<strong>Ausgabe: Basis</strong>”: antippen zeigt den Ziffernbereich für die gewählte Basis an.</li>
  <li><strong>Tasten für Zahlensysteme</strong>: lang antippen wechselt zwischen Standard und balanciert.</li>
  <li><strong>Löschen (🗑)</strong>: lang antippen setzt Eingabe und Ausgabe auf Standard dezimal.</li>
+ <li><strong>Qonvert-Tastatur</strong>: lang antippen für die Zweitbelegungen; ◀ oder runter wischen lässt sie verschwinden,
+ und durch Antippen der Eingabezeile taucht sie wieder auf.</li>
  <li><strong>Einträge</strong> im Verlauf etc.: kurz antippen kopiert in die Eingabezeile, lang antippen schaltet Auswahl um.</li>
 </ul>
 
 <h2>Eingabe</h2>
 <h3>Basis-Kürzel</h3>
 <ul>
- <li><code>@</code>: Standard binär</li>
- <li><code>%23</code>: Standard oktal</li>
- <li><code>$</code>, <code>€</code>, <code>£</code>, <code>¥</code>: Standard dezimal</li>
- <li><code>%</code>: Standard dozenal</li>
- <li><code>&</code>: Standard hexadezimal</li>
+ <li><code>@</code>: Standard binär (2)</li>
+ <li><code>%23</code>: Standard oktal (8)</li>
+ <li><code>$</code>, <code>€</code>, <code>£</code>, <code>¥</code>: Standard dezimal (10)</li>
+ <li><code>%</code>: Standard dozenal (12)</li>
+ <li><code>&</code>: Standard hexadezimal (16)</li>
 </ul>
 
 <h3>Ziffern</h3>
@@ -292,10 +313,11 @@ im balancierten Undezimalsystem benötigst, ist Qonvert deine <strong>einzige</s
 
 <h3>Römische Zahlen</h3>
 <ul>
- <li><code>I V X L C D M</code>: 1..1000</li>
- <li><code>I)) ((I)) I))) (((I)))</code>: 5000, 10&nbsp;000, 50&nbsp;000, 100&nbsp;000</li>
+ <li><code>I V X L C D M</code> or <code class="apostrophus">ↀ</code>: 1..1000</li>
+ <li><code class="apostrophus">ↁ ↂ ↇ ↈ</code> oder <code>I)) ((I)) I))) (((I)))</code>: 5000, 10&nbsp;000, 50&nbsp;000, 100&nbsp;000</li>
  <li><code>|</code> oder <code>!</code>: multipliziert mit 100&nbsp;000</li>
- <li><code>. : S</code>: <i>uncia</i>&nbsp;=&nbsp;Zwölftel, <i>sextans</i>&nbsp;=&nbsp;Sechstel, <i>semis</i>&nbsp;=&nbsp;ein&nbsp;Halb</li>
+ <li><code>. : S</code> (und bis zu 5 Punkten): <i>uncia</i>&nbsp;=&nbsp;Zwölftel, <i>sextans</i>&nbsp;=&nbsp;Sechstel,
+ <i>semis</i>&nbsp;=&nbsp;ein&nbsp;Halb</li>
  <li><code>N</code>: <i>nulla/nihil</i>&nbsp;=&nbsp;Null</li>
 </ul>
 
@@ -307,6 +329,21 @@ im balancierten Undezimalsystem benötigst, ist Qonvert deine <strong>einzige</s
 
     <!-- What’s new -->
     <string name="whatsNew"><![CDATA[
+<h2>Version 1.3.0</h2>
+<p>Qonvert hat eine <strong>neue Tastatur</strong>! (für Android-Version 5 Lollipop und später) – Sie passt sich an das Eingabe-System und an die
+Orientierung deines Handys an. Die Zweitbelegung der Tasten erreichst du durch lang antippen; ◀ oder runter wischen lässt die Tastatur verschwinden,
+und durch Antippen der Eingabezeile taucht sie wieder auf.<br>
+Wenn Du die alte Standard-Tastatur wieder haben willst, kannst du das in den Einstellungen festlegen.</p>
+<p>Mit der Taste ♫ in der Titelleiste wird ein musikalisches Intervall mit dem gegebenen Frequenzverhältnis abgespielt. Seit dieser Version wird auch
+der <strong>Name des Intervalls</strong>, oder der des nächstgelegenen benannten Intervalls, angezeigt. Der Menüpunkt „Musik-Intervalle“ listet alle
+Intervalle auf, die diese App kennt.</p>
+<p>Die Bildschirme „Alle Formate, Verlauf, Musik-Intervalle“ haben eine dritte Option zum Anzeigen, Kopieren und Teilen von Zahlen bekommen:
+„<strong>kompatibel</strong>“ für größtmögliche Kompatibilität mit anderen Mathematik-Apps (zumindest für die weniger ausgefallenen Zahlenbasen und -systeme).</p>
+<p>Natürliche Zahlen werden jetzt auch als <strong>griechische (milesische) Zahlen</strong> angezeigt. Wenn die Anzeige für deinen Geschmack überfüllt ist,
+kannst du sie in den Einstellungen deaktivieren (oder die römischen Zahlen, oder die Unicode-Zeichen).</p>
+<p>Neben den Unicode-Symbolen im Verlauf und auf der Alle-Formate-Seite ist eine neue Taste, die einen <strong>Weblink zum jeweiligen Symbol</strong> öffnet
+(auf fileformat.info).</p>
+
 <h2>Version 1.2.0</h2>
 <p>Es gibt einen neuen Bildschirm, <strong>Alle Formate</strong>, der sich mit ⛶ öffnen lässt. Hier kannst du deine Resultate
 kopieren und teilen. Der Verlauf hat ein neues Aussehen mit den gleichen Funktionen wie die Alle-Formate-Seite.</p>
@@ -355,7 +392,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public 
 If not, see <a href="https://www.gnu.org/licenses/">https://www.gnu.org/licenses/</a>.</p>
 
 <h2>SIL Open Font License</h2>
-<p>Das Logo ist eine Modifikation des Buchstaben Ꝙ (“großer lateinischer Buchstabe Q mit diagonalem Querstrich”) in der Schriftart
+<p>Das Logo ist eine Modifikation des Buchstaben Ꝙ („großer lateinischer Buchstabe Q mit diagonalem Querstrich“) in der Schriftart
 <a href="https://software.sil.org/doulos/">Doulos SIL</a>, die unter einer
 <a href="https://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=ofl">SIL Open Font License</a> lizenziert ist.</p>
 

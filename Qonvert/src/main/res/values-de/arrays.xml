@@ -47,11 +47,64 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
         <item>Gemischter Bruch</item>
         <item>Kettenbruch</item>
         <item>Ägyptischer Bruch</item>
+        <item>Griechische (milesische) Zahl</item>
         <item>Römische Zahl</item>
         <item>Unicode-Zeichen</item>
     </string-array>
 
-   <!-- Preferences -->
+    <string-array name="interval_names">
+        <!-- jeder Eintrag braucht ein "*", dass Intervall-Id und Qualifizierer ("kleine/große/reine") trennt (Reihenfolge egal) -->
+        <!-- Stimmung anschließend, getrennt durch ein Leerzeichen und in runden Klammern -->
+        <!-- alternativer Name nach den Klammern und durch Komma getrennt: nur für Intervalle < Oktave -->
+        <item>*00</item>
+        <item>kleine*01 (pythagoreisch), pythagoreisches Limma</item>
+        <item>kleine*01 (reine Stimmung), diatonischer Halbton</item>
+        <item>große*01 (reine Stimmung), kleiner Ganzton</item>
+        <item>große*01 (pythagoreisch), großer Ganzton</item>
+        <item>kleine*02 (pythagoreisch)</item>
+        <item>kleine*02 (reine Stimmung)</item>
+        <item>große*02 (reine Stimmung)</item>
+        <item>große*02 (pythagoreisch)</item>
+        <item>reine*03</item>
+        <item>*04 (Huygens)</item>
+        <item>*04 (diatonisch)</item>
+        <item>*04 (pythagoreisch)</item>
+        <item>*04 (Euler)</item>
+        <item>reine*05</item>
+        <item>kleine*06 (pythagoreisch)</item>
+        <item>kleine*06 (reine Stimmung)</item>
+        <item>große*06 (reine Stimmung)</item>
+        <item>große*06 (pythagoreisch)</item>
+        <item>kleine*07 (pythagoreisch)</item>
+        <item>kleine*07 (reine Stimmung)</item>
+        <item>große*07 (reine Stimmung)</item>
+        <item>große*07 (pythagoreisch)</item>
+    </string-array>
+    <string-array name="basic_intervals">
+        <!-- 00 --><item>Prime</item>
+        <!-- 01 --><item>Sekunde</item>
+        <!-- 02 --><item>Terz</item>
+        <!-- 03 --><item>Quarte</item>
+        <!-- 04 --><item>Tritonus</item>
+        <!-- 05 --><item>Quinte</item>
+        <!-- 06 --><item>Sexte</item>
+        <!-- 07 --><item>Septime</item>
+        <!-- 00 --><item>Oktave</item>
+        <!-- 01 --><item>None</item>
+        <!-- 02 --><item>Dezime</item>
+        <!-- 03 --><item>Undezime</item>
+        <!-- 04 --><item>Oktave + Tritonus</item>
+        <!-- 05 --><item>Duodezime</item>
+        <!-- 06 --><item>Tredezime</item>
+        <!-- 07 --><item>Quartdezime</item>
+    </string-array>
+    <string-array name="octaves">
+        <item>Doppeloktave</item>
+        <item>Tripeloktave</item>
+        <item>Quadrupeloktave</item>
+    </string-array>
+
+   <!-- Settings -->
    <string-array name="digits_entries">
         <item>10</item>
         <item>30</item>
@@ -61,6 +114,12 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
         <item>3 000</item>
         <item>10 000 (langsam)</item>
         <item>30 000 (kann abstürzen)</item>
+    </string-array>
+
+    <string-array name="natural_entries">
+        <item>Griechisch</item>
+        <item>Römisch</item>
+        <item>Unicode</item>
     </string-array>
 
     <string-array name="egyptian_entries">
