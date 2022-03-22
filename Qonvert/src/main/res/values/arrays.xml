@@ -1,5 +1,5 @@
 <!--
-Copyright 2020, 2021 Anypodetos (Michael Weber)
+Copyright 2020, 2021, 2022 Anypodetos (Michael Weber)
 
 This file is part of Qonvert.
 
@@ -44,33 +44,48 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
         <item>ᵇᵃˡ</item>
         <item>ᵇʲ¹</item>
         <item>ᵇʲᵃ</item>
-        <item>ʳᵒᵐ</item>
+        <item />
+    </string-array>
+
+    <string-array name="formats">
+        <item>Positional notation</item>
+        <item>Alternative positional notation</item>
+        <item>Fraction</item>
+        <item>Mixed fraction</item>
+        <item>Continued fraction</item>
+        <item>Egyptian fraction</item>
+        <item>Greek (Milesian) numeral</item>
+        <item>Roman numeral</item>
+        <item>Unicode character</item>
     </string-array>
 
     <string-array name="interval_names">
-        <!-- must have a "+" each to separate interval id and qualifier (order doesn’t matter) -->
-        <!-- tuning at end, separated by space and in round brackets -->
-        <item>+00</item>
-        <item>minor+01 (just intonation)</item>
-        <item>minor+01 (Pythagorean tuning)</item>
-        <item>lesser major+01 (just intonation)</item>
-        <item>greater major+01 (Pythagorean &amp; just intonation)</item>
-        <item>minor+02 (Pythagorean tuning)</item>
-        <item>minor+02 (just intonation)</item>
-        <item>major+02 (just intonation)</item>
-        <item>major+02 (Pythagorean tuning)</item>
-        <item>perfect+03 (Pythagorean &amp; just intonation)</item>
-        <item>+04 (just intonation)</item>
-        <item>+04 (Pythagorean tuning)</item>
-        <item>perfect+05 (Pythagorean &amp; just intonation)</item>
-        <item>minor+06 (Pythagorean tuning)</item>
-        <item>minor+06 (just intonation)</item>
-        <item>major+06 (just intonation)</item>
-        <item>major+06 (Pythagorean tuning)</item>
-        <item>minor+07 (Pythagorean tuning)</item>
-        <item>minor+07 (just intonation)</item>
-        <item>major+07 (just intonation)</item>
-        <item>major+07 (Pythagorean tuning)</item>
+        <!-- must have a "*" each to separate interval id and qualifier ("minor/major/perfect"; order doesn’t matter) -->
+        <!-- tuning after that, separated by space and in round brackets -->
+        <!-- alternative name after the brackets and separated by a comma: only for intervals < octave -->
+        <item>*00</item>
+        <item>minor*01 (Pythagorean), Pythagorean limma</item>
+        <item>minor*01 (just intonation), diatonic semitone</item>
+        <item>major*01 (just intonation), lesser whole tone</item>
+        <item>major*01 (Pythagorean), greater whole tone</item>
+        <item>minor*02 (Pythagorean)</item>
+        <item>minor*02 (just intonation)</item>
+        <item>major*02 (just intonation)</item>
+        <item>major*02 (Pythagorean)</item>
+        <item>perfect*03</item>
+        <item>*04 (Huygens)</item>
+        <item>*04 (diatonic)</item>
+        <item>*04 (Pythagorean)</item>
+        <item>*04 (Euler)</item>
+        <item>perfect*05</item>
+        <item>minor*06 (Pythagorean)</item>
+        <item>minor*06 (just intonation)</item>
+        <item>major*06 (just intonation)</item>
+        <item>major*06 (Pythagorean)</item>
+        <item>minor*07 (Pythagorean)</item>
+        <item>minor*07 (just intonation)</item>
+        <item>major*07 (just intonation)</item>
+        <item>major*07 (Pythagorean)</item>
     </string-array>
     <string-array name="basic_intervals">
         <!-- 00 --><item>unison</item>
@@ -96,17 +111,18 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
         <item>quadruple octave</item>
     </string-array>
 
-   <!-- Preferences -->
+   <!-- Settings -->
    <string-array name="digits_entries">
         <item>10</item>
         <item>30</item>
         <item>100</item>
         <item>300</item>
-        <item>1000</item>
-        <item>3000 (may be slow)</item>
-        <item>10000 (may freeze the app)</item>
+        <item>1 000</item>
+        <item>3 000</item>
+        <item>10 000 (may be slow)</item>
+        <item>30 000 (may freeze the app)</item>
     </string-array>
-    <string-array name="digits_values">
+    <string-array name="digits_values" translatable="false">
         <item>10</item>
         <item>30</item>
         <item>100</item>
@@ -114,33 +130,60 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
         <item>1000</item>
         <item>3000</item>
         <item>10000</item>
+        <item>30000</item>
     </string-array>
 
-    <string-array name="apostrophus_entries">
+    <string-array name="natural_entries">
+        <item>Greek</item>
+        <item>Roman</item>
+        <item>Unicode</item>
+    </string-array>
+    <string-array name="natural_values" translatable="false">
+        <item>GREEK</item>
+        <item>ROMAN</item>
+        <item>UNICODE</item>
+    </string-array>
+
+    <string-array name="apostrophus_entries" translatable="false">
         <item>ↁMDC</item>
         <item>ↁↀDC</item>
         <item>IↃↃ MDC</item>
         <item>IↃↃ CIↃ IↃ C</item>
     </string-array>
-    <string-array name="apostrophus_values">
+    <string-array name="apostrophus_values" translatable="false">
         <item>0</item>
         <item>1</item>
         <item>2</item>
         <item>3</item>
     </string-array>
 
-    <string-array name="buttons_entries">
-        <item>binary (2)</item>
-        <item>ternary (3)</item>
-        <item>senary (6)</item>
-        <item>octal (8)</item>
-        <item>decimal (10)</item>
-        <item>dozenal (12)</item>
-        <item>hexadecimal (16)</item>
-        <item>vigesimal (20)</item>
-        <item>hexavigesimal (26)</item>
+    <string-array name="egyptian_entries">
+        <item>Greedy method (oldest)</item>
+        <item>Binary remainder method (fastest)</item>
+        <item>Golomb’s method (same results as continued fraction method)</item>
+        <item>Pairing method</item>
+        <item>Don’t show</item>
     </string-array>
-    <string-array name="buttons_values">
+    <string-array name="egyptian_values" translatable="false">
+        <item>GREEDY</item>
+        <item>BINARY</item>
+        <item>GOLOMB</item>
+        <item>PAIRING</item>
+        <item>OFF</item>
+    </string-array>
+
+    <string-array name="buttons_entries">
+        <item>Binary (2)</item>
+        <item>Ternary (3)</item>
+        <item>Senary (6)</item>
+        <item>Octal (8)</item>
+        <item>Decimal (10)</item>
+        <item>Dozenal (12)</item>
+        <item>Hexadecimal (16)</item>
+        <item>Vigesimal (20)</item>
+        <item>Hexavigesimal (26)</item>
+    </string-array>
+    <string-array name="buttons_values" translatable="false">
         <item>2</item>
         <item>3</item>
         <item>6</item>
@@ -151,7 +194,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
         <item>20</item>
         <item>26</item>
     </string-array>
-    <string-array name="buttons_def_values">
+    <string-array name="buttons_def_values" translatable="false">
         <item>2</item>
         <item>8</item>
         <item>10</item>
@@ -166,7 +209,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
         <item>Large</item>
         <item>Huge</item>
     </string-array>
-    <string-array name="size_values">
+    <string-array name="size_values" translatable="false">
         <item>11</item>
         <item>15</item>
         <item>20</item>
@@ -178,16 +221,16 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
         <item>Light</item>
         <item>Dark</item>
         <item>System</item>
- <!--       <item>Light blue</item>
+<!--        <item>Light blue</item>
         <item>Dark blue</item>
         <item>System blue</item>-->
     </string-array>
-    <string-array name="theme_values">
+    <string-array name="theme_values" translatable="false">
         <item>LA</item>
         <item>DA</item>
         <item>SA</item>
- <!--       <item>LB</item>
+        <item>LB</item>
         <item>DB</item>
-        <item>SB</item>-->
+        <item>SB</item>
     </string-array>
 </resources>
