@@ -226,7 +226,8 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     android:clickable="true"
-                    android:background="?attr/selectableItemBackground" />
+                    android:background="?attr/selectableItemBackground"
+                    android:gravity="start" />
 
             <TextView
                     android:id="@+id/textOutput1"
@@ -242,7 +243,8 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     android:clickable="true"
-                    android:background="?attr/selectableItemBackground" />
+                    android:background="?attr/selectableItemBackground"
+                    android:gravity="start" />
 
             <TextView
                     android:id="@+id/textOutput2"
@@ -276,7 +278,8 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     android:clickable="true"
-                    android:background="?attr/selectableItemBackground" />
+                    android:background="?attr/selectableItemBackground"
+                    android:gravity="start" />
 
             <TextView
                     android:id="@+id/textOutput4"
@@ -292,7 +295,8 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     android:clickable="true"
-                    android:background="?attr/selectableItemBackground" />
+                    android:background="?attr/selectableItemBackground"
+                    android:gravity="start" />
 
             <View
                     android:id="@+id/divider0"
@@ -549,7 +553,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent" />
 
-    <EditText
+    <org.tessoft.qonvert.EditInput
             android:id="@+id/editInput"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -560,10 +564,12 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
             android:hint="@string/edit_hint"
             android:importantForAutofill="no"
             android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/keyboard"
             app:layout_constraintEnd_toStartOf="@+id/clearButton"
             app:layout_constraintStart_toStartOf="parent"
-            android:inputType="textNoSuggestions|text" />
+            android:inputType="textNoSuggestions|text" >
+            <requestFocus />
+    </org.tessoft.qonvert.EditInput>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/clearButton"
@@ -574,23 +580,20 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
             android:focusable="true"
             android:contentDescription="@string/clear_hint"
             app:fabSize="mini"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/keyboard"
             app:srcCompat="@drawable/ic_delete"
             app:layout_constraintEnd_toEndOf="parent"
             android:foregroundGravity="bottom" />
 
-    <!--<com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:focusable="true"
-            app:srcCompat="@android:drawable/ic_dialog_dialer"
-            android:id="@+id/keyboardButton"
-            app:fabSize="mini"
+    <org.tessoft.qonvert.KeyboardView
+            android:id="@+id/keyboard"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="2dp"
+            android:layout_alignParentBottom="true"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:contentDescription="@string/keyboard_hint"
-            android:foregroundGravity="bottom" />-->
+            android:visibility="gone" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

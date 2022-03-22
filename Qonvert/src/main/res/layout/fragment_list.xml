@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-Copyright 2021 Anypodetos (Michael Weber)
+Copyright 2021, 2022 Anypodetos (Michael Weber)
 
 This file is part of Qonvert.
 
@@ -120,5 +120,22 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
             android:contentDescription="@string/expand_hint"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/menuButton" />
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/extraButton"
+            app:layout_constraintEnd_toStartOf="@+id/menuButton"
+            android:textSize="30sp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            app:layout_constraintBottom_toBottomOf="@+id/outputText"
+            android:textColor="?attr/editTextColor"
+            android:focusable="true"
+            app:layout_constraintTop_toBottomOf="@+id/inputText" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
