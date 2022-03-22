@@ -1,7 +1,7 @@
 package org.tessoft.qonvert
 
 /*
-Copyright 2020, 2021 Anypodetos (Michael Weber)
+Copyright 2020, 2021, 2022 Anypodetos (Michael Weber)
 
 This file is part of Qonvert.
 
@@ -22,6 +22,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
 */
 
 import android.content.SharedPreferences
+import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
@@ -55,11 +56,15 @@ class SettingsActivity : AppCompatActivity() {
     class SettingsFragment : PreferenceFragmentCompat() {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey)
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
+                findPreference<SwitchPreference>("androidKeyboard")?.isVisible = false
         }
 
-        private fun formatsSummary() {
-            findPreference<MultiSelectListPreference>("formats")?.apply {
-                summary = values.joinToString(" • ")
+        private fun naturalSummary() {
+            findPreference<MultiSelectListPreference>("natural")?.apply {
+                summary = resources.getStringArray(R.array.natural_entries).filterIndexed {
+                    i, _ -> resources.getStringArray(R.array.natural_values)[i] in values
+                }.joinToString(" • ")
             }
         }
 
@@ -67,23 +72,23 @@ class SettingsActivity : AppCompatActivity() {
             val lowercase = findPreference<SwitchPreference>("lowercase")
             val apostrophus = findPreference<ListPreference>("apostrophus")
             apostrophus?.entries = resources.getStringArray(R.array.apostrophus_entries).map {
-                    if (lowercase?.isChecked == true) it.toLowerCase(Locale.ENGLISH) else it
+                    if (lowercase?.isChecked == true) it.toLowerCase(Locale.ROOT) else it
                 }.toTypedArray()
-            apostrophus?.summary = if (lowercase?.isChecked == true) apostrophus?.entry.toString().toLowerCase(Locale.ENGLISH)
-                else apostrophus?.entry.toString().toUpperCase(Locale.ENGLISH)
+            apostrophus?.summary = if (lowercase?.isChecked == true) apostrophus?.entry.toString().toLowerCase(Locale.ROOT)
+                else apostrophus?.entry.toString().toUpperCase(Locale.ROOT)
         }
 
         private fun buttonSummary() {
             findPreference<MultiSelectListPreference>("buttons")?.apply {
                 summary = values.sortedBy { i -> i.toInt() }.joinToString(" • ") { i ->
-                    getString(resources.getIdentifier("b$i", "string", context?.packageName)).toUpperCase(Locale.ENGLISH)
+                    getString(resources.getIdentifier("b$i", "string", context?.packageName)).toUpperCase(Locale.ROOT)
                 }
             }
         }
 
         private val listener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
             when (key) {
-                "formats" -> formatsSummary()
+                "natural" -> naturalSummary()
                 "lowercase", "apostrophus" -> apostrophusSummary()
                 "buttons" -> buttonSummary()
                 "theme" -> activity?.apply {
@@ -96,7 +101,7 @@ class SettingsActivity : AppCompatActivity() {
         override fun onResume() {
             super.onResume()
             preferenceManager.sharedPreferences.registerOnSharedPreferenceChangeListener(listener)
-            formatsSummary()
+            naturalSummary()
             apostrophusSummary()
             buttonSummary()
          }
