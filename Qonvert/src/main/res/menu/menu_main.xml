@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-Copyright 2020 Anypodetos (Michael Weber)
+Copyright 2020, 2022 Anypodetos (Michael Weber)
 
 This file is part of Qonvert.
 
@@ -24,29 +24,41 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:title="@string/menu_formats"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_fullscreen"
+        android:id="@+id/allFormatsItem" />
+    <item
         android:id="@+id/historyItem"
         android:icon="@drawable/ic_history"
         android:title="@string/menu_history"
         app:showAsAction="always" />
-    <item
-            android:id="@+id/playItem"
-            android:icon="@drawable/ic_interval"
-            android:title="@string/menu_interval"
-            app:showAsAction="ifRoom" />
-    <item
+    <group android:id="@+id/group1">
+        <item
             android:id="@+id/settingsItem"
             android:title="@string/menu_settings" />
+        <item
+            android:title="@string/menu_interval_list"
+            android:id="@+id/intervalListItem" />
+    </group>
     <item
+        android:id="@+id/intervalItem"
+        android:icon="@drawable/ic_interval"
+        android:title="@string/menu_interval"
+        app:showAsAction="always" />
+    <group android:id="@+id/group2">
+        <item
             android:id="@+id/helpItem"
             android:title="@string/menu_help" />
-    <item
+        <item
             android:title="@string/menu_cheatSheet"
             android:id="@+id/cheatSheetItem" />
-    <item
+        <item
             android:title="@string/menu_whatsNew"
             android:id="@+id/whatsNewItem"
             android:icon="@android:drawable/star_big_on" />
-    <item
+        <item
             android:id="@+id/aboutItem"
             android:title="@string/menu_about" />
+    </group>
 </menu>

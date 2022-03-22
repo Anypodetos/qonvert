@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+Copyright 2021, 2022 Anypodetos (Michael Weber)
+
+This file is part of Qonvert.
+
+Qonvert is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Qonvert is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Qonvert. If not, see <https://www.gnu.org/licenses/>.
+
+Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
+-->
+
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:id="@+id/group1">
+        <item
+            android:title="@string/select_all"
+            android:id="@+id/selectAllItems"
+            android:icon="?attr/actionModeSelectAllDrawable"
+            app:showAsAction="always"
+            android:visible="false" />
+        <item
+            android:title="@string/copy"
+            android:id="@+id/copyItems"
+            android:icon="?attr/actionModeCopyDrawable"
+            app:showAsAction="always" />
+        <item
+            android:title="@string/share"
+            android:icon="?attr/actionModeShareDrawable"
+            android:id="@+id/shareItems"
+            app:showAsAction="always" />
+        <item
+            android:title="@string/delete"
+            android:id="@+id/deleteItems" />
+        <item
+            android:title="@string/menu_settings"
+            android:id="@+id/settingsListItem" />
+    </group>
+    <group android:id="@+id/group2">
+        <item
+            android:title="@string/menu_interval"
+            android:id="@+id/playItem"
+            android:visible="false" />
+    </group>
+</menu>
