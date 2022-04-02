@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-Copyright 2020 Anypodetos (Michael Weber)
+Copyright 2020, 2021 Anypodetos (Michael Weber)
 
 This file is part of Qonvert.
 
@@ -26,16 +26,17 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     <color name="brown_dark">#FF350C03</color>
     <color name="orange_light">#FFE05300</color>
     <color name="orange_dark">#FFA83E00</color>
+    <color name="orange_semi_transparent">#80E05300</color>
 
-    <color name="ic_launcher_background_blue">#140882</color>
     <color name="blue_light">#FF11076A</color>
     <color name="blue_medium">#FF0D0552</color>
     <color name="blue_dark">#FF080335</color>
     <color name="azure_light">#FF009DE0</color>
     <color name="azure_dark">#FF0076A8</color>
+    <color name="azure_semi_transparent">#80009DE0</color>
 
     <color name="black">#FF000000</color>
-    <color name="grey">#FF808080</color>
+    <color name="grey">#FF909090</color>
     <color name="white">#FFFFFFFF</color>
     <color name="red_error">#FFF02800</color>
     <color name="semi_transparent">#80FFFFFF</color>
