@@ -1,0 +1,1 @@
+A new custom keyboard, "compatible" copying/sharing mode, names of musical intervals, and output of Greek numerals.

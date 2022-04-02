@@ -1,0 +1,1 @@
+Qonvert lets you convert rational numbers between different bases and between different representations such as positional notation and improper, mixed, continued and Egyptian fractions, as well as Roman and Greek numerals. The numbers can have basically arbitrary size and precision.
