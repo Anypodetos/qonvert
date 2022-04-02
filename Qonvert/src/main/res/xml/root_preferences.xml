@@ -1,5 +1,5 @@
 <!--
-Copyright 2020 Anypodetos (Michael Weber)
+Copyright 2020, 2021, 2022 Anypodetos (Michael Weber)
 
 This file is part of Qonvert.
 
@@ -28,14 +28,13 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
         app:title="@string/out_header">
 
         <ListPreference
-            app:defaultValue="300"
-            app:entries="@array/digits_entries"
-            app:entryValues="@array/digits_values"
-            app:iconSpaceReserved="false"
-            app:key="digits"
-            app:persistent="true"
-            app:title="@string/digits_title"
-            app:useSimpleSummaryProvider="true" />
+                app:entries="@array/digits_entries"
+                app:entryValues="@array/digits_values"
+                app:iconSpaceReserved="false"
+                app:key="digits"
+                app:title="@string/digits_title"
+                app:useSimpleSummaryProvider="true"
+                app:defaultValue="300" />
         <SwitchPreference
             android:defaultValue="false"
             android:key="group"
@@ -48,13 +47,28 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
             android:title="@string/lowercase_title"
             app:iconSpaceReserved="false" />
         <ListPreference
-                android:defaultValue="0"
-                android:title="@string/apostrophus_title"
-                android:entries="@array/apostrophus_entries"
-                android:entryValues="@array/apostrophus_values"
-                android:key="apostrophus"
+            android:defaultValue="0"
+            android:title="@string/apostrophus_title"
+            android:entries="@array/apostrophus_entries"
+            android:entryValues="@array/apostrophus_values"
+            android:key="apostrophus"
+            app:iconSpaceReserved="false"
+            app:useSimpleSummaryProvider="false" />
+        <MultiSelectListPreference
+                android:title="@string/natural_title"
+                android:defaultValue="@array/natural_values"
+                android:entries="@array/natural_entries"
+                android:entryValues="@array/natural_values"
+                android:key="natural"
+                app:iconSpaceReserved="false" />
+        <ListPreference
+                android:defaultValue="GREEDY"
+                android:title="@string/egyptian_title"
+                android:entries="@array/egyptian_entries"
+                android:entryValues="@array/egyptian_values"
+                android:key="egyptian"
                 app:iconSpaceReserved="false"
-                app:useSimpleSummaryProvider="false" />
+                app:useSimpleSummaryProvider="true" />
 
     </PreferenceCategory>
 
@@ -87,6 +101,12 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
             app:iconSpaceReserved="false"
             app:key="buttons"
             app:title="@string/buttons_title" />
+        <SwitchPreference
+                android:defaultValue="true"
+                android:key="customKeyboard"
+                android:title="@string/keyboard_title"
+                android:summary="@string/keyboard_hint"
+                app:iconSpaceReserved="false" />
         <ListPreference
             app:defaultValue="20"
             app:entries="@array/size_entries"
