@@ -365,6 +365,9 @@ Qonvert is your <strong>only</strong> source. (The answer is 1YX&nbsp;215.)</p>
 
     <!-- What’s new -->
     <string name="whatsNew"><![CDATA[
+<h2>Version 1.3.1</h2>
+<p>Just bugfixes (versioning and licenses).</p>
+
 <h2>Version 1.3.0</h2>
 <p>Qonvert has a <strong>new keyboard</strong>! (for Android version 5 Lollipop and higher) – It adapts to the current input system and to your phone’s
 orientation. To access the second character on a key, long-tap it. You can vanish the keyboard by tapping ◀ on the navigation bar or by swiping down;
@@ -424,6 +427,10 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public 
 <p>You should have received a copy of the GNU General Public License along with Qonvert.
 If not, see <a href="https://www.gnu.org/licenses/">https://www.gnu.org/licenses/</a>.</p>
 
+<h2>GNU Lesser General Public License</h2>
+<p>I used Maddie Abboud’s really neat <a href="https://github.com/m-abboud/android-tone-player">Tone/Buzzer Generator</a> for playing intervals.
+It is available under the terms of the <a href="https://www.gnu.org/licenses/licenses.en.html%23LGPL">GNU Lesser General Public License v3.0</a>.</p>
+
 <h2>SIL Open Font License</h2>
 <p>The logo is a modification of the letter Ꝙ (“Latin capital letter Q with diagonal stroke”) in the font <a href="https://software.sil.org/doulos/">Doulos SIL</a>,
 which is available under the <a href="https://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=ofl">SIL Open Font License</a>.</p>
@@ -432,8 +439,5 @@ which is available under the <a href="https://scripts.sil.org/cms/scripts/page.p
 <p>The icons are mostly by Google and are available under the
 <a href="https://creativecommons.org/licenses/by/4.0/deed.en">Creative Commons Attribution 4.0 International</a> license.</p>
 
-<h2>Probably some free License</h2>
-<p>I used Maddie Abboud’s really neat <a href="https://mabboud.net/android-tonebuzzer-generator/">Tone/Buzzer Generator</a> for playing intervals. It seems to be free,
-but I couldn’t find an actual license on her page.</p>
     ]]></string>
 </resources>
