@@ -329,6 +329,9 @@ im balancierten Undezimalsystem benötigst, ist Qonvert deine <strong>einzige</s
 
     <!-- What’s new -->
     <string name="whatsNew"><![CDATA[
+<h2>Version 1.3.1</h2>
+<p>Fehlerkorrekturen (Versionsinformationen und Lizenzen).</p>
+
 <h2>Version 1.3.0</h2>
 <p>Qonvert hat eine <strong>neue Tastatur</strong>! (für Android-Version 5 Lollipop und später) – Sie passt sich an das Eingabe-System und an die
 Orientierung deines Handys an. Die Zweitbelegung der Tasten erreichst du durch lang antippen; ◀ oder runter wischen lässt die Tastatur verschwinden,
@@ -391,6 +394,11 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public 
 <p>You should have received a copy of the GNU General Public License along with Qonvert.
 If not, see <a href="https://www.gnu.org/licenses/">https://www.gnu.org/licenses/</a>.</p>
 
+<h2>GNU Lesser General Public License</h2>
+<p>Ich habe Maddie Abbouds praktischen <a href="https://github.com/m-abboud/android-tone-player">Tone/Buzzer Generator</a> zum Abspielen
+von Intervallen verwendet. Er ist zu den Bedingungen der
+<a href="https://www.gnu.org/licenses/licenses.de.html%23LGPL">GNU Lesser General Public License v3.0</a> verfügbar.</p>
+
 <h2>SIL Open Font License</h2>
 <p>Das Logo ist eine Modifikation des Buchstaben Ꝙ („großer lateinischer Buchstabe Q mit diagonalem Querstrich“) in der Schriftart
 <a href="https://software.sil.org/doulos/">Doulos SIL</a>, die unter einer
@@ -400,8 +408,5 @@ If not, see <a href="https://www.gnu.org/licenses/">https://www.gnu.org/licenses
 <p>Die meisten Symbole sind von Google und als
 <a href="https://creativecommons.org/licenses/by/4.0/deed.de">Creative Commons Attribution 4.0 International</a> lizenziert.</p>
 
-<h2>Wahrscheinlich eine freie Lizenz</h2>
-<p>Ich habe Maddie Abbouds praktischen <a href="https://mabboud.net/android-tonebuzzer-generator/">Tone/Buzzer Generator</a> zum Abspielen
-von Intervallen verwendet. Er scheint freie Software zu sein, aber eine konkrete Lizenz habe ich nicht gefunden.</p>
     ]]></string>
 </resources>
