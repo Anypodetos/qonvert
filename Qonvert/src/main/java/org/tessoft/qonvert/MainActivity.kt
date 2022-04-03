@@ -656,7 +656,11 @@ fun makeCompatible(text: String, system: NumSystem): Pair<String, Int> {
         }
         '{' -> compatText = compatText.removeSurrounding("{", "}").removeSuffix(", …").replace("; ", "+$one/").replace(", ", "+$one/")
     }
-    compatText = compatText.removePrefix(if (system in setOf(NumSystem.BIJECTIVE_1, NumSystem.BIJECTIVE_A)) "/+" else "0+")
+    compatText = compatText.removePrefix(when (system) {
+        NumSystem.BIJECTIVE_1, NumSystem.BIJECTIVE_A -> "/+"
+        NumSystem.ROMAN -> if (MainActivity.lowerDigits) "n+" else "N+"
+        else -> "0+"
+    })
     if (" . " !in compatText) compatText = compatText.filter { it != ' ' }
     if (system !in setOf(NumSystem.ROMAN/*, NumSystem.GREEK*/)) {
         val rep = compatText.indexOf('\'')
