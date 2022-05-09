@@ -31,6 +31,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
         <!-- Secondary brand colors -->
         <item name="colorSecondary">@color/orange_light</item>
         <item name="colorSecondaryVariant">@color/orange_dark</item>
+        <item name="android:colorMultiSelectHighlight">@color/orange_semi_transparent</item>
         <item name="colorOnSecondary">@color/white</item>
         <!-- Other -->
         <item name="editTextColor">@color/white</item>
@@ -50,6 +51,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
         <item name="colorSecondary">@color/azure_light</item>
         <item name="colorSecondaryVariant">@color/azure_dark</item>
         <item name="colorOnSecondary">@color/white</item>
+        <item name="android:colorMultiSelectHighlight">@color/azure_semi_transparent</item>
         <!-- Other -->
         <item name="editTextColor">@color/white</item>
         <item name="buttonBarNegativeButtonStyle">@style/AlertButtonStyleBlue</item>
