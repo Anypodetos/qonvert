@@ -27,6 +27,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     <string name="edit_hint">Gib eine Zahl ∈ ℚ ein.</string>
     <string name="clear_hint">Eingabe löschen</string>
     <string name="base">%1$s: Basis %2$d, %3$s</string>
+    <string name="bare_base">Basis %1$d, %2$s</string>
     <string name="clipboard_asIs">In die Zwischenablage kopieren</string>
     <string name="clipboard_rep">… mit Überstrich für Periode</string>
     <string name="clipboard_fraction">… als formatierten Bruch</string>
@@ -36,6 +37,8 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     <string name="to_fraction">In Bruch konvertiert, um nicht runden zu müssen</string>
     <string name="to_history_indep">Referenz auf Eintrag im Verlauf entfernt</string>
     <string name="range_toast">%1$s: Ziffern %2$s..%3$s</string>
+    <string name="range_toast_greek">%1$s: Griechische Zahlen oder Ziffern %2$s..%3$s</string>
+    <string name="range_toast_onlyGreek">%1$s: Griechische Zahlen</string>
     <string name="range_toast_roman">%1$s: Römische Zahlen oder Ziffern %2$s..%3$s</string>
     <string name="range_toast_onlyRoman">%1$s: Römische Zahlen</string>
     <string name="no_q_number">Gib eine gültige Zahl ein und drücke diese Taste, um sie in allen verfügbaren Formaten anzuzeigen.</string>
@@ -55,6 +58,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     <string name="err_ellipsis">kennzeichnet eine abgeschnittene Zahl.</string>
     <string name="err_infinity">[Leute, die Probleme mit Unendlichkeiten haben,] würdigen die projektive Geometrie viel zu wenig. (Grant Sanderson)</string>
     <string name="err_undefined">Hat deine Eingabe Buddha-Natur?</string>
+    <string name="err_keraia">– die Keraia – ist nur am Ende einer griechischen Zahl erlaubt.</string>
     <string name="err_onlyGreek">ist nur in griechischen Zahlen erlaubt.</string>
     <string name="err_noGreek">ist weder eine gültige griechische noch eine arabische Zahl.</string>
     <string name="err_onlyRoman">ist nur in römischen Zahlen erlaubt.</string>
@@ -72,6 +76,8 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     <string name="menu_whatsNew">Neues</string>
     <string name="menu_about">Info &amp; Lizenzen</string>
 
+    <string name="interval">Intervall</string>
+    <string name="interval_keep">Welle antippen um offen zu halten</string>
     <string name="octaves">%d Oktaven</string>
     <string name="between_intervals">zwischen %1$s und %2$s</string>
     <string name="interval_grammar_nom">kleine,große,reine</string>
@@ -95,8 +101,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     </plurals>
     <string name="delete_this_q">Diesen Eintrag löschen?</string>
     <string name="cant_be_undone">Das kann nicht rückgängig gemacht werden.</string>
-    <string name="yes">Ja</string>
-    <string name="no">Nein</string>
+    <string name="cancel">Abbrechen</string>
     <string name="close">Schließen</string>
     <string name="standard_output">standard</string>
     <string name="pretty_output">formatierte</string>
@@ -228,12 +233,23 @@ A, B, C, D,&nbsp;…, X, Y, Z, AA, AB, AC,&nbsp;…. Null ist eigentlich eine le
 <p>Kommazahlen funktionieren in bijektiven Systemen nicht wirklich; daher werden nicht-ganze Zahlen nur als Brüche angezeigt.</p>
 
 <h3>Griechische Zahlen</h3>
-<p>Derzeit wird nur die Ausgabe von <a href="https://de.wikipedia.org/wiki/Griechische_Zahlzeichen">griechischen (milesischen) natürlichen Zahlen</a>
-offiziell unterstützt. Zur besseren Unterscheidung von römischen Zahlen (siehe unten) werden sie von einer Keraia (ʹ) gefolgt.
-Myriaden (10&nbsp;000er) werden nach Diophant mit einem Punkt gekennzeichnet.</p>
+<p><a href="https://de.wikipedia.org/wiki/Griechische_Zahlzeichen">Griechische (milesische) Zahlen</a> gibt es nur in der Basis 10. Die griechischen
+Buchstaben <code>Α Β Γ Δ Ε Ϛ Ζ Η Θ</code> haben die Werte 1 bis 9, <code>Ι Κ Λ Μ Ν Ξ Ο Π Ϟ</code> sind 10 bis 90, <code>Ρ Σ Τ Υ Φ Χ Ψ Ω </code> und
+<code class="apostrophus">Ϡ</code> sind 100 bis 900, und <code>͵Α ͵Β ͵Γ</code> usw. sind 1000 bis 9000. Sie werden normalerweise von groß nach klein
+geordnet: 1231 ist <code>͵ΑΣΛΑ</code>. In der Ausgabe werden sie zur besseren Unterscheidung von römischen Zahlen (siehe unten) von einer Keraia (ʹ) gefolgt,
+aber für die Eingabe ist die Keraia optional.</p>
+<p>Myriaden (10&nbsp;000er) werden nach Diophant mit einem Punkt gekennzeichnet: <code>Θ.ΦΛ</code> bedeutet 9 Myriaden 530 = 90530. Noch größere Zahlen
+werden mit mehreren Punkten konstruiert (<code>Π&nbsp;.&nbsp;.&nbsp;ʹ</code> für 80&nbsp;0000&nbsp;0000),
+ohne dass es für diese Schreibweise irgendein Vorbild gäbe.</p>
+<p><code>○</code> steht für die Null. Nicht-ganze Zahlen werden nur als Brüche angezeigt.</p>
+<p>Wenn als Eingabe-System griechische Zahlen ausgewählt sind, akzeptiert die App auch arabische Zahlen (also Standard dezimal), damit du weniger
+hin- und herschalten musst. Außerdem werden griechische Zahlen in jedem Eingabesystem akzeptiert, da sie griechische Buchstaben enthalten und daher
+ohnehin mit nichts anderem verwechselt werden können.</p>
+<p>Wenn als Ausgabe-System etwas anderes als Griechisch eingestellt ist, werden positive ganze Zahlen <em>zusätzlich</em> in der zweiten Ausgabe-Zeile
+als griechische Zahlen angezeigt.</p>
 
 <h3>Römische Zahlen</h3>
-<p><a href="https://de.wikipedia.org/wiki/R%C3%B6mische_Zahlschrift">Römische Zahlen</a> gibt es nur in der Basis 10. Sie können die Buchstaben
+<p><a href="https://de.wikipedia.org/wiki/R%C3%B6mische_Zahlschrift">Römische Zahlen</a> gibt es auch nur in der Basis 10. Sie können die Buchstaben
 <code>I V X L C D M</code> enthalten. Symbole für größere Zahlen sind <code class="apostrophus">ↁ</code>&nbsp;=&nbsp;5000,
 <code class="apostrophus">ↂ</code>&nbsp;=&nbsp10&nbsp;000, <code class="apostrophus">ↇ</code>&nbsp;=&nbsp;50&nbsp;000, und
 <code class="apostrophus">ↈ</code>&nbsp;=&nbsp;100&nbsp;000. (Wenn Du die Android-Tastatur statt der von Qonvert verwendest, kannst Du sie als
@@ -245,11 +261,9 @@ Die führenden Pipes können ausgelassen werden; und alle Pipes lassen sich durc
 <code style=\"white-space: nowrap\">||V|M|II</code>&nbsp;=&nbsp;<code style=\"white-space: nowrap\">V!M!II</code>&nbsp;=&nbsp;5&nbsp;01000&nbsp;00002.
 (Die alten Römer hätten diese Schreibweise sicher nicht erkannt, aber es scheint keine antike Notation für so große Zahlen zu geben.)</p>
 <p><code>S</code> (<i>semis</i>) nach dem ganzzahligen Teil steht für ein Halb, und ein oder mehrere Punkte für jeweils ein Zwölftel.
-<code>N</code> für <i>nulla</i> oderr <i>nihil</i> bedeutet Null.</p>
-<p>Wenn als Eingabe-System römische Zahlen ausgewählt sind, akzeptiert die App auch arabische Zahlen (also Standard dezimal), damit du weniger
-hin- und herschalten musst.</p>
-<p>Wenn als Ausgabe-System etwas anderes als römische Zahlen eingestellt ist, werden positive ganze Zahlen <em>zusätzlich</em> in der dritten Ausgabe-Zeile
-als römische Zahlen angezeigt.</p>
+<code>N</code> für <i>nulla</i> oder <i>nihil</i> bedeutet Null.</p>
+<p>Wenn als Eingabe-System römische Zahlen ausgewählt sind, akzeptiert die App auch arabische Zahlen (Standard dezimal); und wenn als Ausgabe-System
+etwas anderes als Römisch eingestellt ist, werden positive ganze Zahlen <em>zusätzlich</em> in der dritten Ausgabe-Zeile als römische Zahlen angezeigt.</p>
 
 <h2>Unicode</h2>
 <p>Ganze Zahlen von hexadezimal <code>20</code> bis <code>31FFF</code> (dezimal <code>32</code> bis <code>204&nbsp;799</code>) werden
@@ -275,7 +289,8 @@ im balancierten Undezimalsystem benötigst, ist Qonvert deine <strong>einzige</s
  <li><strong>Löschen (🗑)</strong>: lang antippen setzt Eingabe und Ausgabe auf Standard dezimal.</li>
  <li><strong>Qonvert-Tastatur</strong>: lang antippen für die Zweitbelegungen; ◀ oder runter wischen lässt sie verschwinden,
  und durch Antippen der Eingabezeile taucht sie wieder auf.</li>
- <li><strong>Einträge</strong> im Verlauf etc.: kurz antippen kopiert in die Eingabezeile, lang antippen schaltet Auswahl um.</li>
+ <li><strong>Einträge</strong> im Verlauf etc.: kurz antippen kopiert in die Eingabezeile, lang antippen schaltet Auswahl um. Im Auswahl-Modus wählt
+ lang antippen einen zusammenhängenden Bereich aus.</li>
 </ul>
 
 <h2>Eingabe</h2>
@@ -311,6 +326,16 @@ im balancierten Undezimalsystem benötigst, ist Qonvert deine <strong>einzige</s
  <li><code>{ ; , , }</code>: ägyptischer Bruch</li>
 </ul>
 
+<h3>Griechische Zahlen</h3>
+<ul>
+ <li><code>Α Β Γ Δ Ε Ϛ Ζ Η Θ</code>: 1..9</li>
+ <li><code>Ι Κ Λ Μ Ν Ξ Ο Π Ϟ</code>: 10..90</li>
+ <li><code>Ρ Σ Τ Υ Φ Χ Ψ Ω </code> und <code class="apostrophus">Ϡ</code>: 100..900</li>
+ <li><code>͵</code>: multipliziert den folgenden Buchstaben mit 1000</li>
+ <li><code>.</code>: multipliziert Voranstehendes mit 10000 (einer Myriade)</li>
+ <li><code>○</code>: Null</li>
+</ul>
+
 <h3>Römische Zahlen</h3>
 <ul>
  <li><code>I V X L C D M</code> or <code class="apostrophus">ↀ</code>: 1..1000</li>
@@ -329,8 +354,13 @@ im balancierten Undezimalsystem benötigst, ist Qonvert deine <strong>einzige</s
 
     <!-- What’s new -->
     <string name="whatsNew"><![CDATA[
-<h2>Version 1.3.1</h2>
-<p>Fehlerkorrekturen (Versionsinformationen und Lizenzen).</p>
+<h2>Version 1.4.0</h2>
+<p><strong>Griechische (milesische) Zahlen</strong> werden jetzt voll unterstützt.</p>
+<p>Beim Abspielen eines musikalischen Intervalls wird nun auch eine <strong>Wellenform</strong> dieses Intervalls angezeigt. (Als Beispiel;
+je nach Phasenverschiebung sehen Wellenformen desselben Intervalls unterschiedlich aus.)</p>
+<p>In den Listen-Bildschirmen („Alle Formate, Verlauf, Musik-Intervalle“) kannst du jetzt <strong>einen zusammenhängenden Bereich auf einmal auswählen</strong>,
+indem du den ersten Eintrag des Bereichs lang antippst und dann den letzten lang antippst.</p>
+<p>… und Fehlerkorrekturen, wie üblich.</p>
 
 <h2>Version 1.3.0</h2>
 <p>Qonvert hat eine <strong>neue Tastatur</strong>! (für Android-Version 5 Lollipop und später) – Sie passt sich an das Eingabe-System und an die
@@ -340,9 +370,9 @@ Wenn Du die alte Standard-Tastatur wieder haben willst, kannst du das in den Ein
 <p>Mit der Taste ♫ in der Titelleiste wird ein musikalisches Intervall mit dem gegebenen Frequenzverhältnis abgespielt. Seit dieser Version wird auch
 der <strong>Name des Intervalls</strong>, oder der des nächstgelegenen benannten Intervalls, angezeigt. Der Menüpunkt „Musik-Intervalle“ listet alle
 Intervalle auf, die diese App kennt.</p>
-<p>Die Bildschirme „Alle Formate, Verlauf, Musik-Intervalle“ haben eine dritte Option zum Anzeigen, Kopieren und Teilen von Zahlen bekommen:
+<p>Die Listen-Bildschirme haben eine dritte Option zum Anzeigen, Kopieren und Teilen von Zahlen bekommen:
 „<strong>kompatibel</strong>“ für größtmögliche Kompatibilität mit anderen Mathematik-Apps (zumindest für die weniger ausgefallenen Zahlenbasen und -systeme).</p>
-<p>Natürliche Zahlen werden jetzt auch als <strong>griechische (milesische) Zahlen</strong> angezeigt. Wenn die Anzeige für deinen Geschmack überfüllt ist,
+<p>Natürliche Zahlen werden jetzt auch als <strong>griechische Zahlen</strong> angezeigt. Wenn die Anzeige für deinen Geschmack überfüllt ist,
 kannst du sie in den Einstellungen deaktivieren (oder die römischen Zahlen, oder die Unicode-Zeichen).</p>
 <p>Neben den Unicode-Symbolen im Verlauf und auf der Alle-Formate-Seite ist eine neue Taste, die einen <strong>Weblink zum jeweiligen Symbol</strong> öffnet
 (auf fileformat.info).</p>
@@ -392,7 +422,7 @@ the Free Software Foundation, either version 3 of the License, or (at your optio
 <p>Qonvert is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</p>
 <p>You should have received a copy of the GNU General Public License along with Qonvert.
-If not, see <a href="https://www.gnu.org/licenses/">https://www.gnu.org/licenses/</a>.</p>
+If not, see <a href="https://www.gnu.org/licenses/licenses.de.html%23GPL">https://www.gnu.org/licenses/licenses.de.html%23GPL</a>.</p>
 
 <h2>GNU Lesser General Public License</h2>
 <p>Ich habe Maddie Abbouds praktischen <a href="https://github.com/m-abboud/android-tone-player">Tone/Buzzer Generator</a> zum Abspielen

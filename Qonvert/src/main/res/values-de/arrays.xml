@@ -30,6 +30,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
         <item>balanciert</item>
         <item>bijektiv 1</item>
         <item>bijektiv A</item>
+        <item>griechisch</item>
         <item>römisch</item>
     </string-array>
     <string-array name="num_systems_short">
@@ -37,6 +38,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
         <item>bal</item>
         <item>bj1</item>
         <item>bja</item>
+        <item>gr</item>
         <item>röm</item>
     </string-array>
 
@@ -154,7 +156,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
         <item>Hell</item>
         <item>Dunkel</item>
         <item>System</item>
-<!--        <item>Hellblau</item>
+    <!--    <item>Hellblau</item>
         <item>Dunkelblau</item>
         <item>System blau</item>-->
     </string-array>
