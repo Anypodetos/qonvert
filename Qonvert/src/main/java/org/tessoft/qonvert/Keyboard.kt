@@ -22,6 +22,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
 */
 
 import android.annotation.SuppressLint
+import android.app.Application
 import android.content.Context
 import android.content.res.Configuration
 import android.graphics.*
@@ -71,14 +72,14 @@ class KeyboardView(context: Context, attrs: AttributeSet) : View(context, attrs)
     private val buttonTextY = Array(buttonCols) { Array(buttonRows) { 0f } }
     private val buttonTexts = Array(buttonCols) { Array(buttonRows) { arrayOf("", "") } }
 
-    private val buttonPaint = Array(3) {
+    private val buttonPaints = Array(3) {
         Paint(0).apply {
             style = Paint.Style.FILL
-            color = arrayOf(0x30808080, 0x60808080, ContextCompat.getColor(context, MainActivity.resolveColor(R.attr.colorSecondary)))[it]
+            color = listOf(0x30808080, 0x60808080, ContextCompat.getColor(context, MainActivity.resolveColor(R.attr.colorSecondary)))[it]
         }
     }
     private val textColor = ContextCompat.getColor(context, MainActivity.resolveColor(R.attr.editTextColor))
-    private val textPaint = arrayOf(
+    private val textPaints = listOf(
         Paint(Paint.ANTI_ALIAS_FLAG).apply {
             textSize = 18 * resources.displayMetrics.scaledDensity
             textAlign = Paint.Align.CENTER
@@ -158,31 +159,46 @@ class KeyboardView(context: Context, attrs: AttributeSet) : View(context, attrs)
         if (baseAndSystem.first != base || baseAndSystem.second != system || always) {
             base = baseAndSystem.first
             system = baseAndSystem.second
+            val oldButtonCols = buttonCols
+            buttonCols = if (landscape) 12 else if (system == NumSystem.GREEK) 9 else 8
+            if (oldButtonCols != buttonCols || always) {
+                buttonW = width.toFloat() / buttonCols
+                buttonH = height.toFloat() / buttonRows
+                padding = height / 50f
+                for (i in 0 until buttonCols) for (j in 0 until buttonRows) {
+                    buttonRects[i][j] = RectF(i * buttonW + padding, j * buttonH + padding, (i + 1) * buttonW - padding, (j + 1) * buttonH - padding)
+                    for (k in 0..1) {
+                        buttonTextX[i][j][k] = if (k == 0) buttonRects[i][j].centerX() else buttonRects[i][j].right - padding
+                        buttonTextY[i][j]    = buttonRects[i][j].centerY() + padding
+                    }
+                }
+            }
             for (i in 0 until buttonCols) for (j in 0 until buttonRows) for (k in 0..1) buttonTexts[i][j][k] = ""
-            for (i in 0..1) textPaint[i].typeface = Typeface.DEFAULT
+            for (i in 0..1) textPaints[i].typeface = Typeface.DEFAULT
             val bijectiveAdd = if (system == NumSystem.BIJECTIVE_A) 9 else 0
             val minDigit = minDigit(base, system) + bijectiveAdd
             val maxDigit = minDigit + base - 1
             var bottomRow = ""
             when (system) {
-                /*NumSystem.GREEK -> {
+                NumSystem.GREEK -> {
                     var block = 0
-                    for ((d, digit) in GREEK_DIGITS.withIndex()) if (digit in "\u0000͵ʹ") block++ else
+                    for ((d, digit) in GREEK_DIGITS.withIndex()) if (digit == '\u0000') block++ else
                         buttonTexts[((d - block) % 3 + 3 * block) % (if (landscape) 12 else 9)][2 - ((d - block) / 3 % 3)][0] = digit.toString()
                     for (d in 1..9) buttonTexts[(d - 1) % 3 + 3][(9 - d) / 3][1] = d.toString()
                     buttonTexts[3][3][1] = "0"
                     buttonTexts[5][3][1] = "'"
-                    bottomRow = if (landscape) "○.͵∞無\"␣" else "○.͵?"
-                }*/
+                    bottomRow = if (landscape) "○.͵ʹ∞\"␣" else "○.͵ʹ"
+                    for (i in 0..1) textPaints[i].typeface = Typeface.SERIF
+                }
                 NumSystem.ROMAN -> {
                     for ((d, digit) in ROMAN_DIGITS.keys.withIndex()) buttonTexts[d % 4 + if (landscape) 6 else 3][(11 - d) / 4][0] = digit.toString()
-                    if (APOSTROPHUS_OPTIONS[MainActivity.apostrophus][0] == '+' || APOSTROPHUS_OPTIONS[MainActivity.apostrophus][3] == '+')
+                    if (APOSTROPHUS_OPTIONS[MainActivity.apostrophus][1] == '+' || APOSTROPHUS_OPTIONS[MainActivity.apostrophus][4] == '+')
                         buttonTexts[if (landscape) 8 else 5][1][0] = "ↀ"
                     buttonTexts[if (landscape) 9 else 6][0][0] = "|"
                     for (j in 0..2) for (k in 0..1) buttonTexts[if (landscape) 10 + k else 7][j][if (landscape) 0 else k] = "·∶∴∷⁙S"[2 - j + 3 * k].toString()
                     for (d in 1..9) buttonTexts[(d - 1) % 3 + 3][(9 - d) / 3][if (landscape) 0 else 1] = d.toString()
                     bottomRow = if (landscape) "0.'N∞\"␣" else { buttonTexts[3][3][1] = "0"; "N.'" }
-                    for (i in 0..1) textPaint[i].typeface = Typeface.SERIF
+                    for (i in 0..1) textPaints[i].typeface = Typeface.SERIF
                 }
                 else -> {
                     if (system != NumSystem.BIJECTIVE_A) for (d in minDigit.coerceAtLeast(1)..maxDigit.coerceAtMost(9))
@@ -201,10 +217,10 @@ class KeyboardView(context: Context, attrs: AttributeSet) : View(context, attrs)
             }
             for (i in 0..2) for (j in 0..3) buttonTexts[i][j][if (buttonTexts[i][j][0] == "") 0 else 1] = "[{;,@#_/\$%&-"[4 * i + j].toString()
             for (i in 3 until buttonCols) if (i != (if (landscape) 7 else 3) || minDigit <= 0) buttonTexts[i][3][0] = "$bottomRow⏎⌫".getOrNull(i - 3).toString()
-            if (landscape) buttonTexts[11][3][1] = "\u200A" else for (i in 5..7) buttonTexts[i][3][1] = "\"␣\u200A"[i - 5].toString()
+            if (landscape) buttonTexts[11][3][1] = "\u200A" else for (i in 0..2) buttonTexts[i + buttonCols - 3][3][1] = "\"␣\u200A"[i].toString()
 
             if (MainActivity.lowerDigits) for (i in 0 until buttonCols) for (j in 0 until buttonRows) for (k in 0..1)
-                buttonTexts[i][j][k] = buttonTexts[i][j][k].toLowerCase(Locale.ROOT)
+                buttonTexts[i][j][k] = buttonTexts[i][j][k].lowercase()
             invalidate()
         }
     }
@@ -212,37 +228,26 @@ class KeyboardView(context: Context, attrs: AttributeSet) : View(context, attrs)
     override fun onSizeChanged(w: Int, h: Int, oldW: Int, oldH: Int) {
         super.onSizeChanged(w, h, oldW, oldH)
         landscape = resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
-        buttonCols = if (landscape) 12 else 8
-        buttonW = w.toFloat() / buttonCols
-        buttonH = h.toFloat() / buttonRows
-        padding = h / 50f
-        for (i in 0 until buttonCols) for (j in 0 until buttonRows) {
-            buttonRects[i][j] = RectF(i * buttonW + padding, j * buttonH + padding, (i + 1) * buttonW - padding, (j + 1) * buttonH - padding)
-            for (k in 0..1) {
-                buttonTextX[i][j][k] = if (k == 0) buttonRects[i][j].centerX() else buttonRects[i][j].right - padding
-                buttonTextY[i][j]    = buttonRects[i][j].centerY() + padding
-            }
-        }
         fillButtons(always = true)
     }
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
-        canvas?.apply {
+        canvas?.let {
             for (i in 0 until buttonCols) for (j in 0 until buttonRows) {
-                drawRoundRect(buttonRects[i][j], padding, padding, buttonPaint[when {
+                it.drawRoundRect(buttonRects[i][j], padding, padding, buttonPaints[when {
                     buttonTexts[i][j][0] == "" -> 0
                     !touchDown || touchI != i || touchJ != j -> 1
                     else -> 2
                 }])
-                for (k in 0..1) drawText(buttonTexts[i][j][k], buttonTextX[i][j][k], buttonTextY[i][j], textPaint[k])
+                for (k in 0..1) it.drawText(buttonTexts[i][j][k], buttonTextX[i][j][k], buttonTextY[i][j], textPaints[k])
             }
         }
     }
 
     fun show() {
         hidden = false
-        animate().apply {
+        with(animate()) {
             duration = 150
             withStartAction { visibility = VISIBLE }
             translationY(0f)
@@ -251,7 +256,7 @@ class KeyboardView(context: Context, attrs: AttributeSet) : View(context, attrs)
     }
     fun hide() {
         hidden = true
-        animate().apply {
+        with(animate()) {
             duration = 150
             withEndAction { visibility = GONE }
             translationY(layoutParams.height.toFloat() / 2)

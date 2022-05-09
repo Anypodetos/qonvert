@@ -26,11 +26,7 @@ import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import androidx.preference.ListPreference
-import androidx.preference.MultiSelectListPreference
-import androidx.preference.PreferenceFragmentCompat
-import androidx.preference.SwitchPreference
-import java.util.*
+import androidx.preference.*
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -61,9 +57,9 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         private fun naturalSummary() {
-            findPreference<MultiSelectListPreference>("natural")?.apply {
-                summary = resources.getStringArray(R.array.natural_entries).filterIndexed {
-                    i, _ -> resources.getStringArray(R.array.natural_values)[i] in values
+            findPreference<MultiSelectListPreference>("natural")?.let {
+                it.summary = resources.getStringArray(R.array.natural_entries).filterIndexed {
+                    i, _ -> resources.getStringArray(R.array.natural_values)[i] in it.values
                 }.joinToString(" • ")
             }
         }
@@ -72,16 +68,16 @@ class SettingsActivity : AppCompatActivity() {
             val lowercase = findPreference<SwitchPreference>("lowercase")
             val apostrophus = findPreference<ListPreference>("apostrophus")
             apostrophus?.entries = resources.getStringArray(R.array.apostrophus_entries).map {
-                    if (lowercase?.isChecked == true) it.toLowerCase(Locale.ROOT) else it
+                if (lowercase?.isChecked == true) it.lowercase() else it
                 }.toTypedArray()
-            apostrophus?.summary = if (lowercase?.isChecked == true) apostrophus?.entry.toString().toLowerCase(Locale.ROOT)
-                else apostrophus?.entry.toString().toUpperCase(Locale.ROOT)
+            apostrophus?.summary = if (lowercase?.isChecked == true) apostrophus?.entry.toString().lowercase()
+            else apostrophus?.entry.toString().uppercase()
         }
 
         private fun buttonSummary() {
-            findPreference<MultiSelectListPreference>("buttons")?.apply {
-                summary = values.sortedBy { i -> i.toInt() }.joinToString(" • ") { i ->
-                    getString(resources.getIdentifier("b$i", "string", context?.packageName)).toUpperCase(Locale.ROOT)
+            findPreference<MultiSelectListPreference>("buttons")?.let {
+                it.summary = it.values.sortedBy { i -> i.toInt() }.joinToString(" • ") { i ->
+                    getString(resources.getIdentifier("b$i", "string", it.context.packageName)).uppercase()
                 }
             }
         }
@@ -91,23 +87,22 @@ class SettingsActivity : AppCompatActivity() {
                 "natural" -> naturalSummary()
                 "lowercase", "apostrophus" -> apostrophusSummary()
                 "buttons" -> buttonSummary()
-                "theme" -> activity?.apply {
-                    MainActivity.setQonvertTheme(this, findPreference<ListPreference>("theme")?.value ?: "")
-                    recreate()
+                "theme" -> activity?.let {
+                    MainActivity.setQonvertTheme(it, findPreference<ListPreference>("theme")?.value ?: "")
                 }
             }
         }
 
         override fun onResume() {
             super.onResume()
-            preferenceManager.sharedPreferences.registerOnSharedPreferenceChangeListener(listener)
+            preferenceManager.sharedPreferences?.registerOnSharedPreferenceChangeListener(listener)
             naturalSummary()
             apostrophusSummary()
             buttonSummary()
          }
 
         override fun onPause() {
-            preferenceManager.sharedPreferences.unregisterOnSharedPreferenceChangeListener(listener)
+            preferenceManager.sharedPreferences?.unregisterOnSharedPreferenceChangeListener(listener)
             super.onPause()
         }
     }

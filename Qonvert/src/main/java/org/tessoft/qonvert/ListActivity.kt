@@ -38,15 +38,17 @@ import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import java.util.*
 import java.math.BigInteger.*
+import kotlin.math.*
 
 val MIN_PIE = Build.VERSION.SDK_INT >= Build.VERSION_CODES.P
 
 class QNumberEntry(val inputString: String, val number: QNumber, val egyptianMethod: EgyptianMethod =
         if (MainActivity.egyptianMethod == EgyptianMethod.OFF) EgyptianMethod.BINARY else MainActivity.egyptianMethod,
-        var selected: Boolean = false, var expanded: Boolean = false) {
+        var trustInput: Boolean = true) {
 
+    var selected = false
+    var expanded = false
     var outputBuffer = ""
 
     fun toStrings(activity: ListActivity?): Pair<String, String> {
@@ -62,6 +64,8 @@ class RecyclerAdapter internal constructor(private val activity: ListActivity?, 
         RecyclerView.Adapter<RecyclerAdapter.ViewHolder>() {
 
     var selectedItems = 0
+    var lastSelectedItem = -1
+        private set
     var clickedItem = -1
         private set
     private val inflater: LayoutInflater = LayoutInflater.from(activity)
@@ -74,8 +78,8 @@ class RecyclerAdapter internal constructor(private val activity: ListActivity?, 
             holder.inputText.text = first
             holder.outputText.text = second
         }
-        holder.outputText.typeface = if (items[position].number.system == NumSystem.ROMAN ||
-            items[position].number.format in setOf(QFormat.GREEK_NATURAL, QFormat.ROMAN_NATURAL)) Typeface.SERIF else Typeface.DEFAULT
+        holder.outputText.typeface = if (items[position].number.system in setOf(NumSystem.GREEK, NumSystem.ROMAN) && items[position].number.format != QFormat.UNICODE
+            || items[position].number.format in setOf(QFormat.GREEK_NATURAL, QFormat.ROMAN_NATURAL)) Typeface.SERIF else Typeface.DEFAULT
 
         if (!MIN_PIE) items[position].expanded = true
         holder.outputText.post { holder.expandButton.visibility = if (holder.outputText.lineCount > 3 && MIN_PIE) View.VISIBLE else View.GONE }
@@ -85,8 +89,7 @@ class RecyclerAdapter internal constructor(private val activity: ListActivity?, 
         holder.extraButton.visibility = if (holder.listWhatToken == "I" || items[position].number.format == QFormat.UNICODE) View.VISIBLE else View.GONE
         if (holder.extraButton.visibility == View.VISIBLE) holder.extraButton.text = if (holder.listWhatToken == "I") "♫" else "🌐\uFE0E"
 
-
-        activity?.applicationContext?.let {
+        activity?.let {
             holder.backView.setBackgroundColor(if (items[position].selected)
                 ContextCompat.getColor(it, MainActivity.resolveColor(android.R.attr.colorMultiSelectHighlight)) else 0)
         }
@@ -103,14 +106,29 @@ class RecyclerAdapter internal constructor(private val activity: ListActivity?, 
         val extraButton: TextView = itemView.findViewById(R.id.extraButton)
         val expandButton: FloatingActionButton = itemView.findViewById(R.id.expandButton)
 
-        private fun changeSelection() {
-            with(items[adapterPosition]) {
+        private fun changeSelection(range: Boolean) {
+            if (range) {
+                val start = min(adapterPosition, lastSelectedItem)
+                val end   = max(adapterPosition, lastSelectedItem)
+                for (i in start..end) with (items[i]) {
+                    if (!selected) {
+                        selected = true
+                        selectedItems++
+                    }
+                }
+                lastSelectedItem = adapterPosition
+                notifyItemRangeChanged(start, end - start + 1)
+            } else with(items[adapterPosition]) {
                 selected = !selected
-                if (selected) selectedItems++ else selectedItems--
+                if (selected) {
+                    lastSelectedItem = adapterPosition
+                    selectedItems++
+                } else selectedItems--
+                notifyItemChanged(adapterPosition)
             }
-            notifyItemChanged(adapterPosition)
             activity?.updateToolbar()
         }
+
         init {
             if (listWhatToken == "H" && activity != null) {
                 val inputColor = inputText.textColors
@@ -122,18 +140,17 @@ class RecyclerAdapter internal constructor(private val activity: ListActivity?, 
                 if (selectedItems == 0) {
                     clickedItem = adapterPosition
                     activity?.finish()
-                } else changeSelection()
+                } else changeSelection(range = false)
             }
             itemView.setOnLongClickListener {
-                changeSelection()
+                changeSelection(range = selectedItems > 0)
                 true
             }
 
             listFormatsButton.visibility = if (listWhatToken in "A".."Z") {
                 listFormatsButton.setOnClickListener {
                     val intent = Intent(activity, ListActivity::class.java)
-                    intent.putExtra("list", listWhatToken.toLowerCase(Locale.ROOT) +
-                        items[adapterPosition].number.toPreferencesString() + "/$adapterPosition")
+                    intent.putExtra("list", listWhatToken.lowercase() + items[adapterPosition].number.toPreferencesString() + "/$adapterPosition")
                     activity?.startActivity(intent)
                 }
                 View.VISIBLE
@@ -147,7 +164,7 @@ class RecyclerAdapter internal constructor(private val activity: ListActivity?, 
             extraButton.setOnClickListener {
                 activity?.let {
                     with (items[adapterPosition].number) {
-                        if (listWhatToken == "I") play(it.resources, false) else
+                        if (listWhatToken == "I") play(it) else
                             it.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://www.fileformat.info/info/unicode/char/" + numerator.toString(16))))
                     }
                 }
@@ -173,20 +190,18 @@ class RecyclerAdapter internal constructor(private val activity: ListActivity?, 
                             AlertDialog.Builder(it)
                                 .setTitle(R.string.delete_this_q)
                                 .setMessage(R.string.cant_be_undone)
-                                .setPositiveButton(R.string.yes) { _, _ ->
+                                .setPositiveButton(R.string.delete) { _, _ ->
                                     val pos = adapterPosition
                                     notifyItemRemoved(pos)
                                     if (items[pos].selected) selectedItems--
                                     items.remove(items[pos])
                                     if (items.size == 0) it.finish() else it.updateToolbar()
                                 }
-                                .setNegativeButton(R.string.no) { _, _ -> }
+                                .setNegativeButton(R.string.cancel) { _, _ -> }
                                 .create().show()
                         }
                         R.id.playItem -> activity?.let {
-                            val toast = Toast.makeText(it.applicationContext, items[adapterPosition].number.play(it.resources), Toast.LENGTH_LONG)
-                            toast.view?.findViewById<TextView>(android.R.id.message)?.gravity = Gravity.CENTER
-                            toast.show()
+                            items[adapterPosition].number.play(it)
                         }
                     }
                     true
@@ -194,7 +209,7 @@ class RecyclerAdapter internal constructor(private val activity: ListActivity?, 
                 popupMenu.setOnDismissListener {
                     outputText.setBackgroundColor(0)
                 }
-                activity?.applicationContext?.let {
+                activity?.let {
                     outputText.setBackgroundColor(ContextCompat.getColor(it, MainActivity.resolveColor(android.R.attr.colorMultiSelectHighlight)))
                 }
                 popupMenu.show()
@@ -208,6 +223,7 @@ class ListActivity : AppCompatActivity() {
 
     private var listWhat = ""
     private lateinit var toolbar: Toolbar
+    private lateinit var baseText: TextView
     private lateinit var recycler: RecyclerView
     private lateinit var adapter: RecyclerAdapter
     lateinit var outputRadioGroup: RadioGroup
@@ -225,6 +241,7 @@ class ListActivity : AppCompatActivity() {
         setContentView(R.layout.activity_list)
 
         toolbar = findViewById(R.id.listToolbar)
+        baseText = findViewById(R.id.baseText)
         recycler = findViewById(R.id.recycler)
         outputRadioGroup = findViewById(R.id.outputRadioGroup)
 
@@ -246,11 +263,13 @@ class ListActivity : AppCompatActivity() {
         adapter = RecyclerAdapter(this, items)
         recycler.adapter = adapter
         preferences = PreferenceManager.getDefaultSharedPreferences(this)
+        var base = 10
+        var system = NumSystem.STANDARD
         when (listWhat.firstOrNull()) {
             'H' -> getHistory(preferences, items)
             'I' -> {
-                val base = preferences.getInt("inBase", 10)
-                val system = try { NumSystem.valueOf(preferences.getString("inSystem",  null) ?: "") } catch (e: Exception) { NumSystem.STANDARD }
+                base = preferences.getInt("inBase", 10)
+                system = try { NumSystem.valueOf(preferences.getString("inSystem",  null) ?: "") } catch (e: Exception) { NumSystem.STANDARD }
                 for (i in listOf(ONE, TWO)) for (interval in INTERVALS)
                     with(QNumber(interval.first * i, interval.second, base, system, format = QFormat.FRACTION)) {
                         items.add(QNumberEntry(toInterval(resources), this))
@@ -261,6 +280,8 @@ class ListActivity : AppCompatActivity() {
             }
             in 'a'..'z' -> {
                 val q = QNumber(preferencesEntry = listWhat.substring(1))
+                base = q.base
+                system = q.system
                 val formatsArray = resources.getStringArray(R.array.formats)
                 for (f in QFormat.values()) if (f != QFormat.EGYPTIAN && q.usefulFormat(f)) {
                     prefsMapping.add(items.count())
@@ -273,6 +294,10 @@ class ListActivity : AppCompatActivity() {
                         q.copy(QFormat.EGYPTIAN), egyptianMethod = e))
                 } else prefsMapping.add(-1)
             }
+        }
+        baseText.visibility = if (listWhat == "H") View.GONE else {
+            baseText.text =  getString(R.string.bare_base, base, resources.getStringArray(R.array.num_systems)[system.ordinal])
+            View.VISIBLE
         }
         if (prefsMapping.size == 0) prefsMapping = MutableList(items.size) { it }
         adapter.selectedItems = 0
@@ -305,7 +330,7 @@ class ListActivity : AppCompatActivity() {
         var text = ""
         if (item.itemId in setOf(R.id.copyItems, R.id.shareItems))
             for (listItem in (if (listWhat == "H") items.reversed() else items)) if (adapter.selectedItems == 0 || listItem.selected)
-                text += listItem.toStrings(this).let { it.first + "\n" + it.second } + "\n\n"
+                text += listItem.toStrings(this).run { first + "\n" + second } + "\n\n"
         text = text.removeSuffix("\n")
         when (item.itemId) {
             android.R.id.home -> if (adapter.selectedItems > 0) {
@@ -331,7 +356,7 @@ class ListActivity : AppCompatActivity() {
                 .setTitle(if (adapter.selectedItems == 0)
                     getString(R.string.delete_history_q) else resources.getQuantityString(R.plurals.delete_q, adapter.selectedItems))
                 .setMessage(R.string.cant_be_undone)
-                .setPositiveButton(R.string.yes) { _, _ ->
+                .setPositiveButton(R.string.delete) { _, _ ->
                     if (adapter.selectedItems == 0) items.clear() else
                         for ((i, listItem) in items.withIndex().reversed()) if (listItem.selected) {
                             adapter.notifyItemRemoved(i)
@@ -340,7 +365,7 @@ class ListActivity : AppCompatActivity() {
                     adapter.selectedItems = 0
                     if (items.size == 0) finish() else updateToolbar()
                 }
-                .setNegativeButton(R.string.no) { _, _ -> }
+                .setNegativeButton(R.string.cancel) { _, _ -> }
                 .create().show()
             R.id.settingsListItem -> startActivity(Intent(this, SettingsActivity::class.java))
         }

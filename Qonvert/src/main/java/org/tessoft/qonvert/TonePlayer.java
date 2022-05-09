@@ -25,10 +25,6 @@ public abstract class TonePlayer {
     public TonePlayer() {
     }
 
-    public TonePlayer(double toneFreqInHz) {
-        this.toneFreqInHz = toneFreqInHz;
-    }
-
     public void play() {
         if (isPlaying)
             return;
@@ -45,22 +41,6 @@ public abstract class TonePlayer {
             return;
 
         tryStopPlayer();
-    }
-
-    public void setVolume(int volume) {
-        this.volume = volume;
-    }
-
-    public int getVolume() {
-        return volume;
-    }
-
-    public double getToneFreqInHz() {
-        return toneFreqInHz;
-    }
-
-    public void setToneFreqInHz(double toneFreqInHz) {
-        this.toneFreqInHz = toneFreqInHz;
     }
 
     protected abstract void asyncPlayTrack(final double toneFreqInHz);

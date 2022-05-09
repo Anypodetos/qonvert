@@ -18,17 +18,6 @@ public class OneTimeBuzzer extends TonePlayer {
         this.duration = duration;
     }
 
-    public OneTimeBuzzer() {
-    }
-
-    public double getDuration() {
-        return duration;
-    }
-
-    public void setDuration(double duration) {
-        this.duration = duration;
-    }
-
     protected void asyncPlayTrack(final double toneFreqInHz) {
         playerWorker = new Thread(new Runnable() {
             public void run() {

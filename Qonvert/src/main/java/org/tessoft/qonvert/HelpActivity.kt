@@ -54,7 +54,7 @@ class HelpFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        pageViewModel = ViewModelProvider(this).get(PageViewModel::class.java).apply {
+        pageViewModel = ViewModelProvider(this)[PageViewModel::class.java].apply {
             setIndex(arguments?.getInt(SECTION_NUMBER) ?: 0)
         }
     }
@@ -65,7 +65,7 @@ class HelpFragment : Fragment() {
             root.findViewById<WebView>(R.id.webView).loadData(
                 getString(R.string.css) +
                 (if (isNightModeActive()) getString(R.string.css_dark) else "") +
-                (if (MainActivity.themeId == ThemeId.BLUE) getString(R.string.css_blue) else "") +
+                (if (MainActivity.themeId == R.style.Theme_QonvertBlue) getString(R.string.css_blue) else "") +
                 "<h1>" + when(it) {
                     0 -> getString(R.string.menu_help)
                     1 -> getString(R.string.menu_cheatSheet)
@@ -100,8 +100,7 @@ class HelpFragment : Fragment() {
     }
 }
 
-class PagerAdapter(fm: FragmentManager) :
-        FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+class PagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
     override fun getItem(position: Int): Fragment = HelpFragment.newInstance(position)
     override fun getCount() = 4

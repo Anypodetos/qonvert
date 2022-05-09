@@ -54,11 +54,9 @@ const val HG2G = 42
 const val TAXICAB = 1729
 val MONSTER = BigInteger("808017424794512875886459904961710757005754368000000000")
 val BUTTON_BASES = listOf(2, 3, 6, 8, 10, 12, 16, 20, 26)
-val DEFAULT_BUTTONS = setOf("2", "8", "10", "12", "16")
+val DEFAULT_BUTTONS = listOf(2, 8, 10, 12, 16)
+val THEMES = mapOf('A' to R.style.Theme_Qonvert, 'B' to R.style.Theme_QonvertBlue)
 
-enum class ThemeId {
-    UNSET, CLASSIC, BLUE
-}
 enum class KeyboardId {
     ANDROID, CUSTOM
 }
@@ -77,14 +75,14 @@ class MainActivity : AppCompatActivity() {
     private var lastQNumber = QNumber()
     private var rangeToast: Toast? = null
 
-    private lateinit var toggleButtons: Array<ToggleButton>
-    private lateinit var systemButtons: Array<Button>
+    private lateinit var toggleButtons: List<ToggleButton>
+    private lateinit var systemButtons: List<Button>
     private lateinit var complementSwitch: Switch
-    private lateinit var baseTexts: Array<TextView>
-    private lateinit var baseBars: Array<SeekBar>
+    private lateinit var baseTexts: List<TextView>
+    private lateinit var baseBars: List<SeekBar>
     private lateinit var outputView: ScrollView
     private lateinit var outputLayout: ConstraintLayout
-    private lateinit var textOutputs: Array<TextView>
+    private lateinit var textOutputs: List<TextView>
     lateinit var editInput: EditInput
         private set
     private lateinit var clearButton: FloatingActionButton
@@ -94,20 +92,20 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this)
-        setQonvertTheme(this, if (themeId == ThemeId.UNSET) preferences.getString("theme", "LA") ?: "LA" else "")
+        setQonvertTheme(this, if (themeId == 0) preferences.getString("theme", "LA") ?: "LA" else "")
         appTheme = theme
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(findViewById(R.id.toolbar))
 
-        if (numSystemsSuper[0] == null) resources.getStringArray(R.array.num_systems_super).let {
-            for (i in numSystemsSuper.indices) numSystemsSuper[i] = it[i]
+        if (numSystemsSuper[0] == "") with(resources.getStringArray(R.array.num_systems_super)) {
+            for (i in numSystemsSuper.indices) numSystemsSuper[i] = this[i]
         }
 
         showNaturalStrings = resources.getStringArray(R.array.natural_values)
 
-        toggleButtons = arrayOf(
+        toggleButtons = listOf(
             findViewById(R.id.inToggleButton2),
             findViewById(R.id.inToggleButton3),
             findViewById(R.id.inToggleButton6),
@@ -127,22 +125,22 @@ class MainActivity : AppCompatActivity() {
             findViewById(R.id.outToggleButton20),
             findViewById(R.id.outToggleButton26)
         )
-        systemButtons = arrayOf(
+        systemButtons = listOf(
             findViewById(R.id.inSystemButton),
             findViewById(R.id.outSystemButton)
         )
         complementSwitch = findViewById(R.id.complementSwitch)
-        baseTexts = arrayOf(
+        baseTexts = listOf(
             findViewById(R.id.inBaseText),
             findViewById(R.id.outBaseText)
         )
-        baseBars = arrayOf(
+        baseBars = listOf(
             findViewById(R.id.inBaseBar),
             findViewById(R.id.outBaseBar)
         )
         outputView = findViewById(R.id.outputView)
         outputLayout = findViewById(R.id.outputLayout)
-        textOutputs = arrayOf(
+        textOutputs = listOf(
             findViewById(R.id.textOutput0),
             findViewById(R.id.textOutput1),
             findViewById(R.id.textOutput2),
@@ -211,9 +209,9 @@ class MainActivity : AppCompatActivity() {
         }
 
         for (i in 0..4) textOutputs[i].setOnClickListener {
-            val roman = i == 2 && textOutputs[2].typeface == Typeface.SERIF
+            val greekOrRoman = i in 1..2 && textOutputs[i].typeface == Typeface.SERIF && lastQNumber.denominator == ONE
             copyToInput(lastQNumber, textOutputs[i].text.toString(),
-                if (roman) 10 else baseBars[1].progress + 2, if (roman) NumSystem.ROMAN else numSystems[1],
+                if (greekOrRoman) 10 else baseBars[1].progress + 2, if (greekOrRoman) (if (i == 1) NumSystem.GREEK else NumSystem.ROMAN) else numSystems[1],
                 complementSwitch.isChecked, switchBases = true)
         }
         val clipboard = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager?
@@ -315,11 +313,7 @@ class MainActivity : AppCompatActivity() {
                     .setMessage(R.string.no_history)
                     .setNegativeButton(R.string.close) { _, _ -> }
                     .create().show()
-            R.id.intervalItem -> {
-                val toast = Toast.makeText(applicationContext, lastQNumber.play(resources), Toast.LENGTH_LONG)
-                toast.view?.findViewById<TextView>(android.R.id.message)?.gravity = Gravity.CENTER
-                toast.show()
-            }
+            R.id.intervalItem -> lastQNumber.play(this)
             R.id.intervalListItem -> {
                 val intent = Intent(this, ListActivity::class.java)
                 intent.putExtra("list", "I")
@@ -346,7 +340,7 @@ class MainActivity : AppCompatActivity() {
         showNatural = preferences.getStringSet("natural", null) ?: showNaturalStrings.toSet()
         showRange = preferences.getBoolean("range", true)
         warnNonstandardInput = preferences.getBoolean("wrongDigits", true)
-        val buttons = preferences.getStringSet("buttons", null) ?: DEFAULT_BUTTONS
+        val buttons = preferences.getStringSet("buttons", null) ?: DEFAULT_BUTTONS.toSet().map { it.toString() }
         for (j in BUTTON_BASES.indices) {
             val visibility = if (BUTTON_BASES[j].toString() in buttons) View.VISIBLE else View.GONE
             toggleButtons[j].visibility = visibility
@@ -427,7 +421,7 @@ class MainActivity : AppCompatActivity() {
         val q = if (inputChanged) QNumber(editInput.string, baseBars[0].progress + 2, numSystems[0])
             else lastQNumber.copy()
         if (inputChanged) {
-            editInput.setTextColor(ContextCompat.getColor(applicationContext, when {
+            editInput.setTextColor(ContextCompat.getColor(this, when {
                !q.isValid -> R.color.red_error
                 q.nonstandardInput && warnNonstandardInput -> R.color.orange_light
                 else -> resolveColor(R.attr.editTextColor)
@@ -451,9 +445,9 @@ class MainActivity : AppCompatActivity() {
         }
         for (i in 0..4) {
             textOutputs[i].typeface = if (when (i) {
-                1, 2 -> q.system == NumSystem.ROMAN || q.denominator == ONE /* natural Greek/Roman output */
-                3    -> q.system == NumSystem.ROMAN && q.denominator >  ONE /* Unicode */
-                else -> q.system == NumSystem.ROMAN
+                1, 2 -> q.system in setOf(NumSystem.GREEK, NumSystem.ROMAN) || q.denominator == ONE /* natural Greek/Roman output */
+                3    -> q.system in setOf(NumSystem.GREEK, NumSystem.ROMAN) && q.denominator >  ONE /* Unicode */
+                else -> q.system in setOf(NumSystem.GREEK, NumSystem.ROMAN)
             }) Typeface.SERIF else Typeface.DEFAULT
             textOutputs[i].visibility = if (textOutputs[i].text == "") View.GONE else View.VISIBLE
         }
@@ -475,10 +469,10 @@ class MainActivity : AppCompatActivity() {
         baseTexts[i].text = getString(R.string.base, resources.getStringArray(R.array.base_inOut)[i], base,
             resources.getStringArray(R.array.num_systems)[actualSystem.ordinal])
         for (j in BUTTON_BASES.indices) toggleButtons[BUTTON_BASES.size * i + j].isChecked = BUTTON_BASES[j] == base
-        systemButtons[i].setBackgroundColor(ContextCompat.getColor(applicationContext,
+        systemButtons[i].setBackgroundColor(ContextCompat.getColor(this,
             if (baseAllowed) resolveColor(R.attr.colorPrimaryVariant) else R.color.grey))
         if (i == 0) {
-            editInput.typeface = if (actualSystem == NumSystem.ROMAN) Typeface.SERIF else Typeface.DEFAULT
+            editInput.typeface = if (actualSystem in setOf(NumSystem.GREEK, NumSystem.ROMAN)) Typeface.SERIF else Typeface.DEFAULT
             updateKeyboardToCaretPos(base, actualSystem)
         } else complementSwitch.isEnabled = actualSystem != NumSystem.BALANCED
         toastRangeHint(i, base, system)
@@ -488,19 +482,23 @@ class MainActivity : AppCompatActivity() {
         if (always || (showRange && lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED))) {
             val minDigit = minDigit(base, system)
             rangeToast?.cancel()
-            rangeToast = Toast.makeText(applicationContext, getString(
-                if (system == NumSystem.ROMAN && base == 10) { if (i == 0) R.string.range_toast_roman else R.string.range_toast_onlyRoman }
-                else R.string.range_toast, resources.getStringArray(R.array.base_inOut)[i],
-                digitToChar(minDigit, base, system), digitToChar(minDigit + base - 1, base, system)), Toast.LENGTH_SHORT)
+            rangeToast = Toast.makeText(applicationContext, getString(when {
+                    system == NumSystem.GREEK && base == 10 -> if (i == 0) R.string.range_toast_greek else R.string.range_toast_onlyGreek
+                    system == NumSystem.ROMAN && base == 10 -> if (i == 0) R.string.range_toast_roman else R.string.range_toast_onlyRoman
+                    else -> R.string.range_toast
+                },
+                resources.getStringArray(R.array.base_inOut)[i], digitToChar(minDigit, base, system), digitToChar(minDigit + base - 1, base, system)),
+                Toast.LENGTH_SHORT)
             rangeToast?.setGravity(Gravity.TOP, 0, 0)
             rangeToast?.show()
         }
     }
 
-    fun updateKeyboardToCaretPos(base: Int = baseBars[0].progress + 2, actualSystem: NumSystem = allowedSystem(base, numSystems[0]).first, always: Boolean = false) {
+    fun updateKeyboardToCaretPos(base: Int = baseBars[0].progress + 2, actualSystem: NumSystem = allowedSystem(base, numSystems[0]).first,
+                     always: Boolean = false) {
         if (keyboardId == KeyboardId.CUSTOM) keyboard.fillButtons(tokenBaseSystem(editInput.string.substring(0, editInput.selectionStart).findLast {
             it in "_/[{;,@#$€£¥%&"
-        } ?: '\u0000') ?: Pair(base, actualSystem), always)
+        }) ?: Pair(base, actualSystem), always)
     }
 
     private fun copyToInput(q: QNumber, st: String = q.toString(), base: Int = q.base, system: NumSystem = q.system,
@@ -527,14 +525,18 @@ class MainActivity : AppCompatActivity() {
         var lowerDigits = false
         var apostrophus = 0
         var egyptianMethod = EgyptianMethod.BINARY
-        val numSystemsSuper = arrayOfNulls<String>(NumSystem.values().size)
+        private val tokens = Array(DEFAULT_BUTTONS.size) { Pair(DEFAULT_BUTTONS[it], NumSystem.STANDARD) }
+        val numSystemsSuper = Array(NumSystem.values().size) { "" }
 
         fun getOutputSettings(preferences: SharedPreferences) {
             maxDigitsAfter = (preferences.getString("digits", null))?.toIntOrNull() ?: 300
             groupDigits = preferences.getBoolean("group", false)
             lowerDigits = preferences.getBoolean("lowercase", false)
             apostrophus = ((preferences.getString("apostrophus", null))?.toIntOrNull() ?: 0).coerceIn(0..3)
-            egyptianMethod = try { EgyptianMethod.valueOf(preferences.getString("egyptian", null) ?: "") } catch (e: Exception) { EgyptianMethod.BINARY }
+            egyptianMethod = try { EgyptianMethod.valueOf(preferences.getString("egyptian", null) ?: "") }
+                catch (e: Exception) { EgyptianMethod.BINARY }
+            //for (i in tokens.indices) tokens[i] = Pair(preferences.getString("tokenBase$i", DEFAULT_BUTTONS[i].toString())?.toIntOrNull() ?: tokens[i].first,
+            //    try { NumSystem.valueOf(preferences.getString("tokenSystem$i", null) ?: "") } catch (e: Exception) { NumSystem.STANDARD } )
         }
 
         var appTheme: Resources.Theme? = null
@@ -544,28 +546,32 @@ class MainActivity : AppCompatActivity() {
             return typedValue.resourceId
         }
 
-        fun tokenBaseSystem(token: Char): Pair<Int, NumSystem>? =
+        fun tokenBaseSystem(token: Char?): Pair<Int, NumSystem>? =
             when (token) {
-                '@' -> Pair(2, NumSystem.STANDARD)
-                '#' -> Pair(8, NumSystem.STANDARD)
-                in "$€£¥" -> Pair(10, NumSystem.STANDARD) // +'?' for history entry
-                '%' -> Pair(12, NumSystem.STANDARD)
-                '&' -> Pair(16, NumSystem.STANDARD)
+                '@' -> tokens[0]
+                '#' -> tokens[1]
+                in listOf ('$', '€', '£', '¥') -> tokens[2]
+                '%' -> tokens[3]
+                '&' -> tokens[4]
+                // '?' -> Pair(10, NumSystem.STANDARD)  // history entry
                 else -> null
             }
 
-        var themeId = ThemeId.UNSET
+        var themeId = 0
             private set
-        fun setQonvertTheme(activity: Activity, theme: String = "") {
-            if (theme != "") {
-                AppCompatDelegate.setDefaultNightMode(when (theme) {
-                    in "L".."LZ" -> AppCompatDelegate.MODE_NIGHT_NO
-                    in "D".."DZ" -> AppCompatDelegate.MODE_NIGHT_YES
-                    else         -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+        fun setQonvertTheme(activity: Activity, themeString: String = "") {
+            if (themeString != "") {
+                val nightMode = AppCompatDelegate.getDefaultNightMode()
+                if (nightMode != AppCompatDelegate.MODE_NIGHT_NO)  AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                if (nightMode != AppCompatDelegate.MODE_NIGHT_YES) AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                AppCompatDelegate.setDefaultNightMode(when (themeString.firstOrNull()) {
+                    'L'  -> AppCompatDelegate.MODE_NIGHT_NO
+                    'D'  -> AppCompatDelegate.MODE_NIGHT_YES
+                    else -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
                 })
-                themeId = if (theme.endsWith('B')) ThemeId.BLUE else ThemeId.CLASSIC
+                themeId = THEMES[themeString.lastOrNull() ?: ' '] ?: R.style.Theme_Qonvert
             }
-            activity.setTheme(if (themeId == ThemeId.BLUE) R.style.Theme_QonvertBlue else R.style.Theme_Qonvert)
+            activity.setTheme(themeId)
         }
     }
 }
@@ -622,13 +628,13 @@ fun makePretty(text: String): Pair<String, Int> {
         if (prettyText == text) prettyText = (if (under > -1) prettyText.substring(0, under) else "") +
                 prettyText.substring(under + 1, slash).map {
             when (it) {
-                in '0'..'9' -> SUPERSCRIPT_DIGITS[it.toInt() - 48]
+                in '0'..'9' -> SUPERSCRIPT_DIGITS[it.digitToInt()]
                 '-' -> '⁻'
                 '.' -> '·'
                 else -> '\u202F' /* narrow space */
                 }
             }.joinToString("") + '⁄' + prettyText.substring(slash + 1).map {
-                if (it in '0'..'9') SUBSCRIPT_DIGITS[it.toInt() - 48] else '\u202F'
+                if (it in '0'..'9') SUBSCRIPT_DIGITS[it.digitToInt()] else '\u202F'
             }.joinToString("")
         prettyMenuTitle = R.string.clipboard_fraction
     }
@@ -637,14 +643,15 @@ fun makePretty(text: String): Pair<String, Int> {
 
 fun makeCompatible(text: String, system: NumSystem): Pair<String, Int> {
     if (text.startsWith("\"")) return Pair(text, 0)
-    var compatText = text.removeSuffix("…").replace('_', if (text.firstOrNull() == '-') '-' else '+')
+    var compatText = text.removeSuffix("…")
+        .replace("_", (if (system == NumSystem.GREEK) "ʹ" else "") + (if (text.firstOrNull() == '-') '-' else '+'))
     var one = when (system) {
         NumSystem.BIJECTIVE_A -> "A"
-        //NumSystem.GREEK -> "Α"
+        NumSystem.GREEK -> "Α"
         NumSystem.ROMAN -> "I"
         else -> "1"
     }
-    if (MainActivity.lowerDigits) one = one.toLowerCase(Locale.ROOT)
+    if (MainActivity.lowerDigits) one = one.lowercase()
     when (compatText.firstOrNull()) {
         '[' -> {
             val lastDelim = compatText.lastIndexOfAny(charArrayOf(';', ','))
@@ -654,15 +661,16 @@ fun makeCompatible(text: String, system: NumSystem): Pair<String, Int> {
                 compatText += ")".repeat(compatText.filter { it == '(' }.length)
             }
         }
-        '{' -> compatText = compatText.removeSurrounding("{", "}").removeSuffix(", …").replace("; ", "+$one/").replace(", ", "+$one/")
+        '{' -> compatText = compatText.removeSurrounding("{", "}").replace("; ", "+$one/").replace(", ", "+$one/")
     }
     compatText = compatText.removePrefix(when (system) {
         NumSystem.BIJECTIVE_1, NumSystem.BIJECTIVE_A -> "/+"
+        NumSystem.GREEK -> "○+"
         NumSystem.ROMAN -> if (MainActivity.lowerDigits) "n+" else "N+"
         else -> "0+"
     })
-    if (" . " !in compatText) compatText = compatText.filter { it != ' ' }
-    if (system !in setOf(NumSystem.ROMAN/*, NumSystem.GREEK*/)) {
+    if (system !in setOf(NumSystem.GREEK, NumSystem.ROMAN)) {
+        compatText = compatText.filter { it != ' ' }
         val rep = compatText.indexOf('\'')
         if (rep > -1) {
             compatText = compatText.removeRange(rep, rep + 1)
@@ -670,7 +678,33 @@ fun makeCompatible(text: String, system: NumSystem): Pair<String, Int> {
                 if (length > 0) compatText += repeat(MainActivity.maxDigitsAfter / length)
             }
         }
-        if (compatText.startsWith("..")) {
+    }
+    if (compatText.startsWith("..")) when (system) {
+        NumSystem.GREEK -> {
+            val leading9 = (compatText.getOrNull(2) ?: ' ').uppercaseChar()
+            val dots = compatText.substring(2, compatText.indexOfAny(charArrayOf('/', 'ʹ')).coerceAtLeast(2)).count { it == '.' }
+            compatText = if (dots != 0 && dots % 2 == 0 && leading9 in "ΘϞ") compatText.substring(if (leading9 == 'Θ') 6 else 7)
+                else "͵ΘϠϞΘ . ".let {
+                    if (MainActivity.lowerDigits) it.lowercase() else it
+                }.repeat(2 - dots % 2)
+                    .dropLast(mapOf('Θ' to 4, 'Ϟ' to 5, 'Ϡ' to 6, '͵' to 8)[leading9] ?: 0) + compatText.substring(2)
+        }
+        NumSystem.ROMAN -> {
+            val withoutPipes = compatText.dropWhile { it in ".|" }
+            var standardApostrophus = withoutPipes
+            for ((key, value) in ROMAN_APOSTROPHUS) standardApostrophus = standardApostrophus.replace(key, value)
+            val leadingPlace = mapOf('I' to 0, 'X' to 1, 'C' to 2, 'M' to 3, 'ↂ' to 4)[(standardApostrophus.getOrNull(0) ?: ' ').uppercaseChar()] ?: 0
+            val pipes = withoutPipes.count { it == '|' }
+            compatText = if (leadingPlace == 0 && withoutPipes.length > 2) "|".repeat(pipes - 1) + withoutPipes.substring(3)
+                else "|".repeat(pipes) + listOf(
+                    "ↂↈMↂCMXCIX", "ↂↈↀↂCↀXCIX", "CCIↃↃ CCCIↃↃↃ MCCIↃↃ CMXCIX", "CCIↃↃ CCCIↃↃↃ CIↃ CCIↃↃ CCIↃ XCIX")[MainActivity.apostrophus].let {
+                        if (MainActivity.lowerDigits) it.lowercase() else it
+                    }.dropLast(listOf(2, 4, 6,  8, 10,
+                                      2, 4, 6,  8, 10,
+                                      2, 4, 6, 13, 27,
+                                      2, 4, 9, 19, 33)[leadingPlace + 5 * MainActivity.apostrophus]) + withoutPipes
+        }
+        else -> {
             val intLength = "$compatText.".indexOfAny(charArrayOf('.', '/', '+'), 2) - 4
             compatText = compatText.getOrNull(2).toString().repeat(if (intLength == 0) 8 else 7 - (intLength - 1) % 8) + compatText.substring(4)
         }
