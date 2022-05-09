@@ -7,8 +7,10 @@ Qonvert is available on <a href="https://play.google.com/store/apps/details?id=o
 * Converting between minus (-2) and complement notation (FFFFFFFE)
 * Balanced numeral systems such as balanced ternary
 * Bijective numeration
+* Greek (Milesian) numerals
 * Roman numerals including unciae (twelfths)
-* Plus: Output of Greek numerals, Unicode characters – and it plays musical intervals with a given frequency ratio!
+* Unicode characters
+* Playing musical intervals with a given frequency ratio
 * Light and dark colour schemes
 
 <img src="screenshots/integer.png" width="250px" alt="Converting an integer number"> <img src="screenshots/rational.png" width="250px" alt="Converting a rational number"> <img src="screenshots/allformats.png" width="250px" alt="Display all formats"> <img src="screenshots/settings.png" width="250px" alt="App settings"> <img src="screenshots/cheatsheet.png" width="250px" alt="Cheat sheet">
