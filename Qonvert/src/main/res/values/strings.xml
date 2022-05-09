@@ -37,6 +37,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     <string name="edit_hint">Type a number ∈ ℚ</string>
     <string name="clear_hint">Clear input</string>
     <string name="base">%1$s: base %2$d, %3$s</string>
+    <string name="bare_base">base %1$d, %2$s</string>
     <string name="clipboard_asIs">Copy to clipboard as is</string>
     <string name="clipboard_rep">… with overlined repeating part</string>
     <string name="clipboard_fraction">… as pretty fraction</string>
@@ -46,6 +47,8 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     <string name="to_fraction">Converted to fraction to preserve precision</string>
     <string name="to_history_indep">Removed reference to history entry</string>
     <string name="range_toast">%1$s: digit range %2$s..%3$s</string>
+    <string name="range_toast_greek">%1$s: Greek numerals or digit range %2$s..%3$s</string>
+    <string name="range_toast_onlyGreek">%1$s: Greek numerals</string>
     <string name="range_toast_roman">%1$s: Roman numerals or digit range %2$s..%3$s</string>
     <string name="range_toast_onlyRoman">%1$s: Roman numerals</string>
     <string name="no_q_number">This button would show all available formats. However, there is no valid number in the input line.</string>
@@ -65,6 +68,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     <string name="err_ellipsis">denotes a number that’s been cut off.</string>
     <string name="err_infinity">[Those having problems with infinities] aren’t nearly appreciative enough of projective geometry. (Grant Sanderson)</string>
     <string name="err_undefined">Does your input have Buddha-nature?</string>
+    <string name="err_keraia">– the keraia – is only valid at the end of a Greek numeral.</string>
     <string name="err_onlyGreek">is only valid in Greek numerals.</string>
     <string name="err_noGreek">is neither a valid Greek nor an Arabic numeral.</string>
     <string name="err_onlyRoman">is only valid in Roman numerals.</string>
@@ -82,6 +86,8 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     <string name="menu_whatsNew">What’s new</string>
     <string name="menu_about">About &amp; Licenses</string>
 
+    <string name="interval">Interval</string>
+    <string name="interval_keep">tap wave to keep open</string>
     <string name="octaves">%d octaves</string>
     <string name="between_intervals">between %1$s and %2$s</string>
     <string name="interval_grammar_nom" />
@@ -107,8 +113,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     </plurals>
     <string name="delete_this_q">Delete this entry?</string>
     <string name="cant_be_undone">This can’t be undone.</string>
-    <string name="yes">Yes</string>
-    <string name="no">No</string>
+    <string name="cancel">Cancel</string>
     <string name="close">Close</string>
     <string name="standard_output">standard</string>
     <string name="pretty_output">pretty</string>
@@ -144,7 +149,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     <!-- CSS -->
     <string name="css" translatable="false"><![CDATA[
 <style>
-    body {padding-top: 1.5em}
+    body {padding-top: 1.5em; padding-bottom: 2em}
     h1, h2, h3 {font-family: serif}
     h1 {font-size: 140%}
     h2 {font-size: 125%; border-radius: 0.2em; background: rgb(224, 224, 224)}
@@ -268,12 +273,19 @@ denoted with “/”.</p>
 <p>Numbers with a radix point don’t work well with bijective systems, so non-integers are only displayed as fractions.</p>
 
 <h3>Greek numerals</h3>
-<p>Currently, only output of <a href="https://en.wikipedia.org/wiki/Greek_numerals">Greek (Milesian) natural numerals</a> is officially supported.
-They are followed by a keraia (ʹ) to better distinguish them from Roman numerals (see below).
-Myriads (10&nbsp;000s) are marked with a dot, following Diophantus. For very large numbers, the output gets pretty weird.</p>
+<p><a href="https://en.wikipedia.org/wiki/Greek_numerals">Greek (Milesian) numerals</a> are always base 10. The Greek letters <code>Α Β Γ Δ Ε Ϛ Ζ Η Θ</code>
+have values 1 to 9, <code>Ι Κ Λ Μ Ν Ξ Ο Π Ϟ</code> are 10 to 90, <code>Ρ Σ Τ Υ Φ Χ Ψ Ω </code> and <code class="apostrophus">Ϡ</code> are 100 to 900, and
+<code>͵Α ͵Β ͵Γ</code> etc. are 1000 to 9000. They are normally ordered from largest to smallest: 1231 is <code>͵ΑΣΛΑ</code>. In the output section
+they are followed by a keraia (ʹ) to better distinguish them from Roman numerals (see below), but the keraia is optional for input.</p>
+<p>Myriads (10&nbsp;000s) are marked with a dot, following Diophantus: <code>Θ.ΦΛ</code> means 9 myriads 530 = 90530. Repeated dots are used for still
+larger numbers (<code>Π&nbsp;.&nbsp;.&nbsp;ʹ</code> for 80&nbsp;0000&nbsp;0000), following nobody at all.</p>
+<p><code>○</code> means zero. Non-integers are only displayed as fractions.</p>
+<p>When Greek input is set, Arabic (i.e. standard decimal) input is also accepted so you need less switching between input systems. Furthermore, Greek numerals
+are always accepted regardless of input system as they – consisting of Greek letters – can’t be confused with anything else.</p>
+<p>When an output system other than Greek is selected, positive integers are <em>also</em> displayed as Greek numerals in the second output line.</p>
 
 <h3>Roman numerals</h3>
-<p><a href="https://en.wikipedia.org/wiki/Roman_numerals">Roman numerals</a> are always base 10. They can contain the letters <code>I V X L C D M</code>.
+<p><a href="https://en.wikipedia.org/wiki/Roman_numerals">Roman numerals</a> are also base 10. They can contain the letters <code>I V X L C D M</code>.
 Symbols for larger values are <code class="apostrophus">ↁ</code>&nbsp;=&nbsp;5000, <code class="apostrophus">ↂ</code>&nbsp;=&nbsp10&nbsp;000,
 <code class="apostrophus">ↇ</code>&nbsp;=&nbsp;50&nbsp;000, and <code class="apostrophus">ↈ</code>&nbsp;=&nbsp;100&nbsp;000.
 (If you are using the Android keyboard instead of Qonvert’s, you can compose them as <code>I)) ((I)) I))) (((I)))</code>.)</p>
@@ -285,8 +297,8 @@ You can omit the leading pipes, and replace pipes with exclamation marks:
 (The Romans certainly wouldn’t have recognised this notation, but there doesn’t seem to be any valid way of expressing huge numbers in Roman.)</p>
 <p>The integer part may be followed by <code>S</code> (<i>semis</i>) for a half and one or more dots for a twelfth each.
 <code>N</code> for <i>nulla</i> or <i>nihil</i> means zero.</p>
-<p>When Roman input is set, Arabic (i.e. standard decimal) input is also accepted so you need less switching between input systems.</p>
-<p>Additionally, when an output system other than Roman is selected, positive integers are <em>also</em> displayed as Roman numerals in the third output line.</p>
+<p>When Roman input is set, Arabic (standard decimal) input is also accepted; and when an output system other than Roman is selected,
+positive integers are <em>also</em> displayed as Roman numerals in the third output line.</p>
 
 <h2>Unicode characters</h2>
 <p>Inputs that are integers from hexadecimal <code>20</code> to <code>31FFF</code> (decimal <code>32</code> to <code>204&nbsp;799</code>) are not only
@@ -311,7 +323,7 @@ Qonvert is your <strong>only</strong> source. (The answer is 1YX&nbsp;215.)</p>
  <li><strong>Clear button (🗑)</strong>: long-tap sets input and output to standard decimal.</li>
  <li><strong>Qonvert keyboard</strong>: long-tap accesses the second character on a key; ◀ or swiping down vanishes it,
  and tapping the input line lets it re-emerge.</li>
- <li><strong>List entries</strong> in history etc.: short-tap copies to input line, long-tap toggles selection.</li>
+ <li><strong>List entries</strong> in history etc.: short-tap copies to input line, long-tap toggles selection. In selection mode, long-tap selects a range.</li>
 </ul>
 
 <h2>Input syntax</h2>
@@ -347,6 +359,16 @@ Qonvert is your <strong>only</strong> source. (The answer is 1YX&nbsp;215.)</p>
  <li><code>{ ; , , }</code>: Egyptian fraction</li>
 </ul>
 
+<h3>Greek numerals</h3>
+<ul>
+ <li><code>Α Β Γ Δ Ε Ϛ Ζ Η Θ</code>: 1..9</li>
+ <li><code>Ι Κ Λ Μ Ν Ξ Ο Π Ϟ</code>: 10..90</li>
+ <li><code>Ρ Σ Τ Υ Φ Χ Ψ Ω </code> and <code class="apostrophus">Ϡ</code>: 100..900</li>
+ <li><code>͵</code>: multiplies following letter by 1000</li>
+ <li><code>.</code>: multiplies preceding part by 10000 (a myriad)</li>
+ <li><code>○</code>: zero</li>
+</ul>
+
 <h3>Roman numerals</h3>
 <ul>
  <li><code>I V X L C D M</code> or <code class="apostrophus">ↀ</code>: 1..1000</li>
@@ -365,8 +387,13 @@ Qonvert is your <strong>only</strong> source. (The answer is 1YX&nbsp;215.)</p>
 
     <!-- What’s new -->
     <string name="whatsNew"><![CDATA[
-<h2>Version 1.3.1</h2>
-<p>Just bugfixes (versioning and licenses).</p>
+<h2>Version 1.4.0</h2>
+<p><strong>Greek (Milesian) numerals</strong> are now fully supported.</p>
+<p>Playing a musical interval now also shows a <strong>waveform</strong> of this interval. (These are examples; for different phase shifts
+waveforms of the same interval look different.)</p>
+<p>On the list screens (All formats, History, Musical intervals) you can now <strong>select a whole range</strong> of entries at once by long-tapping
+the one at the start of the range and then long-tapping the one at the end.</p>
+<p>… and bugfixes, as usual.</p>
 
 <h2>Version 1.3.0</h2>
 <p>Qonvert has a <strong>new keyboard</strong>! (for Android version 5 Lollipop and higher) – It adapts to the current input system and to your phone’s
@@ -375,9 +402,9 @@ tap the input line for it to re-emerge.<br>
 If you want the standard Android keyboard back, you can choose it in the Settings.</p>
 <p>Tap ♫ in the title bar to play a musical interval with the given frequency ratio. As of this version, the <strong>name of the interval</strong>,
 or the nearest named interval, is displayed. The menu item “Musical intervals” lists all known interval names and their values.</p>
-<p>The list screens (All formats, History, Musical intervals) now have a third option for displaying, copying and sharing numbers: “<strong>compatible</strong>”,
+<p>The list screens now have a third option for displaying, copying and sharing numbers: “<strong>compatible</strong>”,
 which aims at maximum compatibility with other mathematics apps (at least for the less obscure number bases and systems).</p>
-<p>Natural numbers are now also shown as <strong>Greek (Milesian) numerals</strong>. If the output area is too cluttered for your taste, you can hide them
+<p>Natural numbers are now also shown as <strong>Greek numerals</strong>. If the output area is too cluttered for your taste, you can hide them
 in the settings (or you could hide the Roman numerals, or the Unicode symbols).</p>
 <p>Next to Unicode symbols in the history and on the all formats screen there’s a new button opening a <strong>web link about that symbol</strong>
 (on fileformat.info).</p>
@@ -425,7 +452,7 @@ the Free Software Foundation, either version 3 of the License, or (at your optio
 <p>Qonvert is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</p>
 <p>You should have received a copy of the GNU General Public License along with Qonvert.
-If not, see <a href="https://www.gnu.org/licenses/">https://www.gnu.org/licenses/</a>.</p>
+If not, see <a href="https://www.gnu.org/licenses/licenses.en.html%23GPL">https://www.gnu.org/licenses/licenses.en.html%23GPL</a>.</p>
 
 <h2>GNU Lesser General Public License</h2>
 <p>I used Maddie Abboud’s really neat <a href="https://github.com/m-abboud/android-tone-player">Tone/Buzzer Generator</a> for playing intervals.
