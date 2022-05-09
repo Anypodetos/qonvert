@@ -1,0 +1,1 @@
+Full support of Greek numerals, displaying a waveform when playing a musical interval, and various minor improvements
