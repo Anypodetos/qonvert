@@ -22,7 +22,6 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
 */
 
 import android.annotation.SuppressLint
-import android.app.Application
 import android.content.Context
 import android.content.res.Configuration
 import android.graphics.*
@@ -56,7 +55,9 @@ class KeyboardView(context: Context, attrs: AttributeSet) : View(context, attrs)
     private var mainActivity: MainActivity? = if (context is MainActivity) context else null
     private var base = 1
     private var system = NumSystem.STANDARD
-    private var hidden = false
+    var hidden = false
+        private set
+
     private var touchDown = false
     private var touchI  = -1
     private var touchJ  = -1

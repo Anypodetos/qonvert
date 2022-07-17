@@ -174,7 +174,7 @@ class MainActivity : AppCompatActivity() {
         })
         for (i in 0..1) for (j in BUTTON_BASES.indices) toggleButtons[BUTTON_BASES.size * i + j].setOnTouchListener { _, event ->
             toggleButtonGestureDetectors[i]?.onTouchEvent(event)
-            return@setOnTouchListener false
+            false
         }
         for (i in 0..1) for (j in BUTTON_BASES.indices) toggleButtons[BUTTON_BASES.size * i + j].setOnClickListener {
             baseBars[i].progress = BUTTON_BASES[j] - 2
@@ -366,11 +366,15 @@ class MainActivity : AppCompatActivity() {
         } else keyboardId = KeyboardId.ANDROID
         if (keyboardId == KeyboardId.CUSTOM) {
             updateKeyboardToCaretPos(always = true)
-            keyboard.show()
+            if (preferences.getBoolean("keyboardShow", true)) keyboard.show() else keyboard.hide()
             window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
         } else keyboard.hide()
-        editInput.string = preferences.getString("input", "1_5/6") ?: ""
+        editInput.string = preferences.getString("input", "1_3/5") ?: ""
         try { editInput.setSelection(preferences.getInt("selStart", 0), preferences.getInt("selEnd", 0)) } catch (e: Exception) { }
+        if (preferences.getInt("playDialog", -2) == -1) {
+            playPhaseShift = preferences.getFloat("playPhaseShift", 0f)
+            lastQNumber.play(this, onlyRecreate = true)
+        }
 
         preferences.getString("listInput", null)?.let { listInput ->
             if (editInput.string.isNotBlank() && lastQNumber.isValid) historyList.add(QNumberEntry(editInput.string, lastQNumber))
@@ -410,10 +414,23 @@ class MainActivity : AppCompatActivity() {
         editor.putString("inSystem", numSystems[0].toString())
         editor.putString("outSystem", numSystems[1].toString())
         editor.putBoolean("outComplement", complementSwitch.isChecked)
+        editor.putBoolean("keyboardShow", !keyboard.hidden)
+        editor.putInt("playDialog", if (playDialog?.isShowing == true) {
+            editor.putFloat("playPhaseShift", playPhaseShift)
+            -1
+        } else -2)
+        playDialogTimer?.cancel()
         editor.remove("listInput")
         if (!showWhatsNewStar) editor.putInt("version", BuildConfig.VERSION_CODE)
         editor.apply()
     }
+
+  /*  override fun onStop() {
+        super.onStop()
+        val editor = preferences.edit()
+        editor.remove("playDialog")
+        editor.apply()
+    }*/
 
     /*  C a l c u l a t e  */
 
@@ -527,6 +544,10 @@ class MainActivity : AppCompatActivity() {
         var egyptianMethod = EgyptianMethod.BINARY
         private val tokens = Array(DEFAULT_BUTTONS.size) { Pair(DEFAULT_BUTTONS[it], NumSystem.STANDARD) }
         val numSystemsSuper = Array(NumSystem.values().size) { "" }
+
+        var playDialogTimer: Timer? = null
+        var playDialog: AlertDialog? = null
+        var playPhaseShift = 0f
 
         fun getOutputSettings(preferences: SharedPreferences) {
             maxDigitsAfter = (preferences.getString("digits", null))?.toIntOrNull() ?: 300

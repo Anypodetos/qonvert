@@ -44,8 +44,7 @@ import kotlin.math.*
 val MIN_PIE = Build.VERSION.SDK_INT >= Build.VERSION_CODES.P
 
 class QNumberEntry(val inputString: String, val number: QNumber, val egyptianMethod: EgyptianMethod =
-        if (MainActivity.egyptianMethod == EgyptianMethod.OFF) EgyptianMethod.BINARY else MainActivity.egyptianMethod,
-        var trustInput: Boolean = true) {
+        if (MainActivity.egyptianMethod == EgyptianMethod.OFF) EgyptianMethod.BINARY else MainActivity.egyptianMethod) {
 
     var selected = false
     var expanded = false
@@ -164,8 +163,10 @@ class RecyclerAdapter internal constructor(private val activity: ListActivity?, 
             extraButton.setOnClickListener {
                 activity?.let {
                     with (items[adapterPosition].number) {
-                        if (listWhatToken == "I") play(it) else
-                            it.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://www.fileformat.info/info/unicode/char/" + numerator.toString(16))))
+                        if (listWhatToken == "I") {
+                            play(it)
+                            it.lastPlayedInterval = adapterPosition
+                        } else it.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://www.fileformat.info/info/unicode/char/" + numerator.toString(16))))
                     }
                 }
             }
@@ -233,6 +234,7 @@ class ListActivity : AppCompatActivity() {
     private var listSel = ""
     private var listExpand = ""
     private var prefsMapping = mutableListOf<Int>()
+    var lastPlayedInterval = -1
     var clipboard: ClipboardManager? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -377,6 +379,11 @@ class ListActivity : AppCompatActivity() {
         MainActivity.getOutputSettings(preferences)
         for (listItem in items) listItem.outputBuffer = ""
         adapter.notifyDataSetChanged()
+        lastPlayedInterval = preferences.getInt("playDialog", -2)
+        if (lastPlayedInterval >= 0) {
+            MainActivity.playPhaseShift = preferences.getFloat("playPhaseShift", 0f)
+            items[lastPlayedInterval].number.play(this, onlyRecreate = true)
+        }
     }
 
     override fun onPause() {
@@ -399,6 +406,11 @@ class ListActivity : AppCompatActivity() {
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
             startActivity(intent)
         }
+        editor.putInt("playDialog", if (MainActivity.playDialog?.isShowing == true) {
+            editor.putFloat("playPhaseShift", MainActivity.playPhaseShift)
+            lastPlayedInterval
+        } else -2)
+        MainActivity.playDialogTimer?.cancel()
         editor.apply()
     }
 

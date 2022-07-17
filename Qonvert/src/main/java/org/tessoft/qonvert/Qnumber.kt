@@ -27,6 +27,7 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Path
 import android.view.Gravity
+import android.view.MotionEvent
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
@@ -751,30 +752,32 @@ class QNumber(numerator: BigInteger = ZERO, denominator: BigInteger = ONE, base:
         )} catch (e: Exception) { arrayOf("", "INVALID", "INTERVAL NAMES", "IN RESOURCES") }
     }
 
-    fun play(context: Context) {
-        val ratio = abs(numerator.toDouble() / denominator.toDouble())
+    fun play(context: Context, onlyRecreate: Boolean = false) {
+        val ratio = abs(numerator.toDouble() / denominator.toDouble()).toFloat()
         if (ratio in 1/128.0..128.0) {
-            val baseFrequency = 440 / 1.5.pow(round(ln(ratio) / ln(1.5) / 2))
+            if (!onlyRecreate) {
+                val baseFrequency = 440 / 1.5.pow(round(ln(ratio) / ln(1.5) / 2))
+                OneTimeBuzzer(baseFrequency, 100, 1.5).play()
+                Timer().schedule(1500) { OneTimeBuzzer(baseFrequency * ratio, 100, 1.5).play() }
+                Timer().schedule(3000) {
+                    OneTimeBuzzer(baseFrequency, 50, 2.0).play()
+                    OneTimeBuzzer(baseFrequency * ratio, 50, 2.0).play()
+                }
+            }
             val wave = WaveView(context)
-            wave.ratio = ratio.toFloat()
-            val dialog = AlertDialog.Builder(context)
+            wave.ratio = ratio
+            wave.autoClose = !onlyRecreate
+            MainActivity.playDialog = AlertDialog.Builder(context)
                 .setTitle(R.string.interval)
                 .setMessage(toInterval(context.resources))
                 .setView(wave)
                 .setNegativeButton(R.string.close) { _, _ -> }
                 .create()
-            dialog.show()
+            MainActivity.playDialog?.show()
             wave.layoutParams.height = (160 * context.resources.displayMetrics.scaledDensity).toInt()
-
-            OneTimeBuzzer(baseFrequency, 100, 1.5).play()
-            Timer().schedule(1500) { OneTimeBuzzer(baseFrequency * ratio, 100, 1.5).play() }
-            Timer().schedule(3000) {
-                OneTimeBuzzer(baseFrequency, 50, 2.0).play()
-                OneTimeBuzzer(baseFrequency * ratio, 50, 2.0).play()
-            }
-            Timer().apply {
-                wave.timer = this
-                schedule(5000) { dialog.cancel() }
+            if (!onlyRecreate) Timer().apply {
+                MainActivity.playDialogTimer = this
+                schedule(5000) { MainActivity.playDialog?.cancel() }
             }
         } else {
             val toast = Toast.makeText(context, context.resources.getString(R.string.no_interval,
@@ -818,10 +821,11 @@ class WaveView(context: Context) : View(context) {
 
     var ratio = 1f
         set(value) { field = (if (value > 1) value else 1 / value) }
-    var timer: Timer? = null
+    var autoClose = true
     private var waveWidth = 0f
     private var waveHeight = 0f
     private val path = Path()
+    private var oldX = 0f
 
     private val linePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE
@@ -835,33 +839,53 @@ class WaveView(context: Context) : View(context) {
 
     init {
         isClickable = true
+        setOnTouchListener { _, event ->
+            when (event.actionMasked) {
+                MotionEvent.ACTION_DOWN -> oldX = event.x
+                MotionEvent.ACTION_MOVE -> {
+                    MainActivity.playPhaseShift += 10 * PI.toFloat() * (event.x - oldX) / waveWidth
+                    while (MainActivity.playPhaseShift > 2 * PI) MainActivity.playPhaseShift -= 2 * PI.toFloat()
+                    while (MainActivity.playPhaseShift < 0) MainActivity.playPhaseShift += 2 * PI.toFloat()
+                    oldX = event.x
+                    calcWave()
+                }
+            }
+            if (autoClose) performClick()
+            true
+        }
         setOnClickListener {
-            timer?.cancel()
-            isClickable = false
+            MainActivity.playDialogTimer?.cancel()
+            autoClose = false
             invalidate()
         }
+    }
+
+    private fun calcWave() {
+        if (waveWidth > 0) with (path) {
+            reset()
+            moveTo(waveWidth, waveHeight * 0.4f)
+            lineTo(0f, waveHeight * 0.4f)
+            for (x in 0..waveWidth.toInt()) {
+                val t = 40 * PI.toFloat() * x / waveWidth
+                lineTo(x.toFloat(), waveHeight * (2 - sin(t) - sin(t * ratio - MainActivity.playPhaseShift)) / 5)
+            }
+        }
+        invalidate()
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldW: Int, oldH: Int) {
         super.onSizeChanged(w, h, oldW, oldH)
         waveWidth = w.toFloat()
         waveHeight = h.toFloat()
-        with (path) {
-            reset()
-            moveTo(waveWidth, waveHeight * 0.4f)
-            lineTo(0f, waveHeight * 0.4f)
-            for (x in 0..w) {
-                val t = 40 * PI.toFloat() * x / waveWidth
-                lineTo(x.toFloat(), waveHeight * (2 - sin(t) - sin(t * ratio)) / 5)
-            }
-        }
+        calcWave()
     }
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
         canvas?.let{
             it.drawPath(path, linePaint)
-            if (isClickable) it.drawText(resources.getString(R.string.interval_keep), waveWidth / 2, waveHeight - textPaint.textSize / 2, textPaint)
+            it.drawText(resources.getString(if (autoClose) R.string.interval_keep else R.string.interval_swipe),
+                waveWidth / 2, waveHeight - textPaint.textSize / 2, textPaint)
         }
     }
 }
