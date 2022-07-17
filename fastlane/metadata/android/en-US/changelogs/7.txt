@@ -1,0 +1,1 @@
+Improvements and bugfixes to the waveform display of musical intervals.
