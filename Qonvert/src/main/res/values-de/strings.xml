@@ -78,6 +78,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
 
     <string name="interval">Intervall</string>
     <string name="interval_keep">Welle antippen um offen zu halten</string>
+    <string name="interval_swipe">wischen um die Phasenverschiebung zu ändern</string>
     <string name="octaves">%d Oktaven</string>
     <string name="between_intervals">zwischen %1$s und %2$s</string>
     <string name="interval_grammar_nom">kleine,große,reine</string>
@@ -131,7 +132,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
 
     <!-- Help -->
     <string name="logo_hint">Das Logo von Qonvert ist ein (mehr oder weniger) phantasievolles ℚ, das Symbol für die Menge der rationalen Zahlen.</string>
-    <string name="share_app">Rationale Zahlen zwischen verschiedenen Basen und Darstellungen konvertieren:\n\nhttps://play.google.com/store/apps/details?id=org.tessoft.qonvert\n\noder\n\nhttps://qonvert.en.uptodown.com/android</string>
+    <string name="share_app">Rationale Zahlen zwischen verschiedenen Basen und Darstellungen konvertieren:\n\nhttps://play.google.com/store/apps/details?id=org.tessoft.qonvert\n\noder\n\nhttps://f-droid.org/packages/org.tessoft.qonvert/</string>
     <string name="title_about">Über Qonvert V %s</string>
 
     <string name="help"><![CDATA[
@@ -354,6 +355,10 @@ im balancierten Undezimalsystem benötigst, ist Qonvert deine <strong>einzige</s
 
     <!-- What’s new -->
     <string name="whatsNew"><![CDATA[
+<h2>Version 1.4.1</h2>
+<p>Verbesserungen und Fehlerkorrekturen der <strong>Wellenform</strong>-Anzeige musikalischer Intervalle:
+Die Phasenverschiebung lässt sich jetzt durch Wischen ändern.</p>
+
 <h2>Version 1.4.0</h2>
 <p><strong>Griechische (milesische) Zahlen</strong> werden jetzt voll unterstützt.</p>
 <p>Beim Abspielen eines musikalischen Intervalls wird nun auch eine <strong>Wellenform</strong> dieses Intervalls angezeigt. (Als Beispiel;
