@@ -88,6 +88,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
 
     <string name="interval">Interval</string>
     <string name="interval_keep">tap wave to keep open</string>
+    <string name="interval_swipe">swipe wave to shift phase</string>
     <string name="octaves">%d octaves</string>
     <string name="between_intervals">between %1$s and %2$s</string>
     <string name="interval_grammar_nom" />
@@ -143,7 +144,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
 
     <!-- Help -->
     <string name="logo_hint">The Qonvert logo is a dashing version of ℚ, the symbol for the set of rational numbers.</string>
-    <string name="share_app">Convert rational numbers between different bases and different representations:\n\nhttps://play.google.com/store/apps/details?id=org.tessoft.qonvert\n\nor\n\nhttps://qonvert.en.uptodown.com/android</string>
+    <string name="share_app">Convert rational numbers between different bases and different representations:\n\nhttps://play.google.com/store/apps/details?id=org.tessoft.qonvert\n\nor\n\nhttps://f-droid.org/packages/org.tessoft.qonvert/</string>
     <string name="title_about">About Qonvert v%s</string>
 
     <!-- CSS -->
@@ -387,6 +388,9 @@ Qonvert is your <strong>only</strong> source. (The answer is 1YX&nbsp;215.)</p>
 
     <!-- What’s new -->
     <string name="whatsNew"><![CDATA[
+<h2>Version 1.4.1</h2>
+<p>Improvements and bugfixes to the <strong>waveform</strong> display of musical intervals: the phase shift can now be changed by swiping.</p>
+
 <h2>Version 1.4.0</h2>
 <p><strong>Greek (Milesian) numerals</strong> are now fully supported.</p>
 <p>Playing a musical interval now also shows a <strong>waveform</strong> of this interval. (These are examples; for different phase shifts
