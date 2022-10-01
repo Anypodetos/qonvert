@@ -54,7 +54,12 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
         <item>Unicode-Zeichen</item>
     </string-array>
 
-    <string-array name="interval_names">
+    <string-array name="choose_base">
+        <item>Eingabe-Basis (±2..36)</item>
+        <item>Ausgabe-Basis (±2..36)</item>
+    </string-array>
+
+   <string-array name="interval_names">
         <!-- jeder Eintrag braucht ein "*", dass Intervall-Id und Qualifizierer ("kleine/große/reine") trennt (Reihenfolge egal) -->
         <!-- Stimmung anschließend, getrennt durch ein Leerzeichen und in runden Klammern -->
         <!-- alternativer Name nach den Klammern und durch Komma getrennt: nur für Intervalle < Oktave -->
@@ -133,6 +138,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     </string-array>
 
     <string-array name="buttons_entries">
+        <item>Vorzeichen ändern (+/−)</item>
         <item>Binär (2)</item>
         <item>Ternär (3)</item>
         <item>Senär (6)</item>

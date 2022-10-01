@@ -24,6 +24,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
 <resources>
     <!-- Main -->
     <string name="complement">Komplement</string>
+    <string name="dms">DMS</string>
     <string name="edit_hint">Gib eine Zahl ∈ ℚ ein.</string>
     <string name="clear_hint">Eingabe löschen</string>
     <string name="base">%1$s: Basis %2$d, %3$s</string>
@@ -31,6 +32,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     <string name="clipboard_asIs">In die Zwischenablage kopieren</string>
     <string name="clipboard_rep">… mit Überstrich für Periode</string>
     <string name="clipboard_fraction">… als formatierten Bruch</string>
+    <string name="clipboard_withUnicodeName">… mit dem Unicode-Namen</string>
     <string name="clipboard_noQuotes">… ohne Anführungszeichen</string>
     <string name="clipboard_compat">… möglichst kompatibel</string>
     <string name="clipboard_ok">In die Zwischenablage kopiert</string>
@@ -42,9 +44,9 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     <string name="range_toast_roman">%1$s: Römische Zahlen oder Ziffern %2$s..%3$s</string>
     <string name="range_toast_onlyRoman">%1$s: Römische Zahlen</string>
     <string name="no_q_number">Gib eine gültige Zahl ein und drücke diese Taste, um sie in allen verfügbaren Formaten anzuzeigen.</string>
-    <string name="no_history">Der Verlauf ist leer. Gib eine Zahl ein und drücke die Eingabetaste oder 🗑 um sie hier zu speichern.</string>
+    <string name="no_history">Der Verlauf ist leer. Gib eine Zahl ein und drücke ⏎ oder 🗑 um sie hier zu speichern.</string>
 
-    <string name="err_quote">ist nur am Anfang der Eingabe erlaubt.</string>
+    <string name="err_quote">ist nur am Anfang oder Ende der Eingabe erlaubt.</string>
     <string name="err_bracket">ist nur um einen Kettenbruch erlaubt.</string>
     <string name="err_brace">ist nur um einen ägyptischen Bruch erlaubt.</string>
     <string name="err_semicolon">in einem Ketten- oder ägyptischen Bruch darf nur einmal und nur vor Kommas vorkommen.</string>
@@ -53,6 +55,8 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     <string name="err_slash">in einem Bruch darf nur einmal vorkommen.</string>
     <string name="err_twoPoints">– der Trennpunkt für Nachkommastellen – darf nur einmal vorkommen.</string>
     <string name="err_twoReps">– das Periodenzeichen – darf nur einmal vorkommen.</string>
+    <string name="err_twoDegs">– das Gradzeichen – darf nur einmal vorkommen.</string>
+    <string name="err_twoMins">– the Minuten-Zeichen – darf nur einmal und nur nach dem Gradzeichen vorkommen.</string>
     <string name="err_baseTokenOrMinus">ist nur am Anfang einer Zahl erlaubt.</string>
     <string name="err_notInHistory">bezeichnet einen Eintrag im Verlauf, der nicht existiert.</string>
     <string name="err_ellipsis">kennzeichnet eine abgeschnittene Zahl.</string>
@@ -90,7 +94,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     <string name="expand_hint">Aus- und einklappen</string>
     <string name="egyptian_method">Ägytischer Bruch: %s</string>
     <string name="select_all">Alles auswählen</string>
-    <string name="copy">Kopieren</string>
+    <string name="copy_my">Kopieren</string>
     <string name="clipboard_all_ok">Alle %d Einträge in die Zwischenablage kopiert</string>
     <string name="share">Freigeben</string>
     <string name="share_all">Alle %d Einträge freigeben über</string>
@@ -104,15 +108,15 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     <string name="cant_be_undone">Das kann nicht rückgängig gemacht werden.</string>
     <string name="cancel">Abbrechen</string>
     <string name="close">Schließen</string>
-    <string name="standard_output">standard</string>
-    <string name="pretty_output">formatierte</string>
-    <string name="compatible_output">kompatible Ausgabe</string>
+    <string name="default_output">Standard</string>
+    <string name="pretty_output">formatiert</string>
+    <string name="compatible_output">kompatibel</string>
 
     <!-- Settings -->
     <string name="out_header">Ausgabe</string>
     <string name="digits_title">Höchstzahl Nachkommastellen</string>
     <string name="group_title">Ziffern gruppieren</string>
-    <string name="group_hint">Vierergruppen für Basen 2, 4, 8, 16, 32, sonst Dreiergruppen</string>
+    <string name="group_hint">Vierergruppen für Basen ±2, 4, 8, 16, 32, sonst Dreiergruppen</string>
     <string name="lowercase_title">Kleinbuchstaben</string>
     <string name="natural_title">Für natürliche Zahlen anzeigen</string>
     <string name="apostrophus_title">Römischer Apostrophus</string>
@@ -120,11 +124,14 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
 
     <string name="feedback_header">Rückmeldungen</string>
     <string name="range_title">Ziffernbereich anzeigen, wenn Basis geändert wird</string>
+    <string name="autoScroll_title">Ausgabebereich automatisch runter rollen</string>
+    <string name="autoScroll_hint">bei Texteingabe</string>
     <string name="wrongDigits_title">Warnen bei ungewöhnlicher Eingabe</string>
     <string name="wrongDigits_hint">färbt die Eingabe bei ungewöhnlicher Eingabe orange (z.B.&#xA0;Ziffer außerhalb des Bereichs)</string>
 
     <string name="appearance_header">Aussehen</string>
     <string name="buttons_title">Tasten für Basen</string>
+    <string name="moreSpace_title">Mehr Platz über den Tastenreihen</string>
     <string name="keyboard_title">Qonvert-Tastatur verwenden</string>
     <string name="keyboard_hint">statt der Standard-Tastatur</string>
     <string name="size_title">Textgröße</string>
@@ -146,8 +153,10 @@ sie taucht wieder auf, wenn du die Eingabezeile antippst.</p>
 
 <h2>Eingabe- und Ausgabe-Systeme</h2>
 <p>Die Eingabe-<a href="https://de.wikipedia.org/wiki/Stellenwertsystem">Basis</a> (2 bis 36) lässt sich mit dem Schieberegler im unteren Teil des Bildschirms
-oder den Tasten direkt darüber einstellen, die Ausgabe-Basis mit den Kontrollen im oberen Teil.</p>
-<p>Die farbigen Tasten am rechten Rand wechseln zwischen verschiedenen Zahlensystemen (Standard, balanciert, bijektiv und römisch) – mehr dazu gleich.
+oder den Tasten direkt darüber einstellen, die Ausgabe-Basis mit den Kontrollen im oberen Teil. Welche Tasten angezeigt werden
+(einschließlich welcher für <a href="https://de.wikipedia.org/wiki/Stellenwertsystem%23Negative_Basen">negative Basen</a>), kannst Du in den Einstellungen
+unter „Tasten für Basen“ ändern. Durch lang Antippen der Tasten lässt sich eine Dialogbox zum Einstellen der Basis anzeigen.</p>
+<p>Die farbigen Tasten am rechten Rand wechseln zwischen verschiedenen Zahlensystemen (Standard, balanciert, bijektiv, griechisch und römisch) – mehr dazu gleich.
 Nicht jedes Zahlensystem lässt sich mit jeder Basis kombinieren. Wenn du eine unmögliche Kombination einstellst, wird die entsprechende Taste grau,
 und die App verwendet das Standard-Stellenwertsystem.</p>
 
@@ -160,9 +169,10 @@ bis <code>Z</code>&nbsp;=&nbsp;35 verwendet; dabei unterscheidet diese App nicht
 
 <h3>Nicht-ganze Zahlen</h3>
 <p>Der Punkt <code>.</code> dient der Eingabe von Kommazahlen (Vorsicht, das Komma <code>,</code> hat eine andere Funktion!): <code>1.A6</code> in
-DOZenal (Basis 12) ist <strong>1</strong>×12<sup>0</sup>+<strong>10</strong>×12<sup>−1</sup>+<strong>6</strong>×12<sup>−2</sup>&nbsp;=&nbsp;1.875.
-Der Beginn der <a href="https://de.wikipedia.org/wiki/Periodische_Zahl">Periode</a> wird durch ein Hochkomma <code>\'</code> gekennzeichnet:
-Zum Beispiel bedeuten <code>0.1\'486</code> 0.1486486486… und <code>21\'3.4</code> 213.43434….</p>
+DOZenal (Basis 12) ist <strong>1</strong>×12<sup>0</sup>+<strong>10</strong>×12<sup>−1</sup>+<strong>6</strong>×12<sup>−2</sup>&nbsp;=&nbsp;1.875 dezimal.
+Der Beginn der <a href="https://de.wikipedia.org/wiki/Periodische_Zahl">Periode</a> wird durch einen Punkt oben <code>˙</code> gekennzeichnet
+(oder mit einem Doppelpunkt <code>:</code>, wenn du die Android-Tastatur statt der von Qonvert verwendest):
+Zum Beispiel bedeuten <code>0.1˙486</code> 0.1486486486… und <code>21˙3.4</code> 213.43434….</p>
 <p>Das Ergebnis hat immer entweder eine endliche Anzahl von Kommastellen oder eine Periode. Manchmal ist diese aber sehr lang. Damit die App nicht
 einfriert, werden standardmäßig nicht mehr als 300 Stellen berechnet. Dieser Wert lässt sich in den Einstellungen ändern.</p>
 <p>Wenn der Bildschirm zu klein für alle Ausgabeformate ist (Stellenwertsystem, Bruch, gemischte Zahl, Kettenbruch, ägyptischer Bruch),
@@ -172,26 +182,32 @@ kannst Du die Anzeige rauf und runter wischen.</p>
 <p>Gib den Zähler ein, dann einen Schrägstrich <code>/</code> und dann den Nenner, wie zum Beispiel <code>6/8</code> oder <code>1.5/2</code>.
 Brüche werden immer gekürzt oder erweitert, sodass das Ergebnis dieser beiden Eingaben 3/4 ist.</p>
 <p>Gemischte Zahlen verwenden einen Unterstrich <code>_</code> zur Trennung von ganzzahligem Teil und Bruch: zum Beispiel <code>1_9/8</code>,
-oder etwas Komplizierteres wie <code>1.\'3&nbsp;_&nbsp;1/3</code>. Brüche mit einem Absolutwert über 1 werden sowohl als unechte Brüche
+oder etwas Komplizierteres wie <code>1.˙3&nbsp;_&nbsp;1/3</code>. Brüche mit einem Absolutwert über 1 werden sowohl als unechte Brüche
 (17/8 oder 5/3 in unseren Beispielen) als auch als gemischte Zahlen (2_1/8 oder 1_2/3) angezeigt.</p>
 
 <h3>Kettenbrüche</h3>
 <p><a href="https://de.wikipedia.org/wiki/Kettenbruch">Kettenbrüche</a> beginnen mit einem ganzzahligen Teil, gefolgt von einem Semikolon <code>;</code>
 und einer Komma-getrennten Liste von Nennern. Kettenbrüche werden in eckigen Klammern angezeigt; für die Eingabe sind die Klammern optional.</p>
 <p>Beispielsweise bedeutet <code>2;3,4</code> <strong>2</strong>&nbsp;+&nbsp;1/(<strong>3</strong>&nbsp;+&nbsp;1/<strong>4</strong>), was soviel ist wie
-2.\'307692, 30/13, oder 2_4/13.</p>
+2.˙307692, 30/13, oder 2_4/13.</p>
 <p>Es können auch nicht-ganze Zahlen einschließlich Brüchen eingegeben werden: <code>1.5;&nbsp;2/3,&nbsp;1_1/5</code> wird zu [2;&nbsp;6] vereinfacht,
 das nur ganze Zahlen enthält. Die Ausgabe erfolgt immer mit positiven Nennern: <code>-3;-1,-1,-18</code> wird zu [−4;&nbsp;2,&nbsp;18].</p>
 
 <h3>Ägyptische Brüche</h3>
 <p>Ägyptische Brüche sind Summen von Stammbrüchen. Sie werden wie Kettenbrüche eingegeben, aber mit geschweiften Klammern:
-<code>{2;3,4}</code> wird als <strong>2</strong>&nbsp;+&nbsp;1/<strong>3</strong>&nbsp;+&nbsp;1/<strong>4</strong> interpretiert
-und als 2.58\'3, 31/12, 2_7/12 und [2;&nbsp;1,&nbsp;1,&nbsp;2,&nbsp;2] angezeigt.</p>
+<code>{2;3,4</code> wird als <strong>2</strong>&nbsp;+&nbsp;1/<strong>3</strong>&nbsp;+&nbsp;1/<strong>4</strong> interpretiert
+und als 2.58˙3, 31/12, 2_7/12 und [2;&nbsp;1,&nbsp;1,&nbsp;2,&nbsp;2] angezeigt.</p>
 <p>Jede rationale Zahl hat unendlich viele Darstellungen als ägyptischer Bruch. In den Einstellungen lässt sich eine Berechnungsmethode
 für den Hauptbildschirm auswählen. Die Ergebnisse der anderen Berechnungsmethoden erscheinen, wenn du ⛶ antippst – diese sind manchmal identisch
 und manchmal komplett verschieden.</p>
 <p>Wenn ein ägyptischer Bruch zu lang ist, wird die Berechnung abgebrochen. Die maximale Länge hängt von der „Höchstzahl Nachkommastellen“
 in den Einstellungen ab.</p>
+
+<h2>Grad, Minuten und Sekunden</h2>
+<p>Die Eingabe von <code>1° 23\' 45\"</code> beispielsweise bedeutet 1+23/60+45/3600&nbsp;= 67/48&nbsp;= 1.3958˙3 in Standard dezimal. Die drei Teile
+dieses Formats müssen in dieser Reihenfolge stehen, aber nicht unbedingt alle vorhanden sein; außerdem sind auch nicht-ganze Zahlen erlaubt:
+<code>1° 45.6\"</code> oder <code>1/2\'</code> (eine halbe Minute) werden richtig interpretiert.</p>
+<p>Der DMS-Schalter oben rechts bestimmt, ob Zahlen im normalen Stellenwertsystem oder als Grad, Minuten und Sekunden ausgegeben werden.</p>
 
 <h2>Negative Zahlen</h2>
 <p>Negative Zahlen lassen sich entweder in der gewöhnlichen Schreibweíse mit einem Minus <code>-</code> eingeben, oder in Komplement-Notation
@@ -199,7 +215,7 @@ mit zwei Punkten <code>..</code> davor: Diese Punkte bedeuten „die höchste Zi
 Die Komplement-Notation kommt vor allem in der EDV vor, wo −1 hexadezimal als FFFFFFFF gespeichert wird, −2 als FFFFFFFE und so weiter
 (mit so vielen Fs wie Platz ist). In Qonvert bedeuten also <code>..FFD</code> oder einfach <code>..D</code> im Hexadezimalsystem, oder
 <code>..997</code> oder einfach <code>..7</code> im Dezimalsystem, alle −3.</p>
-<p>Ob negative Zahlen in gewöhnlicher oder Komplement-Notation ausgegeben werden, hängt vom Schalter oben rechts ab.</p>
+<p>Ob negative Zahlen in gewöhnlicher oder Komplement-Notation ausgegeben werden, hängt vom Komplement-Schalter oben rechts ab.</p>
 
 <h2>Eingabe mit Basis-Kürzeln</h2>
 <p>Du kannst Zahlen in Standard binär, oktal, dezimal, dozenal und hexadezimal eingeben, ohne die Basis zu wechseln. Es lassen sich sogar
@@ -212,9 +228,9 @@ oder ägyptischen Bruchs. Dazu stellst du eines dieser Kürzel vor die Zahl:</p>
  <li>dozenal: <code>%</code></li>
  <li>hexadezimal: <code>&</code></li>
 </ul>
-<p>Gib beispielsweise <code>@10010&nbsp;/&nbsp;&13</code> oder <code>%2312;&nbsp;@1010,&nbsp;$10</code> ein.</p>
+<p>Gib beispielsweise <code>@10010&nbsp;/&nbsp;&13</code> ein oder <code>%2312;&nbsp;@1010,&nbsp;$10</code> oder <code>1° &1E\'</code>.</p>
 
-<h2>Nicht-standard-Zahlensysteme</h2>
+<h2>Nicht-Standard-Zahlensysteme</h2>
 <h3>Balanciert</h3>
 <p>In balancierten Zahlensystemen (das Bekannteste ist das <a href="https://de.wikipedia.org/wiki/Tern%C3%A4rsystem%23Balanciert">balancierte Ternärsystem</a>,
 also Basis 3) haben die Buchstaben <code>J</code> bis <code>Z</code> <em>negative</em> Werte mit <code>Z</code>&nbsp;=&nbsp;−1,
@@ -266,8 +282,18 @@ Die führenden Pipes können ausgelassen werden; und alle Pipes lassen sich durc
 <p>Wenn als Eingabe-System römische Zahlen ausgewählt sind, akzeptiert die App auch arabische Zahlen (Standard dezimal); und wenn als Ausgabe-System
 etwas anderes als Römisch eingestellt ist, werden positive ganze Zahlen <em>zusätzlich</em> in der dritten Ausgabe-Zeile als römische Zahlen angezeigt.</p>
 
+<h3>Negative Basen</h3>
+<p><a href="https://de.wikipedia.org/wiki/Stellenwertsystem%23Negative_Basen">Negative Basen</a> lassen sich mit allen Standard- und Nicht-Standard-Systemen
+verwenden, einschließlich aller Notationen für nicht-ganze Zahlen – nur nicht mit griechischen und römischen Zahlen.
+Da ungerade Potenzen von negativen Zahlen negativ sind und gerade Potenzen positiv, wird <code>345</code> in Standard nega-dezimal als
+<strong>3</strong>×10<sup>2</sup><strong>−4</strong>×10<sup>1</sup>+<strong>5</strong>×10<sup>0</sup>&nbsp;=&nbsp;265 interpretiert,
+und <code>3450</code> als <strong>−3</strong>×10<sup>3</sup>+<strong>4</strong>×10<sup>2</sup><strong>−5</strong>×10<sup>1</sup>&nbsp;=&nbsp;−2650:
+Zahlen in negativen Basen kommen ohne negatives Vorzeichen aus.</p>
+<p>“Bijektive” Systeme mit negativen Basen sind nicht wirklich bijektiv: zum Beispiel ändert es nichts am Wert einer Zahl im Negadezimal-System,
+wenn man ihr <strong>1A</strong> voran stellt.</p>
+
 <h2>Unicode</h2>
-<p>Ganze Zahlen von hexadezimal <code>20</code> bis <code>31FFF</code> (dezimal <code>32</code> bis <code>204&nbsp;799</code>) werden
+<p>Ganze Zahlen von hexadezimal <code>20</code> bis <code>10FFFF</code> (dezimal <code>32</code> bis <code>1114111</code>) werden
 nicht nur in das entsprechende Ausgabe-System und in griechische und römische Zahlen konvertiert, sondern auch in das entsprechende
 <a href="https://de.wikipedia.org/wiki/Unicode">Unicode</a>-Zeichen. (Wenn die Anzeige für deinen Geschmack überfüllt ist, kannst
 du einiges davon in den Einstellungen deaktivieren.)</p>
@@ -284,7 +310,7 @@ im balancierten Undezimalsystem benötigst, ist Qonvert deine <strong>einzige</s
 <h2>Gesten</h2>
 <ul>
  <li><strong>Ausgabebereich</strong>: kurz antippen kopiert in die Eingabezeile und tauscht Ein- und Ausgabe-Basis, lang antippen kopiert in die Zwischenablage.</li>
- <li><strong>Tasten für Basen</strong>: wischen nach links/rechts erniedrigt/erhöht Basis um 1.</li>
+ <li><strong>Tasten für Basen</strong>: wischen nach links/rechts erniedrigt/erhöht Basis um 1, lang antippen zeigt einen Dialog zur Auswahl der Basis an.</li>
  <li>“<strong>Eingabe: Basis</strong>” und “<strong>Ausgabe: Basis</strong>”: antippen zeigt den Ziffernbereich für die gewählte Basis an.</li>
  <li><strong>Tasten für Zahlensysteme</strong>: lang antippen wechselt zwischen Standard und balanciert.</li>
  <li><strong>Löschen (🗑)</strong>: lang antippen setzt Eingabe und Ausgabe auf Standard dezimal.</li>
@@ -320,9 +346,10 @@ im balancierten Undezimalsystem benötigst, ist Qonvert deine <strong>einzige</s
 <h3>Nicht-ganze Zahlen</h3>
 <ul>
  <li><code>.</code>: Trennpunkt für Nachkommastellen („Komma“)</li>
- <li><code>\'</code>: Beginn der Periode</li>
+ <li><code>˙</code>: Beginn der Periode</li>
  <li><code>/</code>: Bruchstrich</li>
  <li><code>_</code>: zwischen ganzer Zahl und Bruch in einer gemischten Zahl (z.B. <code>2_1/8</code>)</li>
+ <li><code>° \' \"</code>: Grad, Minuten und Sekunden</li>
  <li><code>[ ; , , ]</code>: Kettenbruch (Die Klammern sind optional.)</li>
  <li><code>{ ; , , }</code>: ägyptischer Bruch</li>
 </ul>
@@ -342,8 +369,7 @@ im balancierten Undezimalsystem benötigst, ist Qonvert deine <strong>einzige</s
  <li><code>I V X L C D M</code> or <code class="apostrophus">ↀ</code>: 1..1000</li>
  <li><code class="apostrophus">ↁ ↂ ↇ ↈ</code> oder <code>I)) ((I)) I))) (((I)))</code>: 5000, 10&nbsp;000, 50&nbsp;000, 100&nbsp;000</li>
  <li><code>|</code> oder <code>!</code>: multipliziert mit 100&nbsp;000</li>
- <li><code>. : S</code> (und bis zu 5 Punkten): <i>uncia</i>&nbsp;=&nbsp;Zwölftel, <i>sextans</i>&nbsp;=&nbsp;Sechstel,
- <i>semis</i>&nbsp;=&nbsp;ein&nbsp;Halb</li>
+ <li><code>. : S</code> (und bis zu 5 Punkten): <i>uncia</i>&nbsp;=&nbsp;Zwölftel, <i>sextans</i>&nbsp;=&nbsp;Sechstel, <i>semis</i>&nbsp;=&nbsp;ein&nbsp;Halb</li>
  <li><code>N</code>: <i>nulla/nihil</i>&nbsp;=&nbsp;Null</li>
 </ul>
 
@@ -355,6 +381,18 @@ im balancierten Undezimalsystem benötigst, ist Qonvert deine <strong>einzige</s
 
     <!-- What’s new -->
     <string name="whatsNew"><![CDATA[
+<h2>Version 1.5.0</h2>
+<p><strong>Negative Basen</strong> werden jetzt unterstützt. Durch lang Antippen der Basis-Tasten (BIN, DEC, HEX etc.) erscheint eine Dialogbox,
+in der eine Basis, einschließlich einer negativen, eingegeben werden kann. Außerdem gibt es Tasten zum Wechseln des Vorzeichens, die sich in den Einstellungen
+unter „Tasten für Basen“ aktivieren oder deaktivieren lassen.</p>
+<p><strong>Grad, Minuten und Sekunden</strong> (wie etwa <code>1° 45\' 10\"</code>) werden unterstützt – mit Ausnahme des alternativen Stellenwertsystems
+am „Alle Formate“-Bildschirm.</p>
+<p><big>⚠️</big> Das <strong>Periodenzeichen</strong> wurde zu einem Punkt oben <code>˙</code> geändert (oder du kannst einen Doppelpunkt <code>:</code>
+verwenden), um Platz für das Minuten-Symbol zu machen. Die Tastatur wurde etwas angepasst. Entschuldigt bitte die Unannehmlichkeit!</p>
+<p>Der „Alle Formate“-Bildschirm zeigt <strong>Unicode-Namen</strong> an, wenn „formatiert“ ausgewählt ist (für Android-Version 4.4 KitKat und später).</p>
+<p><strong>Einstellungen</strong>: Das automatische Runterrollen des Ausgabebereichs kann jetzt ausgeschaltet werden. Die Textgröße wird jetzt auch für
+die DMS- und Komplement-Schalter verwendet und für die „Eingabe: Basis“- und „Ausgabe: Basis“-Texte. Und die Höhe der Schalter kann vergrößert werden.</p>
+
 <h2>Version 1.4.1</h2>
 <p>Verbesserungen und Fehlerkorrekturen der <strong>Wellenform</strong>-Anzeige musikalischer Intervalle:
 Die Phasenverschiebung lässt sich jetzt durch Wischen ändern.</p>
@@ -394,7 +432,7 @@ wählen; die Ergebnisse der anderen Methoden findest du auf der Alle-Formate-Sei
 <strong>bijektiv</strong> und <strong>römisch</strong> ersetzt. Lang antippen dieser Tasten wechselt wie gewohnt zwischen Standard
 und balanciert. Auf der Hilfeseite gibt es Informationen zu den neuen Zahlensystemen.</p>
 <p>In den Einstellungen kannst du neue Basis-Tasten für <strong>hexavigesimal</strong> (Basis 26) aktivieren.</p>
-<p>Eingabe von <strong>ägyptischen Brüchen</strong> is jetzt möglich: <code>{2;3,4}</code> wird
+<p>Eingabe von <strong>ägyptischen Brüchen</strong> is jetzt möglich: <code>{2;3,4</code> wird
 als 2&nbsp;+&nbsp;1/3&nbsp;+&nbsp;1/4 = 2_7/12 interpretiert.</p>
 <p>Du kannst <strong>Unicode-Zeichen für Brüche</strong> wie <code>¾</code> zur Eingabe von Zahlen verwenden: <code>2¾</code></p>
 <p>Im Hauptmenü gibt es einen neuen Eintrag „<strong>Spickzettel</strong>“ mit einer Übersicht über Gesten und Syntax.
@@ -435,8 +473,8 @@ von Intervallen verwendet. Er ist zu den Bedingungen der
 <a href="https://www.gnu.org/licenses/licenses.de.html%23LGPL">GNU Lesser General Public License v3.0</a> verfügbar.</p>
 
 <h2>SIL Open Font License</h2>
-<p>Das Logo ist eine Modifikation des Buchstaben Ꝙ („großer lateinischer Buchstabe Q mit diagonalem Querstrich“) in der Schriftart
-<a href="https://software.sil.org/doulos/">Doulos SIL</a>, die unter einer
+<p>Das Logo ist eine Modifikation des Buchstaben Ꝙ („großer lateinischer Buchstabe Q mit diagonalem Querstrich“, Unicode A758₁₆) in
+der Schriftart <a href="https://software.sil.org/doulos/">Doulos SIL</a>, die unter einer
 <a href="https://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=ofl">SIL Open Font License</a> lizenziert ist.</p>
 
 <h2>Creative Commons License</h2>
