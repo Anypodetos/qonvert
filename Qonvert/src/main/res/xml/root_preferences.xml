@@ -28,13 +28,13 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
         app:title="@string/out_header">
 
         <ListPreference
-                app:entries="@array/digits_entries"
-                app:entryValues="@array/digits_values"
-                app:iconSpaceReserved="false"
-                app:key="digits"
-                app:title="@string/digits_title"
-                app:useSimpleSummaryProvider="true"
-                app:defaultValue="300" />
+            app:entries="@array/digits_entries"
+            app:entryValues="@array/digits_values"
+            app:iconSpaceReserved="false"
+            app:key="digits"
+            app:title="@string/digits_title"
+            app:useSimpleSummaryProvider="true"
+            app:defaultValue="300" />
         <SwitchPreference
             android:defaultValue="false"
             android:key="group"
@@ -55,20 +55,20 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
             app:iconSpaceReserved="false"
             app:useSimpleSummaryProvider="false" />
         <MultiSelectListPreference
-                android:title="@string/natural_title"
-                android:defaultValue="@array/natural_values"
-                android:entries="@array/natural_entries"
-                android:entryValues="@array/natural_values"
-                android:key="natural"
-                app:iconSpaceReserved="false" />
+            android:title="@string/natural_title"
+            android:defaultValue="@array/natural_values"
+            android:entries="@array/natural_entries"
+            android:entryValues="@array/natural_values"
+            android:key="natural"
+            app:iconSpaceReserved="false" />
         <ListPreference
-                android:defaultValue="GREEDY"
-                android:title="@string/egyptian_title"
-                android:entries="@array/egyptian_entries"
-                android:entryValues="@array/egyptian_values"
-                android:key="egyptian"
-                app:iconSpaceReserved="false"
-                app:useSimpleSummaryProvider="true" />
+            android:defaultValue="GREEDY"
+            android:title="@string/egyptian_title"
+            android:entries="@array/egyptian_entries"
+            android:entryValues="@array/egyptian_values"
+            android:key="egyptian"
+            app:iconSpaceReserved="false"
+            app:useSimpleSummaryProvider="true" />
 
     </PreferenceCategory>
 
@@ -81,6 +81,12 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
             android:key="range"
             android:title="@string/range_title"
             app:iconSpaceReserved="false" />
+        <SwitchPreference
+            android:title="@string/autoScroll_title"
+            android:key="scrollOutput"
+            android:defaultValue="true"
+            app:iconSpaceReserved="false"
+            android:summary="@string/autoScroll_hint" />
         <SwitchPreference
             android:defaultValue="true"
             android:key="wrongDigits"
@@ -102,11 +108,16 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
             app:key="buttons"
             app:title="@string/buttons_title" />
         <SwitchPreference
-                android:defaultValue="true"
-                android:key="customKeyboard"
-                android:title="@string/keyboard_title"
-                android:summary="@string/keyboard_hint"
-                app:iconSpaceReserved="false" />
+            android:defaultValue="true"
+            android:key="customKeyboard"
+            android:title="@string/keyboard_title"
+            android:summary="@string/keyboard_hint"
+            app:iconSpaceReserved="false" />
+        <SwitchPreference
+            android:defaultValue="false"
+            android:title="@string/moreSpace_title"
+            android:key="moreSpace"
+            app:iconSpaceReserved="false" />
         <ListPreference
             app:defaultValue="20"
             app:entries="@array/size_entries"
