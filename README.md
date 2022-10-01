@@ -13,4 +13,4 @@ Qonvert is available on [Google Play](https://play.google.com/store/apps/details
 * Playing musical intervals with a given frequency ratio
 * Light and dark colour schemes
 
-<img src="screenshots/integer.png" width="250px" alt="Converting an integer number"> <img src="screenshots/rational.png" width="250px" alt="Converting a rational number"> <img src="screenshots/allformats.png" width="250px" alt="Display all formats"> <img src="screenshots/settings.png" width="250px" alt="App settings"> <img src="screenshots/cheatsheet.png" width="250px" alt="Cheat sheet">
+<img src="screenshots/integer.png" width="250px" alt="Converting an integer number"> <img src="screenshots/rational.png" width="250px" alt="Converting a rational number"> <img src="screenshots/greek.png" width="250px" alt="Converting a Greek numeral"> <img src="screenshots/allformats.png" width="250px" alt="Display all formats"> <img src="screenshots/settings.png" width="250px" alt="App settings"> <img src="screenshots/cheatsheet.png" width="250px" alt="Cheat sheet">
