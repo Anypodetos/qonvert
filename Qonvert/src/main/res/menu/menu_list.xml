@@ -32,7 +32,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
             app:showAsAction="always"
             android:visible="false" />
         <item
-            android:title="@string/copy"
+            android:title="@string/copy_my"
             android:id="@+id/copyItems"
             android:icon="?attr/actionModeCopyDrawable"
             app:showAsAction="always" />
