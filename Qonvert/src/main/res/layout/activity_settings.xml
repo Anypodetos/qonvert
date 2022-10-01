@@ -26,15 +26,15 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
-            android:id="@+id/settingsToolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?attr/colorPrimary"
-            android:minHeight="?attr/actionBarSize"
-            app:title="@string/menu_settings"
-            app:titleTextColor="?attr/colorOnPrimary"
-            android:elevation="4dp"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+        android:id="@+id/settingsToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        app:title="@string/menu_settings"
+        app:titleTextColor="?attr/colorOnPrimary"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <FrameLayout
         android:id="@+id/settings"

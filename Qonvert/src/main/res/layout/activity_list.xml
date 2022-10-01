@@ -71,13 +71,13 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
             android:id="@+id/outputRadioGroup"
             android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:checkedButton="@id/standardRadio">
+            android:checkedButton="@id/defaultRadio">
 
         <RadioButton
-                android:text="@string/standard_output"
+                android:text="@string/default_output"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/standardRadio" />
+                android:id="@+id/defaultRadio" />
 
         <RadioButton
                 android:text="@string/pretty_output"
