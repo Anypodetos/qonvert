@@ -51,13 +51,13 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     <string name="clipboard_ok">Copied to clipboard</string>
     <string name="to_fraction">Converted to fraction to preserve precision</string>
     <string name="to_history_indep">Removed reference to history entry</string>
-    <string name="range_toast">%1$s: digit range %2$s..%3$s</string>
-    <string name="range_toast_greek">%1$s: Greek numerals or digit range %2$s..%3$s</string>
+    <string name="range_toast">%1$s: digit range %2$s…%3$s</string>
+    <string name="range_toast_greek">%1$s: Greek numerals or digit range %2$s…%3$s</string>
     <string name="range_toast_onlyGreek">%1$s: Greek numerals</string>
-    <string name="range_toast_roman">%1$s: Roman numerals or digit range %2$s..%3$s</string>
+    <string name="range_toast_roman">%1$s: Roman numerals or digit range %2$s…%3$s</string>
     <string name="range_toast_onlyRoman">%1$s: Roman numerals</string>
     <string name="no_q_number">This button would show all available formats. However, there is no valid number in the input line.</string>
-    <string name="no_history">The history is empty. Type a number, then tap ⏎ or delete it with the 🗑 button, to store it there.</string>
+    <string name="no_history">The history is empty. Type a number, then tap Enter or delete it with the 🗑 button, to store it there.</string>
 
     <string name="err_quote">is only valid at start or end of input.</string>
     <string name="err_bracket">is only valid around continued fraction.</string>
@@ -81,6 +81,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     <string name="err_onlyRoman">is only valid in Roman numerals.</string>
     <string name="err_noRoman">is neither a valid Roman nor an Arabic numeral.</string>
     <string name="err_fraction">is only valid at end of integer.</string>
+    <string name="err_load">error loading the number</string>
     <string name="err_generic">isn’t a valid character.</string>
 
     <string name="menu_formats">All formats</string>
@@ -100,7 +101,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     <string name="between_intervals">between %1$s and %2$s</string>
     <string name="interval_grammar_nom" />
     <string name="interval_grammar_between" />
-    <string name="no_interval">Number must be in the range %1$s..%2$s</string>
+    <string name="no_interval">Number must be in the range\n%1$s…%2$s</string>
 
     <!-- Lists / Dialogs -->
     <string name="menu_dots" translatable="false">⋮</string>
@@ -153,8 +154,8 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     <string name="theme_title">Theme</string>
 
     <!-- Help -->
-    <string name="logo_hint">The Qonvert logo is a dashing version of ℚ, the symbol for the set of rational numbers.</string>
-    <string name="share_app">Convert rational numbers between different bases and different representations:\n\nhttps://play.google.com/store/apps/details?id=org.tessoft.qonvert\n\nor\n\nhttps://f-droid.org/packages/org.tessoft.qonvert/</string>
+    <string name="share_app">Convert rational numbers between different bases and different representations:
+        \n\nhttps://play.google.com/store/apps/details?id=org.tessoft.qonvert\n\nor\n\nhttps://f-droid.org/packages/org.tessoft.qonvert/</string>
     <string name="title_about">About Qonvert v%s</string>
 
     <!-- CSS -->
@@ -275,7 +276,7 @@ numerator and denominator of a fraction, or for the numbers in a continued or Eg
 </ul>
 <p>Try typing <code>@10010&nbsp;/&nbsp;&13</code> or <code>%2312;&nbsp;@1010,&nbsp;$10</code> or <code>1° &1E\'</code>.</p>
 
-<h2>Non-standard numeral systems</h3>
+<h2>Non-standard numeral systems</h2>
 <h3>Balanced</h3>
 <p>In balanced numeral systems (the best-known being <a href="https://en.wikipedia.org/wiki/Balanced_ternary">balanced ternary</a>, i.e. base 3), the letters
 <code>J</code> to <code>Z</code> have <em>negative</em> values, with <code>Z</code>&nbsp;=&nbsp;−1, <code>Y</code>&nbsp;=&nbsp;−2, down to
@@ -307,7 +308,7 @@ are always accepted regardless of input system as they – consisting of Greek l
 
 <h3>Roman numerals</h3>
 <p><a href="https://en.wikipedia.org/wiki/Roman_numerals">Roman numerals</a> are also base 10. They can contain the letters <code>I V X L C D M</code>.
-Symbols for larger values are <code class="apostrophus">ↁ</code>&nbsp;=&nbsp;5000, <code class="apostrophus">ↂ</code>&nbsp;=&nbsp10&nbsp;000,
+Symbols for larger values are <code class="apostrophus">ↁ</code>&nbsp;=&nbsp;5000, <code class="apostrophus">ↂ</code>&nbsp;=&nbsp;10&nbsp;000,
 <code class="apostrophus">ↇ</code>&nbsp;=&nbsp;50&nbsp;000, and <code class="apostrophus">ↈ</code>&nbsp;=&nbsp;100&nbsp;000.
 (If you are using the Android keyboard instead of Qonvert’s, you can compose them as <code>I)) ((I)) I))) (((I)))</code>.)</p>
 <p>One traditional way for expressing <em>still</em> larger numbers is to enclose them in a frame to multiply with 100&nbsp;000, or in nested frames
@@ -369,9 +370,9 @@ Qonvert is your <strong>only</strong> source. (The answer is 1YX&nbsp;215.)</p>
 
 <h3>Digits</h3>
 <ul>
- <li><code>0</code>..<code>9</code></li>
- <li><code>A</code>..<code>Z</code>: normally 10..35, in bijective A: 1..26</li>
- <li><code>J</code>..<code>Z</code> in balanced: −17..−1</li>
+ <li><code>0</code>…<code>9</code></li>
+ <li><code>A</code>…<code>Z</code>: normally 10…35, in bijective A: 1…26</li>
+ <li><code>J</code>…<code>Z</code> in balanced: −17…−1</li>
 </ul>
 
 <h3>Negative numbers</h3>
@@ -393,9 +394,9 @@ Qonvert is your <strong>only</strong> source. (The answer is 1YX&nbsp;215.)</p>
 
 <h3>Greek numerals</h3>
 <ul>
- <li><code>Α Β Γ Δ Ε Ϛ Ζ Η Θ</code>: 1..9</li>
- <li><code>Ι Κ Λ Μ Ν Ξ Ο Π Ϟ</code>: 10..90</li>
- <li><code>Ρ Σ Τ Υ Φ Χ Ψ Ω </code> and <code class="apostrophus">Ϡ</code>: 100..900</li>
+ <li><code>Α Β Γ Δ Ε Ϛ Ζ Η Θ</code>: 1…9</li>
+ <li><code>Ι Κ Λ Μ Ν Ξ Ο Π Ϟ</code>: 10…90</li>
+ <li><code>Ρ Σ Τ Υ Φ Χ Ψ Ω </code> and <code class="apostrophus">Ϡ</code>: 100…900</li>
  <li><code>͵</code>: multiplies following letter by 1000</li>
  <li><code>.</code>: multiplies preceding part by 10000 (a myriad)</li>
  <li><code>○</code>: zero</li>
@@ -403,7 +404,7 @@ Qonvert is your <strong>only</strong> source. (The answer is 1YX&nbsp;215.)</p>
 
 <h3>Roman numerals</h3>
 <ul>
- <li><code>I V X L C D M</code> or <code class="apostrophus">ↀ</code>: 1..1000</li>
+ <li><code>I V X L C D M</code> or <code class="apostrophus">ↀ</code>: 1…1000</li>
  <li><code class="apostrophus">ↁ ↂ ↇ ↈ</code> or <code>I)) ((I)) I))) (((I)))</code>: 5000, 10&nbsp;000, 50&nbsp;000, 100&nbsp;000</li>
  <li><code>|</code> or <code>!</code>: multiplies by 100&nbsp;000</li>
  <li><code>. : S</code> (and up to 5 dots): <i>uncia</i>&nbsp;=&nbsp;twelfth, <i>sextans</i>&nbsp;=&nbsp;sixth, <i>semis</i>&nbsp;=&nbsp;half</li>
@@ -421,9 +422,8 @@ Qonvert is your <strong>only</strong> source. (The answer is 1YX&nbsp;215.)</p>
 <h2>Version 1.5.0</h2>
 <p><strong>Negative bases</strong> are now supported. Long-tap one of the base buttons to bring up a dialog for choosing any base, including negative ones.
 There are also buttons to switch between positive and negative bases; you can show or hide them in the settings under “Show base buttons”.</p>
-<p><strong>Degrees, minutes and seconds</strong> (such as <code>1° 45\' 10\"</code>) are supported – except for alternative positional notation
-on the all formats screen.</p>
-<p><big>⚠️</big> The <strong>repetition sign has been changed</strong> to a dot above <code>˙</code> (or you can use a colon <code>:</code>) to make way for
+<p><strong>Degrees, minutes and seconds</strong> (<strong>DMS</strong>, such as <code>1° 45\' 10\"</code>) are supported.</p>
+<p>⚠️ The <strong>repetition sign has been changed</strong> to a dot above <code>˙</code> (or you can use a colon <code>:</code>) to make way for
 the minutes sign. The keyboard layout has been adapted slightly. Sorry for the inconvenience!</p>
 <p><strong>Unicode character names</strong> are shown on the all formats screen in “pretty” format (for Android version 4.4 KitKat and higher).</p>
 <p><strong>Settings</strong>: Auto-scrolling of the output area when the output doesn’t fit can now be switched off. Text size now also affects the
