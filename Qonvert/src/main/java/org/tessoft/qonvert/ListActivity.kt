@@ -228,7 +228,7 @@ class ListActivity : AppCompatActivity() {
     private lateinit var recycler: RecyclerView
     private lateinit var adapter: RecyclerAdapter
     lateinit var outputRadioGroup: RadioGroup
-    var outputRadioIds = arrayOf(R.id.standardRadio, R.id.prettyRadio, R.id.compatibleRadio)
+    var outputRadioIds = arrayOf(R.id.defaultRadio, R.id.prettyRadio, R.id.compatibleRadio)
     private lateinit var preferences: SharedPreferences
     private val items = mutableListOf<QNumberEntry>()
     private var listSel = ""
@@ -237,6 +237,7 @@ class ListActivity : AppCompatActivity() {
     var lastPlayedInterval = -1
     var clipboard: ClipboardManager? = null
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
         MainActivity.setQonvertTheme(this)
         super.onCreate(savedInstanceState)
@@ -267,6 +268,8 @@ class ListActivity : AppCompatActivity() {
         preferences = PreferenceManager.getDefaultSharedPreferences(this)
         var base = 10
         var system = NumSystem.STANDARD
+        var complement = false
+        var dms = false
         when (listWhat.firstOrNull()) {
             'H' -> getHistory(preferences, items)
             'I' -> {
@@ -284,6 +287,8 @@ class ListActivity : AppCompatActivity() {
                 val q = QNumber(preferencesEntry = listWhat.substring(1))
                 base = q.base
                 system = q.system
+                complement = q.complement
+                dms = q.dms
                 val formatsArray = resources.getStringArray(R.array.formats)
                 for (f in QFormat.values()) if (f != QFormat.EGYPTIAN && q.usefulFormat(f)) {
                     prefsMapping.add(items.count())
@@ -298,7 +303,10 @@ class ListActivity : AppCompatActivity() {
             }
         }
         baseText.visibility = if (listWhat == "H") View.GONE else {
-            baseText.text =  getString(R.string.bare_base, base, resources.getStringArray(R.array.num_systems)[system.ordinal])
+            val textList = mutableListOf(getString(R.string.bare_base, base, resources.getStringArray(R.array.num_systems)[system.ordinal]))
+            if (complement) textList.add(getString(R.string.complement))
+            if (dms) textList.add(getString(R.string.dms))
+            baseText.text = textList.joinToString()
             View.VISIBLE
         }
         if (prefsMapping.size == 0) prefsMapping = MutableList(items.size) { it }
@@ -328,6 +336,7 @@ class ListActivity : AppCompatActivity() {
         updateToolbar()
         return true
     }
+    @SuppressLint("NotifyDataSetChanged")
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         var text = ""
         if (item.itemId in setOf(R.id.copyItems, R.id.shareItems))
@@ -374,6 +383,7 @@ class ListActivity : AppCompatActivity() {
         return true
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onResume() {
         super.onResume()
         MainActivity.getOutputSettings(preferences)

@@ -31,6 +31,7 @@ import android.view.SoundEffectConstants
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat.animate
 import java.util.*
 import kotlin.concurrent.schedule
 import kotlin.math.*
@@ -87,7 +88,7 @@ class KeyboardView(context: Context, attrs: AttributeSet) : View(context, attrs)
             color = textColor
         },
         Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            textSize = 12 * resources.displayMetrics.scaledDensity
+            textSize = 13 * resources.displayMetrics.scaledDensity
             textAlign = Paint.Align.RIGHT
             color = textColor and 0xa0ffffff.toInt()
         })
@@ -157,8 +158,8 @@ class KeyboardView(context: Context, attrs: AttributeSet) : View(context, attrs)
     }
 
     fun fillButtons(baseAndSystem: Pair<Int, NumSystem> = Pair(base, system), always: Boolean = false) {
-        if (baseAndSystem.first != base || baseAndSystem.second != system || always) {
-            base = baseAndSystem.first
+        if (baseAndSystem.first.absoluteValue != base || baseAndSystem.second != system || always) {
+            base = baseAndSystem.first.absoluteValue
             system = baseAndSystem.second
             val oldButtonCols = buttonCols
             buttonCols = if (landscape) 12 else if (system == NumSystem.GREEK) 9 else 8
@@ -169,7 +170,8 @@ class KeyboardView(context: Context, attrs: AttributeSet) : View(context, attrs)
                 for (i in 0 until buttonCols) for (j in 0 until buttonRows) {
                     buttonRects[i][j] = RectF(i * buttonW + padding, j * buttonH + padding, (i + 1) * buttonW - padding, (j + 1) * buttonH - padding)
                     for (k in 0..1) {
-                        buttonTextX[i][j][k] = if (k == 0) buttonRects[i][j].centerX() else buttonRects[i][j].right - padding
+                        buttonTextX[i][j][k] = if (k == 0) buttonRects[i][j].centerX() - (if (system == NumSystem.GREEK) padding else 0f)
+                            else buttonRects[i][j].right - padding
                         buttonTextY[i][j]    = buttonRects[i][j].centerY() + padding
                     }
                 }
@@ -179,16 +181,15 @@ class KeyboardView(context: Context, attrs: AttributeSet) : View(context, attrs)
             val bijectiveAdd = if (system == NumSystem.BIJECTIVE_A) 9 else 0
             val minDigit = minDigit(base, system) + bijectiveAdd
             val maxDigit = minDigit + base - 1
-            var bottomRow = ""
+            val bottomRow = arrayOf("", "")
             when (system) {
                 NumSystem.GREEK -> {
                     var block = 0
                     for ((d, digit) in GREEK_DIGITS.withIndex()) if (digit == '\u0000') block++ else
                         buttonTexts[((d - block) % 3 + 3 * block) % (if (landscape) 12 else 9)][2 - ((d - block) / 3 % 3)][0] = digit.toString()
                     for (d in 1..9) buttonTexts[(d - 1) % 3 + 3][(9 - d) / 3][1] = d.toString()
-                    buttonTexts[3][3][1] = "0"
-                    buttonTexts[5][3][1] = "'"
-                    bottomRow = if (landscape) "○.͵ʹ∞\"␣" else "○.͵ʹ"
+                    bottomRow[0] = if (landscape) "○.˙͵∞無␣" else "○.˙͵"
+                    bottomRow[1] = if (landscape) "0  ʹ    " else "0  ʹ␣"
                     for (i in 0..1) textPaints[i].typeface = Typeface.SERIF
                 }
                 NumSystem.ROMAN -> {
@@ -196,9 +197,10 @@ class KeyboardView(context: Context, attrs: AttributeSet) : View(context, attrs)
                     if (APOSTROPHUS_OPTIONS[MainActivity.apostrophus][1] == '+' || APOSTROPHUS_OPTIONS[MainActivity.apostrophus][4] == '+')
                         buttonTexts[if (landscape) 8 else 5][1][0] = "ↀ"
                     buttonTexts[if (landscape) 9 else 6][0][0] = "|"
-                    for (j in 0..2) for (k in 0..1) buttonTexts[if (landscape) 10 + k else 7][j][if (landscape) 0 else k] = "·∶∴∷⁙S"[2 - j + 3 * k].toString()
+                    for (j in 0..2) for (k in 0..1) buttonTexts[if (landscape) 11 - k else 7][j][if (landscape) 0 else k] = "∷⁙S·∶∴"[2 - j + 3 * k].toString()
                     for (d in 1..9) buttonTexts[(d - 1) % 3 + 3][(9 - d) / 3][if (landscape) 0 else 1] = d.toString()
-                    bottomRow = if (landscape) "0.'N∞\"␣" else { buttonTexts[3][3][1] = "0"; "N.'" }
+                    bottomRow[0] = if (landscape) "0.˙N∞無␣" else "N.˙"
+                    bottomRow[1] = if (landscape) "        " else "0  ␣"
                     for (i in 0..1) textPaints[i].typeface = Typeface.SERIF
                 }
                 else -> {
@@ -213,13 +215,24 @@ class KeyboardView(context: Context, attrs: AttributeSet) : View(context, attrs)
                         buttonTexts[i][j][if (i == 0 || buttonTexts[i][j][0] == "") 0 else 1] = (d + 91).toChar().toString()
                     }
                     if (!landscape && system == NumSystem.BALANCED) for (d in 16..maxDigit) buttonTexts[3][d - 16][1] = (d + 55).toChar().toString()
-                    bottomRow = (if (landscape) "∞無\"␣" else "") + "0.'"
+                    bottomRow[0] = (if (landscape) "°'\"␣0.˙" else "0.˙").let {
+                        if (minDigit <= 0) it else it.replace('0', '∞')
+                    }
+                    bottomRow[1] = if (landscape) "    ∞無  ".let{
+                        if (minDigit <= 0) it else it.replace('∞', ' ')
+                    } else "   ␣"
                 }
             }
-            for (i in 0..2) for (j in 0..3) buttonTexts[i][j][if (buttonTexts[i][j][0] == "") 0 else 1] = "[{;,@#_/\$%&-"[4 * i + j].toString()
-            for (i in 3 until buttonCols) if (i != (if (landscape) 7 else 3) || minDigit <= 0) buttonTexts[i][3][0] = "$bottomRow⏎⌫".getOrNull(i - 3).toString()
-            if (landscape) buttonTexts[11][3][1] = "\u200A" else for (i in 0..2) buttonTexts[i + buttonCols - 3][3][1] = "\"␣\u200A"[i].toString()
-
+            for (i in 0..2) {
+                for (j in 0..3) buttonTexts[i][j][if (buttonTexts[i][j][0] == "") 0 else 1] = "[{;,@#_/\$%&-"[4 * i + j].toString()
+                if (!landscape || system in setOf(NumSystem.GREEK, NumSystem.ROMAN)) buttonTexts[i][3][1] = "°'\""[i].toString()
+            }
+            for (k in 0..1) {
+                bottomRow[k] += arrayOf("⏎⌫", "\u200A")[k]
+                for (i in 3 until buttonCols) with (bottomRow[k].getOrNull(i - 3)) {
+                    if (this != ' ') buttonTexts[i][3][k] = this.toString()
+                }
+            }
             if (MainActivity.lowerDigits) for (i in 0 until buttonCols) for (j in 0 until buttonRows) for (k in 0..1)
                 buttonTexts[i][j][k] = buttonTexts[i][j][k].lowercase()
             invalidate()

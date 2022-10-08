@@ -77,7 +77,7 @@ class SettingsActivity : AppCompatActivity() {
         private fun buttonSummary() {
             findPreference<MultiSelectListPreference>("buttons")?.let {
                 it.summary = it.values.sortedBy { i -> i.toInt() }.joinToString(" • ") { i ->
-                    getString(resources.getIdentifier("b$i", "string", it.context.packageName)).uppercase()
+                    getString(resources.getIdentifier(if (i == "-1") "bPosNeg" else "b$i", "string", it.context.packageName)).uppercase()
                 }
             }
         }

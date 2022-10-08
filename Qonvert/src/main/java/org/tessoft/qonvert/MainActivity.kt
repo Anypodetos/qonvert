@@ -30,6 +30,7 @@ import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
 import android.text.Editable
+import android.text.InputType
 import android.text.TextWatcher
 import android.util.TypedValue
 import android.view.*
@@ -54,7 +55,7 @@ const val HG2G = 42
 const val TAXICAB = 1729
 val MONSTER = BigInteger("808017424794512875886459904961710757005754368000000000")
 val BUTTON_BASES = listOf(2, 3, 6, 8, 10, 12, 16, 20, 26)
-val DEFAULT_BUTTONS = listOf(2, 8, 10, 12, 16)
+val DEFAULT_BUTTONS = listOf(-1, 2, 8, 10, 12, 16)
 val THEMES = mapOf('A' to R.style.Theme_Qonvert, 'B' to R.style.Theme_QonvertBlue)
 
 enum class KeyboardId {
@@ -68,6 +69,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var showNaturalStrings: Array<String>
     private var showNatural = setOf<String>()
     private var showRange = true
+    private var autoScrollOutput = true
     private var warnNonstandardInput = true
     private var keyboardId = KeyboardId.CUSTOM
     private var showWhatsNewStar = true
@@ -75,9 +77,11 @@ class MainActivity : AppCompatActivity() {
     private var lastQNumber = QNumber()
     private var rangeToast: Toast? = null
 
+    private lateinit var negaButtons: List<ToggleButton>
     private lateinit var toggleButtons: List<ToggleButton>
     private lateinit var systemButtons: List<Button>
     private lateinit var complementSwitch: Switch
+    private lateinit var dmsSwitch: Switch
     private lateinit var baseTexts: List<TextView>
     private lateinit var baseBars: List<SeekBar>
     private lateinit var outputView: ScrollView
@@ -105,6 +109,11 @@ class MainActivity : AppCompatActivity() {
 
         showNaturalStrings = resources.getStringArray(R.array.natural_values)
 
+        negaButtons = listOf(
+            findViewById(R.id.inNegaButton),
+            findViewById(R.id.outNegaButton)
+        )
+
         toggleButtons = listOf(
             findViewById(R.id.inToggleButton2),
             findViewById(R.id.inToggleButton3),
@@ -130,6 +139,7 @@ class MainActivity : AppCompatActivity() {
             findViewById(R.id.outSystemButton)
         )
         complementSwitch = findViewById(R.id.complementSwitch)
+        dmsSwitch = findViewById(R.id.dmsSwitch)
         baseTexts = listOf(
             findViewById(R.id.inBaseText),
             findViewById(R.id.outBaseText)
@@ -155,6 +165,37 @@ class MainActivity : AppCompatActivity() {
 
         /*   I n t e r f a c e   */
 
+        fun baseDialogOk(i: Int, edit: EditText) {
+            edit.text.toString().toIntOrNull()?.let {
+                baseBars[i].progress = it.absoluteValue - 2
+                negaButtons[i].isChecked = it < 0
+                calculate(inputChanged = i == 0)
+                baseAndSystemFeedback(i)
+           }
+        }
+        fun baseDialogShow(i: Int) {
+            val edit = EditText(this@MainActivity)
+            edit.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_SIGNED
+            edit.setText(getBase(i).toString())
+            edit.selectAll()
+            val dialog = AlertDialog.Builder(this@MainActivity)
+                .setTitle(resources.getStringArray(R.array.choose_base)[i]) //// .replace("%d", MAX_BASE.toString()))
+                .setView(edit)
+                .setPositiveButton(android.R.string.ok) { _, _ -> baseDialogOk(i, edit) }
+                .setNegativeButton(R.string.cancel) { _, _ -> }
+                .create()
+            edit.setOnEditorActionListener { _, actionId, _ ->
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    baseDialogOk(i, edit)
+                    dialog.cancel()
+                    true
+                } else false
+            }
+            edit.requestFocus()
+            dialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
+            dialog.show()
+        }
+
         for (i in 0..1) baseBars[i].setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
             override fun onStartTrackingTouch(seekBar: SeekBar) { }
             override fun onStopTrackingTouch(seekBar: SeekBar) { }
@@ -164,22 +205,36 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        val toggleButtonGestureDetectors = arrayOfNulls<GestureDetector>(2)
-        for (i in 0..1) toggleButtonGestureDetectors[i] = GestureDetector(this, object : GestureDetector.SimpleOnGestureListener() {
+        val buttonGestureDetectors = arrayOfNulls<GestureDetector>(2)
+        for (i in 0..1) buttonGestureDetectors[i] = GestureDetector(this, object : GestureDetector.SimpleOnGestureListener() {
             override fun onFling(e1: MotionEvent?, e2: MotionEvent?, velocityX: Float, velocityY: Float): Boolean {
                 baseBars[i].progress += velocityX.sign.toInt()
                 calculate(inputChanged = i == 0)
                 return true
             }
+            override fun onLongPress(e: MotionEvent?) {
+                super.onLongPress(e)
+                baseDialogShow(i)
+            }
         })
-        for (i in 0..1) for (j in BUTTON_BASES.indices) toggleButtons[BUTTON_BASES.size * i + j].setOnTouchListener { _, event ->
-            toggleButtonGestureDetectors[i]?.onTouchEvent(event)
+
+        for (i in 0..1) negaButtons[i].setOnClickListener {
+            calculate(inputChanged = i == 0)
+            baseAndSystemFeedback(i)
+        }
+        for (i in 0..1) negaButtons[i].setOnTouchListener { _, event ->
+            buttonGestureDetectors[i]?.onTouchEvent(event)
             false
         }
+
         for (i in 0..1) for (j in BUTTON_BASES.indices) toggleButtons[BUTTON_BASES.size * i + j].setOnClickListener {
             baseBars[i].progress = BUTTON_BASES[j] - 2
             toggleButtons[BUTTON_BASES.size * i + j].isChecked = true /* push down again in case it was down before */
             calculate(inputChanged = i == 0)
+        }
+        for (i in 0..1) for (j in BUTTON_BASES.indices) toggleButtons[BUTTON_BASES.size * i + j].setOnTouchListener { _, event ->
+            buttonGestureDetectors[i]?.onTouchEvent(event)
+            false
         }
 
         for (i in 0..1) systemButtons[i].setOnClickListener { view ->
@@ -189,7 +244,7 @@ class MainActivity : AppCompatActivity() {
             popupMenu.menu.setGroupCheckable(1, true, true)
             popupMenu.setOnMenuItemClickListener { item: MenuItem ->
                 val system = NumSystem.values()[item.order]
-                setBaseAndSystem(i, allowedBase(baseBars[i].progress + 2, system), system, recalculate = true)
+                setBaseAndSystem(i, allowedBase(getBase(i), system), system, recalculate = true)
                 true
             }
             popupMenu.show()
@@ -197,11 +252,14 @@ class MainActivity : AppCompatActivity() {
         for (i in 0..1) systemButtons[i].setOnLongClickListener {
             it.playSoundEffect(SoundEffectConstants.CLICK)
             val system = if (numSystems[i] == NumSystem.STANDARD) NumSystem.BALANCED else NumSystem.STANDARD
-            setBaseAndSystem(i, allowedBase(baseBars[i].progress + 2, system), system, recalculate = true)
+            setBaseAndSystem(i, allowedBase(getBase(i), system), system, recalculate = true)
             true
         }
 
         complementSwitch.setOnClickListener {
+            calculate(inputChanged = false)
+        }
+        dmsSwitch.setOnClickListener {
             calculate(inputChanged = false)
         }
         for (i in 0..1) baseTexts[i].setOnClickListener {
@@ -211,8 +269,8 @@ class MainActivity : AppCompatActivity() {
         for (i in 0..4) textOutputs[i].setOnClickListener {
             val greekOrRoman = i in 1..2 && textOutputs[i].typeface == Typeface.SERIF && lastQNumber.denominator == ONE
             copyToInput(lastQNumber, textOutputs[i].text.toString(),
-                if (greekOrRoman) 10 else baseBars[1].progress + 2, if (greekOrRoman) (if (i == 1) NumSystem.GREEK else NumSystem.ROMAN) else numSystems[1],
-                complementSwitch.isChecked, switchBases = true)
+                if (greekOrRoman) 10 else getBase(1), if (greekOrRoman) (if (i == 1) NumSystem.GREEK else NumSystem.ROMAN) else numSystems[1],
+                    complementSwitch.isChecked, dmsSwitch.isChecked, switchBases = true)
         }
         val clipboard = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager?
         for (i in 0..4) textOutputs[i].setOnLongClickListener {
@@ -254,7 +312,7 @@ class MainActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 val small = outputLayout.height - textOutputs[0].height / 3 < outputView.height
                 calculate(inputChanged = true)
-                if (small) outputView.post { outputView.smoothScrollTo(0, outputView.bottom) }
+                if (small and autoScrollOutput) outputView.post { outputView.smoothScrollTo(0, outputView.bottom) }
             }
         })
         editInput.setOnEditorActionListener { _, actionId, _ ->
@@ -268,7 +326,7 @@ class MainActivity : AppCompatActivity() {
         clearButton.setOnClickListener {
             if (editInput.string.isNotBlank() && lastQNumber.isValid) {
                 if (historyList.lastOrNull()?.let {
-                    it.inputString.trim() == editInput.string.trim() && it.number.base == baseBars[0].progress + 2 && it.number.system == numSystems[0]
+                    it.inputString.trim() == editInput.string.trim() && it.number.base == getBase(0) && it.number.system == numSystems[0]
                 } == true) historyList.removeLastOrNull()
                 historyList.add(QNumberEntry(editInput.string, lastQNumber))
             }
@@ -277,6 +335,7 @@ class MainActivity : AppCompatActivity() {
         clearButton.setOnLongClickListener {
             it.playSoundEffect(SoundEffectConstants.CLICK)
             complementSwitch.isChecked = false
+            dmsSwitch.isChecked = false
             for (i in 1 downTo 0) setBaseAndSystem(i, 10, NumSystem.STANDARD, recalculate = i == 0)
             true
         }
@@ -298,10 +357,11 @@ class MainActivity : AppCompatActivity() {
             R.id.allFormatsItem -> if (lastQNumber.isValid) {
                 val intent = Intent(this, ListActivity::class.java)
                 val q = lastQNumber.copy()
-                q.changeBase(baseBars[1].progress + 2, numSystems[1], complementSwitch.isChecked)
+                q.changeBase(getBase(1), numSystems[1], complementSwitch.isChecked, dmsSwitch.isChecked)
                 intent.putExtra("list", "m" + q.toPreferencesString() + "/")
                 startActivity(intent)
             } else AlertDialog.Builder(this)
+                    .setTitle(R.string.menu_formats)
                     .setMessage(R.string.no_q_number)
                     .setNegativeButton(R.string.close) { _, _ -> }
                     .create().show()
@@ -310,6 +370,7 @@ class MainActivity : AppCompatActivity() {
                 intent.putExtra("list", "H")
                 startActivity(intent)
             } else AlertDialog.Builder(this)
+                    .setTitle(R.string.menu_history)
                     .setMessage(R.string.no_history)
                     .setNegativeButton(R.string.close) { _, _ -> }
                     .create().show()
@@ -334,25 +395,45 @@ class MainActivity : AppCompatActivity() {
         if (keyboard.visibility == View.VISIBLE) keyboard.hide() else super.onBackPressed()
     }
 
+    @SuppressLint("ApplySharedPref")
     override fun onResume() {
         super.onResume()
+        var input = preferences.getString("input", null)
+        val updateFrom141 = preferences.getInt("thisVersion", 0) == 0 && input != null /* update preferences from v1.4.1 and earlier */
+        if (updateFrom141) {
+            input = input?.replace('\'', '˙')
+            val editor = preferences.edit()
+            editor.putStringSet("buttons", setOf("-1") + (preferences.getStringSet("buttons", null) ?: setOf<String>()))
+            editor.commit()
+        }
         getOutputSettings(preferences)
         showNatural = preferences.getStringSet("natural", null) ?: showNaturalStrings.toSet()
         showRange = preferences.getBoolean("range", true)
+        autoScrollOutput = preferences.getBoolean("scrollOutput", true)
         warnNonstandardInput = preferences.getBoolean("wrongDigits", true)
         val buttons = preferences.getStringSet("buttons", null) ?: DEFAULT_BUTTONS.toSet().map { it.toString() }
+        negaButtons[0].visibility = if ("-1" in buttons) View.VISIBLE else View.GONE
+        negaButtons[1].visibility = negaButtons[0].visibility
         for (j in BUTTON_BASES.indices) {
-            val visibility = if (BUTTON_BASES[j].toString() in buttons) View.VISIBLE else View.GONE
-            toggleButtons[j].visibility = visibility
-            toggleButtons[j + BUTTON_BASES.size].visibility = visibility
+            toggleButtons[j].visibility = if (BUTTON_BASES[j].toString() in buttons) View.VISIBLE else View.GONE
+            toggleButtons[j + BUTTON_BASES.size].visibility = toggleButtons[j].visibility
         }
         val textSize = (preferences.getString("size", null))?.toFloatOrNull() ?: 20f
         editInput.textSize = textSize
         for (i in 0..4) textOutputs[i].textSize = textSize
-        clearButton.size = if (textSize < 25) FloatingActionButton.SIZE_MINI else FloatingActionButton.SIZE_NORMAL
+        complementSwitch.textSize = textSize * 0.7f
+        dmsSwitch.textSize = textSize * 0.7f
+        for (i in 0..1) baseTexts[i].textSize = textSize * 0.7f
+        clearButton.size = if (textSize < 25f) FloatingActionButton.SIZE_MINI else FloatingActionButton.SIZE_NORMAL
+        val heights = if (preferences.getBoolean("moreSpace", false)) ((textSize + 30f) * resources.displayMetrics.scaledDensity).toInt()
+            else LinearLayout.LayoutParams.WRAP_CONTENT
+        baseTexts[1].layoutParams.height = heights
+        complementSwitch.layoutParams.height = heights
+        dmsSwitch.layoutParams.height = heights
 
-        getHistory(preferences, historyList)
+        getHistory(preferences, historyList, updateFrom141)
         complementSwitch.isChecked = preferences.getBoolean("outComplement", false)
+        dmsSwitch.isChecked = preferences.getBoolean("outDMS", false)
         setBaseAndSystem(0, preferences.getInt("inBase", 10),
             try { NumSystem.valueOf(preferences.getString("inSystem",  null) ?: "") } catch (e: Exception) { NumSystem.STANDARD },
             recalculate = false, alwaysFeedback = true)
@@ -369,7 +450,7 @@ class MainActivity : AppCompatActivity() {
             if (preferences.getBoolean("keyboardShow", true)) keyboard.show() else keyboard.hide()
             window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
         } else keyboard.hide()
-        editInput.string = preferences.getString("input", "1_3/5") ?: ""
+        editInput.string = input ?: "1_3/5"
         try { editInput.setSelection(preferences.getInt("selStart", 0), preferences.getInt("selEnd", 0)) } catch (e: Exception) { }
         if (preferences.getInt("playDialog", -2) == -1) {
             playPhaseShift = preferences.getFloat("playPhaseShift", 0f)
@@ -387,7 +468,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 'I' -> listInput.substring(1).toIntOrNull()?.let {
                     with(INTERVALS[it % INTERVALS.size]) {
-                        copyToInput(QNumber(first * (TWO.pow(it / INTERVALS.size)), second, baseBars[0].progress + 2, numSystems[0], format = QFormat.FRACTION))
+                        copyToInput(QNumber(first * (TWO.pow(it / INTERVALS.size)), second, getBase(0), numSystems[0], format = QFormat.FRACTION))
                     }
                 }
                 in 'a'..'z' -> with(QNumber(preferencesEntry = listInput.substring(1))) {
@@ -398,8 +479,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-        showWhatsNewStar = preferences.getInt("version", 0) < BuildConfig.VERSION_CODE &&
-            preferences.getString("input", null) != null /* don’t show star if there was no old version */
+        showWhatsNewStar = preferences.getInt("version", 0) < BuildConfig.VERSION_CODE && input != null /* don’t show star if there was no old version */
     }
 
     override fun onPause() {
@@ -409,11 +489,12 @@ class MainActivity : AppCompatActivity() {
         editor.putString("input", editInput.string)
         editor.putInt("selStart", editInput.selectionStart)
         editor.putInt("selEnd", editInput.selectionEnd)
-        editor.putInt("inBase", baseBars[0].progress + 2)
-        editor.putInt("outBase", baseBars[1].progress + 2)
+        editor.putInt("inBase", getBase(0))
+        editor.putInt("outBase", getBase(1))
         editor.putString("inSystem", numSystems[0].toString())
         editor.putString("outSystem", numSystems[1].toString())
         editor.putBoolean("outComplement", complementSwitch.isChecked)
+        editor.putBoolean("outDMS", dmsSwitch.isChecked)
         editor.putBoolean("keyboardShow", !keyboard.hidden)
         editor.putInt("playDialog", if (playDialog?.isShowing == true) {
             editor.putFloat("playPhaseShift", playPhaseShift)
@@ -421,21 +502,15 @@ class MainActivity : AppCompatActivity() {
         } else -2)
         playDialogTimer?.cancel()
         editor.remove("listInput")
+        editor.putInt("thisVersion", BuildConfig.VERSION_CODE)
         if (!showWhatsNewStar) editor.putInt("version", BuildConfig.VERSION_CODE)
         editor.apply()
     }
 
-  /*  override fun onStop() {
-        super.onStop()
-        val editor = preferences.edit()
-        editor.remove("playDialog")
-        editor.apply()
-    }*/
-
     /*  C a l c u l a t e  */
 
     fun calculate(inputChanged: Boolean) {
-        val q = if (inputChanged) QNumber(editInput.string, baseBars[0].progress + 2, numSystems[0])
+        val q = if (inputChanged) QNumber(editInput.string, getBase(0), numSystems[0])
             else lastQNumber.copy()
         if (inputChanged) {
             editInput.setTextColor(ContextCompat.getColor(this, when {
@@ -445,7 +520,7 @@ class MainActivity : AppCompatActivity() {
             }))
             lastQNumber = q.copy()
         }
-        q.changeBase(baseBars[1].progress + 2, numSystems[1], complementSwitch.isChecked)
+        q.changeBase(getBase(1), numSystems[1], complementSwitch.isChecked, dmsSwitch.isChecked)
         textOutputs[0].text = if (q.usefulFormat(QFormat.POSITIONAL)) q.toPositional() else
             (if (!q.isValid) q.errorMessage(resources) else "")
         textOutputs[1].text = if (q.usefulFormat(QFormat.FRACTION)) q.toFraction() else
@@ -472,30 +547,35 @@ class MainActivity : AppCompatActivity() {
 
     /*   U t i l i t i e s   */
 
+    private fun getBase(i: Int): Int {
+        return (baseBars[i].progress + 2) * if (negaButtons[i].isChecked) -1 else 1
+    }
+
     private fun setBaseAndSystem(i: Int, base: Int, system: NumSystem, recalculate: Boolean, alwaysFeedback: Boolean = false) {
-        val feedback = alwaysFeedback || base != baseBars[i].progress + 2 || system != numSystems[i]
+        val feedback = alwaysFeedback || base != getBase(i) || system != numSystems[i]
         numSystems[i] = system
         systemButtons[i].text = resources.getStringArray(R.array.num_systems_short)[system.ordinal]
-        baseBars[i].progress = base - 2
+        negaButtons[i].isChecked = base < 0
+        baseBars[i].progress = base.absoluteValue - 2
         if (recalculate) calculate(inputChanged = i == 0)
         if (feedback) baseAndSystemFeedback(i, base, system)
     }
 
-    private fun baseAndSystemFeedback(i: Int, base: Int = baseBars[i].progress + 2, system: NumSystem = numSystems[i]) {
+    private fun baseAndSystemFeedback(i: Int, base: Int = getBase(i), system: NumSystem = numSystems[i]) {
         val (actualSystem, baseAllowed) = allowedSystem(base, system)
         baseTexts[i].text = getString(R.string.base, resources.getStringArray(R.array.base_inOut)[i], base,
             resources.getStringArray(R.array.num_systems)[actualSystem.ordinal])
-        for (j in BUTTON_BASES.indices) toggleButtons[BUTTON_BASES.size * i + j].isChecked = BUTTON_BASES[j] == base
+        for (j in BUTTON_BASES.indices) toggleButtons[BUTTON_BASES.size * i + j].isChecked = BUTTON_BASES[j] == base.absoluteValue
         systemButtons[i].setBackgroundColor(ContextCompat.getColor(this,
             if (baseAllowed) resolveColor(R.attr.colorPrimaryVariant) else R.color.grey))
         if (i == 0) {
             editInput.typeface = if (actualSystem in setOf(NumSystem.GREEK, NumSystem.ROMAN)) Typeface.SERIF else Typeface.DEFAULT
             updateKeyboardToCaretPos(base, actualSystem)
-        } else complementSwitch.isEnabled = actualSystem != NumSystem.BALANCED
+        } else complementSwitch.isEnabled = actualSystem != NumSystem.BALANCED && base > 0
         toastRangeHint(i, base, system)
     }
 
-    private fun toastRangeHint(i: Int, base: Int = baseBars[i].progress + 2, system: NumSystem = numSystems[i], always: Boolean = false) {
+    private fun toastRangeHint(i: Int, base: Int = getBase(i), system: NumSystem = numSystems[i], always: Boolean = false) {
         if (always || (showRange && lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED))) {
             val minDigit = minDigit(base, system)
             rangeToast?.cancel()
@@ -504,34 +584,34 @@ class MainActivity : AppCompatActivity() {
                     system == NumSystem.ROMAN && base == 10 -> if (i == 0) R.string.range_toast_roman else R.string.range_toast_onlyRoman
                     else -> R.string.range_toast
                 },
-                resources.getStringArray(R.array.base_inOut)[i], digitToChar(minDigit, base, system), digitToChar(minDigit + base - 1, base, system)),
+                resources.getStringArray(R.array.base_inOut)[i],
+                digitToChar(minDigit, base, system), digitToChar(minDigit + base.absoluteValue - 1, base, system)),
                 Toast.LENGTH_SHORT)
             rangeToast?.setGravity(Gravity.TOP, 0, 0)
             rangeToast?.show()
         }
     }
 
-    fun updateKeyboardToCaretPos(base: Int = baseBars[0].progress + 2, actualSystem: NumSystem = allowedSystem(base, numSystems[0]).first,
-                     always: Boolean = false) {
+    fun updateKeyboardToCaretPos(base: Int = getBase(0), actualSystem: NumSystem = allowedSystem(base, numSystems[0]).first,
+                 always: Boolean = false) {
         if (keyboardId == KeyboardId.CUSTOM) keyboard.fillButtons(tokenBaseSystem(editInput.string.substring(0, editInput.selectionStart).findLast {
             it in "_/[{;,@#$€£¥%&"
         }) ?: Pair(base, actualSystem), always)
     }
 
     private fun copyToInput(q: QNumber, st: String = q.toString(), base: Int = q.base, system: NumSystem = q.system,
-                complement: Boolean = q.complement, switchBases: Boolean = false) {
+                complement: Boolean = q.complement, dms: Boolean = q.dms, switchBases: Boolean = false) {
         if (switchBases && lastQNumber.numerator < ZERO) complementSwitch.isChecked = lastQNumber.complement
-        val rounded = st.endsWith("…") || st.endsWith("…}")
-        val historyDependent = '?' in st && !st.trimStart().startsWith('"')
+        if (switchBases) dmsSwitch.isChecked = lastQNumber.dms
+        val rounded = st.endsWith("…") || st.endsWith("…}") || st.endsWith("…\"")
+        val historyDependent = '℅' in st && !st.trimStart().startsWith('"')
         editInput.string = if (rounded || historyDependent) {
-            val toast = Toast.makeText(applicationContext, getString(if (rounded) R.string.to_fraction else R.string.to_history_indep),
-                Toast.LENGTH_SHORT)
-            toast.view?.findViewById<TextView>(android.R.id.message)?.gravity = Gravity.CENTER
-            toast.show()
-            q.changeBase(base, system, complement)
+            Toast.makeText(applicationContext, getString(if (rounded) R.string.to_fraction else R.string.to_history_indep),
+                Toast.LENGTH_SHORT).show()
+            q.changeBase(base, system, complement, dms)
             if (rounded) q.toMixed() else q.toString()
         } else st
-        if (switchBases) setBaseAndSystem(1, baseBars[0].progress + 2, numSystems[0], recalculate = false)
+        if (switchBases) setBaseAndSystem(1, getBase(0), numSystems[0], recalculate = false)
         setBaseAndSystem(0, base, system, recalculate = true)
     }
 
@@ -542,7 +622,7 @@ class MainActivity : AppCompatActivity() {
         var lowerDigits = false
         var apostrophus = 0
         var egyptianMethod = EgyptianMethod.BINARY
-        private val tokens = Array(DEFAULT_BUTTONS.size) { Pair(DEFAULT_BUTTONS[it], NumSystem.STANDARD) }
+        private val tokens = Array(DEFAULT_BUTTONS.size - 1) { Pair(DEFAULT_BUTTONS[it + 1], NumSystem.STANDARD) }
         val numSystemsSuper = Array(NumSystem.values().size) { "" }
 
         var playDialogTimer: Timer? = null
@@ -556,7 +636,7 @@ class MainActivity : AppCompatActivity() {
             apostrophus = ((preferences.getString("apostrophus", null))?.toIntOrNull() ?: 0).coerceIn(0..3)
             egyptianMethod = try { EgyptianMethod.valueOf(preferences.getString("egyptian", null) ?: "") }
                 catch (e: Exception) { EgyptianMethod.BINARY }
-            //for (i in tokens.indices) tokens[i] = Pair(preferences.getString("tokenBase$i", DEFAULT_BUTTONS[i].toString())?.toIntOrNull() ?: tokens[i].first,
+            //for (i in tokens.indices) tokens[i] = Pair(preferences.getString("tokenBase$i", null)?.toIntOrNull() ?: tokens[i].first,
             //    try { NumSystem.valueOf(preferences.getString("tokenSystem$i", null) ?: "") } catch (e: Exception) { NumSystem.STANDARD } )
         }
 
@@ -571,10 +651,10 @@ class MainActivity : AppCompatActivity() {
             when (token) {
                 '@' -> tokens[0]
                 '#' -> tokens[1]
-                in listOf ('$', '€', '£', '¥') -> tokens[2]
+                in setOf ('$', '€', '£', '¥') -> tokens[2]
                 '%' -> tokens[3]
                 '&' -> tokens[4]
-                // '?' -> Pair(10, NumSystem.STANDARD)  // history entry
+                // '℅' -> Pair(10, NumSystem.STANDARD)  // history entry
                 else -> null
             }
 
@@ -597,11 +677,13 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
-fun getHistory(preferences: SharedPreferences, historyList: MutableList<QNumberEntry>) {
+fun getHistory(preferences: SharedPreferences, historyList: MutableList<QNumberEntry>, updateFrom141: Boolean = false) {
     historyList.clear()
     for (i in 0 until preferences.getInt("historySize", 0))
         with(QNumber(preferencesEntry = preferences.getString("history$i", null) ?: "")) {
-            if (isValid) historyList.add(QNumberEntry(preferences.getString("historyInput$i", null) ?: "", this))
+            if (isValid) historyList.add(QNumberEntry((preferences.getString("historyInput$i", null) ?: "").let {
+                if (updateFrom141) it.replace('\'', '˙') else it
+            }, this))
     }
 }
 fun putHistory(preferences: SharedPreferences, editor: SharedPreferences.Editor, historyList: MutableList<QNumberEntry>) {
@@ -627,17 +709,18 @@ fun shareText(activity: Activity?, text: String, title: String? = null) {
 }
 
 fun makePretty(text: String): Pair<String, Int> {
-    if (text.startsWith("\""))
-        return if (text.endsWith("\"")) Pair(text.removeSurrounding("\""), R.string.clipboard_noQuotes) else Pair(text, 0)
+    if (text.startsWith("\"")) return if (text.endsWith("\"") && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+        Pair("$text " + (Character.getName(text.codePointAt(1)) ?: ""), R.string.clipboard_withUnicodeName) else Pair(text, 0)
     var prettyText = text
     var prettyMenuTitle = 0
-    val rep = prettyText.indexOf('\'')
+    val rep = prettyText.indexOf('˙')
     if (rep > -1) {
         val s = StringBuilder(prettyText).deleteAt(rep)
-        for (i in s.length downTo rep + 1) if (s[i - 1] != ' ') s.insert(i, '\u0305')
+        for (i in s.length downTo rep + 1) if (s[i - 1] !in " \"") s.insert(i, '\u0305')
         prettyText = s.toString()
         prettyMenuTitle = R.string.clipboard_rep
     }
+    prettyText = prettyText.replace('\'', '′').replace('"', '″')
     val slash = prettyText.indexOf('/')
     val under = prettyText.indexOf('_')
     if (slash > -1 && prettyText.substring(under + 1).all { it in '0'..'9' || it in "/-. " }) {
@@ -663,16 +746,16 @@ fun makePretty(text: String): Pair<String, Int> {
 }
 
 fun makeCompatible(text: String, system: NumSystem): Pair<String, Int> {
-    if (text.startsWith("\"")) return Pair(text, 0)
+    if (text.startsWith("\""))
+        return if (text.endsWith("\"")) Pair(text.removeSurrounding("\""), R.string.clipboard_noQuotes) else Pair(text, 0)
     var compatText = text.removeSuffix("…")
         .replace("_", (if (system == NumSystem.GREEK) "ʹ" else "") + (if (text.firstOrNull() == '-') '-' else '+'))
-    var one = when (system) {
-        NumSystem.BIJECTIVE_A -> "A"
-        NumSystem.GREEK -> "Α"
-        NumSystem.ROMAN -> "I"
+    val one = when (system) {
+        NumSystem.BIJECTIVE_A -> "a"
+        NumSystem.GREEK -> "α"
+        NumSystem.ROMAN -> "i"
         else -> "1"
-    }
-    if (MainActivity.lowerDigits) one = one.lowercase()
+    }.let { if (MainActivity.lowerDigits) it else it.uppercase() }
     when (compatText.firstOrNull()) {
         '[' -> {
             val lastDelim = compatText.lastIndexOfAny(charArrayOf(';', ','))
@@ -685,20 +768,23 @@ fun makeCompatible(text: String, system: NumSystem): Pair<String, Int> {
         '{' -> compatText = compatText.removeSurrounding("{", "}").replace("; ", "+$one/").replace(", ", "+$one/")
     }
     compatText = compatText.removePrefix(when (system) {
+        NumSystem.STANDARD, NumSystem.BALANCED -> "0+"
         NumSystem.BIJECTIVE_1, NumSystem.BIJECTIVE_A -> "/+"
         NumSystem.GREEK -> "○+"
         NumSystem.ROMAN -> if (MainActivity.lowerDigits) "n+" else "N+"
-        else -> "0+"
     })
     if (system !in setOf(NumSystem.GREEK, NumSystem.ROMAN)) {
         compatText = compatText.filter { it != ' ' }
-        val rep = compatText.indexOf('\'')
+        val rep = compatText.indexOf('˙')
         if (rep > -1) {
-            compatText = compatText.removeRange(rep, rep + 1)
+            val seconds = compatText.endsWith("\"")
+            compatText = compatText.removeRange(rep, rep + 1).removeSuffix("\"")
             with (compatText.substring(rep).filter { it != '.' }) {
                 if (length > 0) compatText += repeat(MainActivity.maxDigitsAfter / length)
             }
+            if (seconds) compatText +="\""
         }
+        compatText = compatText.replace("°", "° ").replace("'", "' ").trimEnd()
     }
     if (compatText.startsWith("..")) when (system) {
         NumSystem.GREEK -> {
