@@ -38,13 +38,13 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     <string name="clipboard_ok">In die Zwischenablage kopiert</string>
     <string name="to_fraction">In Bruch konvertiert, um nicht runden zu müssen</string>
     <string name="to_history_indep">Referenz auf Eintrag im Verlauf entfernt</string>
-    <string name="range_toast">%1$s: Ziffern %2$s..%3$s</string>
-    <string name="range_toast_greek">%1$s: Griechische Zahlen oder Ziffern %2$s..%3$s</string>
+    <string name="range_toast">%1$s: Ziffern %2$s…%3$s</string>
+    <string name="range_toast_greek">%1$s: Griechische Zahlen oder Ziffern %2$s…%3$s</string>
     <string name="range_toast_onlyGreek">%1$s: Griechische Zahlen</string>
-    <string name="range_toast_roman">%1$s: Römische Zahlen oder Ziffern %2$s..%3$s</string>
+    <string name="range_toast_roman">%1$s: Römische Zahlen oder Ziffern %2$s…%3$s</string>
     <string name="range_toast_onlyRoman">%1$s: Römische Zahlen</string>
     <string name="no_q_number">Gib eine gültige Zahl ein und drücke diese Taste, um sie in allen verfügbaren Formaten anzuzeigen.</string>
-    <string name="no_history">Der Verlauf ist leer. Gib eine Zahl ein und drücke ⏎ oder 🗑 um sie hier zu speichern.</string>
+    <string name="no_history">Der Verlauf ist leer. Gib eine Zahl ein und drücke die Eingabetaste oder 🗑 um sie hier zu speichern.</string>
 
     <string name="err_quote">ist nur am Anfang oder Ende der Eingabe erlaubt.</string>
     <string name="err_bracket">ist nur um einen Kettenbruch erlaubt.</string>
@@ -68,6 +68,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     <string name="err_onlyRoman">ist nur in römischen Zahlen erlaubt.</string>
     <string name="err_noRoman">ist weder eine gültige römische noch eine arabische Zahl.</string>
     <string name="err_fraction">ist nur nach einer ganzen Zahl erlaubt.</string>
+    <string name="err_load">Fehler beim Laden</string>
     <string name="err_generic">ist kein gültiges Zeichen.</string>
 
     <string name="menu_formats">Alle Formate</string>
@@ -87,7 +88,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     <string name="between_intervals">zwischen %1$s und %2$s</string>
     <string name="interval_grammar_nom">kleine,große,reine</string>
     <string name="interval_grammar_between">kleiner,großer,reiner</string>
-    <string name="no_interval">Zahl muss zwischen %1$s und %2$s liegen</string>
+    <string name="no_interval">Zahl muss zwischen %1$s\nund %2$s liegen</string>
 
     <!-- Lists / Dialogs -->
     <string name="formats_hint">Alle Formate anzeigen</string>
@@ -138,8 +139,8 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     <string name="theme_title">Farbschema</string>
 
     <!-- Help -->
-    <string name="logo_hint">Das Logo von Qonvert ist ein (mehr oder weniger) phantasievolles ℚ, das Symbol für die Menge der rationalen Zahlen.</string>
-    <string name="share_app">Rationale Zahlen zwischen verschiedenen Basen und Darstellungen konvertieren:\n\nhttps://play.google.com/store/apps/details?id=org.tessoft.qonvert\n\noder\n\nhttps://f-droid.org/packages/org.tessoft.qonvert/</string>
+    <string name="share_app">Rationale Zahlen zwischen verschiedenen Basen und Darstellungen konvertieren:
+        \n\nhttps://play.google.com/store/apps/details?id=org.tessoft.qonvert\n\noder\n\nhttps://f-droid.org/packages/org.tessoft.qonvert/</string>
     <string name="title_about">Über Qonvert V %s</string>
 
     <string name="help"><![CDATA[
@@ -268,7 +269,7 @@ als griechische Zahlen angezeigt.</p>
 <h3>Römische Zahlen</h3>
 <p><a href="https://de.wikipedia.org/wiki/R%C3%B6mische_Zahlschrift">Römische Zahlen</a> gibt es auch nur in der Basis 10. Sie können die Buchstaben
 <code>I V X L C D M</code> enthalten. Symbole für größere Zahlen sind <code class="apostrophus">ↁ</code>&nbsp;=&nbsp;5000,
-<code class="apostrophus">ↂ</code>&nbsp;=&nbsp10&nbsp;000, <code class="apostrophus">ↇ</code>&nbsp;=&nbsp;50&nbsp;000, und
+<code class="apostrophus">ↂ</code>&nbsp;=&nbsp;10&nbsp;000, <code class="apostrophus">ↇ</code>&nbsp;=&nbsp;50&nbsp;000, und
 <code class="apostrophus">ↈ</code>&nbsp;=&nbsp;100&nbsp;000. (Wenn Du die Android-Tastatur statt der von Qonvert verwendest, kannst Du sie als
 <code>I)) ((I)) I))) (((I)))</code> eingeben.)</p>
 <p>Traditionellerweise werden <em>noch</em> größere Zahlen mit Rahmen geschrieben, die ihren Inhalt mit 100&nbsp;000 multiplizieren.
@@ -332,9 +333,9 @@ im balancierten Undezimalsystem benötigst, ist Qonvert deine <strong>einzige</s
 
 <h3>Ziffern</h3>
 <ul>
- <li><code>0</code>..<code>9</code></li>
- <li><code>A</code>..<code>Z</code>: normalerweise 10..35; bijektiv A: 1..26</li>
- <li><code>J</code>..<code>Z</code> in balancierten Systemen: −17..−1</li>
+ <li><code>0</code>…<code>9</code></li>
+ <li><code>A</code>…<code>Z</code>: normalerweise 10…35; bijektiv A: 1…26</li>
+ <li><code>J</code>…<code>Z</code> in balancierten Systemen: −17…−1</li>
 </ul>
 
 <h3>Negative Zahlen</h3>
@@ -356,9 +357,9 @@ im balancierten Undezimalsystem benötigst, ist Qonvert deine <strong>einzige</s
 
 <h3>Griechische Zahlen</h3>
 <ul>
- <li><code>Α Β Γ Δ Ε Ϛ Ζ Η Θ</code>: 1..9</li>
- <li><code>Ι Κ Λ Μ Ν Ξ Ο Π Ϟ</code>: 10..90</li>
- <li><code>Ρ Σ Τ Υ Φ Χ Ψ Ω </code> und <code class="apostrophus">Ϡ</code>: 100..900</li>
+ <li><code>Α Β Γ Δ Ε Ϛ Ζ Η Θ</code>: 1…9</li>
+ <li><code>Ι Κ Λ Μ Ν Ξ Ο Π Ϟ</code>: 10…90</li>
+ <li><code>Ρ Σ Τ Υ Φ Χ Ψ Ω </code> und <code class="apostrophus">Ϡ</code>: 100…900</li>
  <li><code>͵</code>: multipliziert den folgenden Buchstaben mit 1000</li>
  <li><code>.</code>: multipliziert Voranstehendes mit 10000 (einer Myriade)</li>
  <li><code>○</code>: Null</li>
@@ -366,7 +367,7 @@ im balancierten Undezimalsystem benötigst, ist Qonvert deine <strong>einzige</s
 
 <h3>Römische Zahlen</h3>
 <ul>
- <li><code>I V X L C D M</code> or <code class="apostrophus">ↀ</code>: 1..1000</li>
+ <li><code>I V X L C D M</code> or <code class="apostrophus">ↀ</code>: 1…1000</li>
  <li><code class="apostrophus">ↁ ↂ ↇ ↈ</code> oder <code>I)) ((I)) I))) (((I)))</code>: 5000, 10&nbsp;000, 50&nbsp;000, 100&nbsp;000</li>
  <li><code>|</code> oder <code>!</code>: multipliziert mit 100&nbsp;000</li>
  <li><code>. : S</code> (und bis zu 5 Punkten): <i>uncia</i>&nbsp;=&nbsp;Zwölftel, <i>sextans</i>&nbsp;=&nbsp;Sechstel, <i>semis</i>&nbsp;=&nbsp;ein&nbsp;Halb</li>
@@ -383,11 +384,10 @@ im balancierten Undezimalsystem benötigst, ist Qonvert deine <strong>einzige</s
     <string name="whatsNew"><![CDATA[
 <h2>Version 1.5.0</h2>
 <p><strong>Negative Basen</strong> werden jetzt unterstützt. Durch lang Antippen der Basis-Tasten (BIN, DEC, HEX etc.) erscheint eine Dialogbox,
-in der eine Basis, einschließlich einer negativen, eingegeben werden kann. Außerdem gibt es Tasten zum Wechseln des Vorzeichens, die sich in den Einstellungen
-unter „Tasten für Basen“ aktivieren oder deaktivieren lassen.</p>
-<p><strong>Grad, Minuten und Sekunden</strong> (wie etwa <code>1° 45\' 10\"</code>) werden unterstützt – mit Ausnahme des alternativen Stellenwertsystems
-am „Alle Formate“-Bildschirm.</p>
-<p><big>⚠️</big> Das <strong>Periodenzeichen</strong> wurde zu einem Punkt oben <code>˙</code> geändert (oder du kannst einen Doppelpunkt <code>:</code>
+in der eine Basis, einschließlich einer negativen, eingegeben werden kann. Außerdem gibt es Tasten zum Wechseln des Vorzeichens,
+die sich in den Einstellungen unter „Tasten für Basen“ aktivieren oder deaktivieren lassen.</p>
+<p><strong>Grad, Minuten und Sekunden</strong> (<strong>DMS</strong>, zum Beispiel <code>1° 45\' 10\"</code>) werden unterstützt.</p>
+<p>⚠️ Das <strong>Periodenzeichen</strong> wurde zu einem Punkt oben <code>˙</code> geändert (oder du kannst einen Doppelpunkt <code>:</code>
 verwenden), um Platz für das Minuten-Symbol zu machen. Die Tastatur wurde etwas angepasst. Entschuldigt bitte die Unannehmlichkeit!</p>
 <p>Der „Alle Formate“-Bildschirm zeigt <strong>Unicode-Namen</strong> an, wenn „formatiert“ ausgewählt ist (für Android-Version 4.4 KitKat und später).</p>
 <p><strong>Einstellungen</strong>: Das automatische Runterrollen des Ausgabebereichs kann jetzt ausgeschaltet werden. Die Textgröße wird jetzt auch für
