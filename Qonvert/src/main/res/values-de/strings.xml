@@ -292,6 +292,7 @@ und <code>3450</code> als <strong>−3</strong>×10<sup>3</sup>+<strong>4</stron
 Zahlen in negativen Basen kommen ohne negatives Vorzeichen aus.</p>
 <p>“Bijektive” Systeme mit negativen Basen sind nicht wirklich bijektiv: zum Beispiel ändert es nichts am Wert einer Zahl im Negadezimal-System,
 wenn man ihr <strong>1A</strong> voran stellt.</p>
+<p>Die Komplementnotation ist für negative Basen deaktiviert.</p>
 
 <h2>Unicode</h2>
 <p>Ganze Zahlen von hexadezimal <code>20</code> bis <code>10FFFF</code> (dezimal <code>32</code> bis <code>1114111</code>) werden
