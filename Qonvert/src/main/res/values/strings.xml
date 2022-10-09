@@ -331,6 +331,7 @@ Since odd powers of negative numbers are negative, and even powers are positive,
 thus, we don’t need a minus sign in negative bases.</p>
 <p>Note that “bijective” systems with negative bases aren’t actually bijective: for example, in nega-decimal, you can always add or remove a leading
 <strong>1A</strong> without changing a number’s value.</p>
+<p>Complement notation is disabled for negative bases.</p>
 
 <h2>Unicode characters</h2>
 <p>Inputs that are integers from hexadecimal <code>20</code> to <code>10FFFF</code> (decimal <code>32</code> to <code>1114111</code>) are not only
