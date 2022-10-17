@@ -1,0 +1,1 @@
+Supports bases up to 64, base tokens are customizable, degrees - minutes - seconds: seconds are now also shown as fractions
