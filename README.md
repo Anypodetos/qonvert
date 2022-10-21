@@ -1,8 +1,17 @@
-# Lemizh constellations
-This is the code for the [celestial sphere](https://lemizh.conlang.org/appendix/constell/webgl.php) and [constellation list](https://lemizh.conlang.org/appendix/constell.php) in my conworld Lemizh.
+# Qonvert
+Qonvert is an Android app available on [Google Play](https://play.google.com/store/apps/details?id=org.tessoft.qonvert), [F-Droid](https://f-droid.org/packages/org.tessoft.qonvert/) and [Uptodown](https://qonvert.en.uptodown.com/android). It is free, contains no ads, collects or shares no personal data, and needs no special permissions.
 
-Published in the hope that someone who wants to create a 3D interactive celestial sphere for web browsers might find it useful.
+* Practically unlimited size and precision
+* Converting between bases 2 to 64 and negative 2 to 64
+* Converting rational numbers between positional notation (including repeating digits) and fractions (including mixed, improper, continued and Egyptian fractions)
+* Converting between minus (-2) and complement notation (FFFFFFFE)
+* Converting to and from degrees, minutes and seconds
+* Balanced numeral systems such as balanced ternary
+* Bijective numeration
+* Greek (Milesian) numerals
+* Roman numerals including unciae (twelfths)
+* Unicode characters
+* Playing musical intervals with a given frequency ratio
+* Light and dark colour schemes
 
-* The data from which the celestial sphere was created are mainly from the [HYG Database by David Nash](https://github.com/astronexus/HYG-Database), which is available under a CC BY-SA 2.5 Licence. Additional star names are from the [IAU](https://www.iau.org/public/themes/naming_stars/), additional Bayer designations from [In-The-Sky.org](https://in-the-sky.org/data/catalogue.php?cat=Bayer).
-* The Milky Way image (Web/constell/milkyway.png) is from the [Stellarium](https://stellarium.org/) software, which is available under a GNU General Public Licence.
-* The compass rose (Web/constell/compassrose.svg) is modified from [Serg!o’s image](https://commons.wikimedia.org/wiki/File:Compass_Rose_English_North.svg), available under a CC BY-SA 3.0 Licence.
+<img src="screenshots/integer.png" width="250px" alt="Converting an integer number"> <img src="screenshots/rational.png" width="250px" alt="Converting a rational number"> <img src="screenshots/greek.png" width="250px" alt="Converting a Greek numeral"> <img src="screenshots/allformats.png" width="250px" alt="Display all formats"> <img src="screenshots/settings.png" width="250px" alt="App settings"> <img src="screenshots/cheatsheet.png" width="250px" alt="Cheat sheet">
