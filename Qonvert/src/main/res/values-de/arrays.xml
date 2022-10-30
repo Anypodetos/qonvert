@@ -55,8 +55,8 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     </string-array>
 
     <string-array name="choose_base">
-        <item>Eingabe-Basis (±2..36)</item>
-        <item>Ausgabe-Basis (±2..36)</item>
+        <item>Eingabe-Basis (±2…%d)</item>
+        <item>Ausgabe-Basis (±2…%d)</item>
     </string-array>
 
    <string-array name="interval_names">
@@ -148,6 +148,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
         <item>Hexadezimal (16)</item>
         <item>Vigesimal (20)</item>
         <item>Hexavigesimal (26)</item>
+        <item>Sexagesimal (60)</item>
     </string-array>
 
     <string-array name="size_entries">
