@@ -31,20 +31,22 @@ import android.os.Bundle
 import android.view.*
 import android.widget.*
 import androidx.appcompat.widget.Toolbar
-import androidx.appcompat.app.AlertDialog
+import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.MenuCompat
 import androidx.preference.PreferenceManager
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.snackbar.BaseTransientBottomBar
+import com.google.android.material.snackbar.Snackbar
 import java.math.BigInteger.*
 import kotlin.math.*
 
 val MIN_PIE = Build.VERSION.SDK_INT >= Build.VERSION_CODES.P
 
-class QNumberEntry(val inputString: String, val number: QNumber, val egyptianMethod: EgyptianMethod =
-        if (MainActivity.egyptianMethod == EgyptianMethod.OFF) EgyptianMethod.BINARY else MainActivity.egyptianMethod) {
+class QNumberEntry(val inputString: String, val number: QNumber, val egyptianMethod: EgyptianMethod = EgyptianMethod.OFF) {
 
     var selected = false
     var expanded = false
@@ -54,7 +56,7 @@ class QNumberEntry(val inputString: String, val number: QNumber, val egyptianMet
         if (outputBuffer == "") outputBuffer = number.toString(withBaseSystem = true,
             mode = if (activity != null) DisplayMode.values()[activity.outputRadioIds.indexOf(activity.outputRadioGroup.checkedRadioButtonId)]
                 else DisplayMode.STANDARD,
-            aEgyptianMethod = egyptianMethod)
+            aEgyptianMethod = if (egyptianMethod == EgyptianMethod.OFF) MainActivity.preferredEgyptianMethod() else egyptianMethod)
         return Pair(activity?.getString(R.string.item_header, inputString) ?: "", outputBuffer)
     }
 }
@@ -77,8 +79,9 @@ class RecyclerAdapter internal constructor(private val activity: ListActivity?, 
             holder.inputText.text = first
             holder.outputText.text = second
         }
-        holder.outputText.typeface = if (items[position].number.system in setOf(NumSystem.GREEK, NumSystem.ROMAN) && items[position].number.format != QFormat.UNICODE
-            || items[position].number.format in setOf(QFormat.GREEK_NATURAL, QFormat.ROMAN_NATURAL)) Typeface.SERIF else Typeface.DEFAULT
+        holder.outputText.typeface = if (items[position].number.system in setOf(NumSystem.GREEK, NumSystem.ROMAN) &&
+            items[position].number.format != QFormat.UNICODE || items[position].number.format in setOf(QFormat.GREEK_NATURAL, QFormat.ROMAN_NATURAL))
+                Typeface.SERIF else Typeface.DEFAULT
 
         if (!MIN_PIE) items[position].expanded = true
         holder.outputText.post { holder.expandButton.visibility = if (holder.outputText.lineCount > 3 && MIN_PIE) View.VISIBLE else View.GONE }
@@ -162,7 +165,7 @@ class RecyclerAdapter internal constructor(private val activity: ListActivity?, 
 
             extraButton.setOnClickListener {
                 activity?.let {
-                    with (items[adapterPosition].number) {
+                    with(items[adapterPosition].number) {
                         if (listWhatToken == "I") {
                             play(it)
                             it.lastPlayedInterval = adapterPosition
@@ -187,22 +190,10 @@ class RecyclerAdapter internal constructor(private val activity: ListActivity?, 
                             Toast.makeText(it.applicationContext, it.getString(R.string.clipboard_ok), Toast.LENGTH_SHORT).show()
                         }
                         R.id.shareItems -> shareText(activity, text)
-                        R.id.deleteItems -> activity?.let {
-                            AlertDialog.Builder(it)
-                                .setTitle(R.string.delete_this_q)
-                                .setMessage(R.string.cant_be_undone)
-                                .setPositiveButton(R.string.delete) { _, _ ->
-                                    val pos = adapterPosition
-                                    notifyItemRemoved(pos)
-                                    if (items[pos].selected) selectedItems--
-                                    items.remove(items[pos])
-                                    if (items.size == 0) it.finish() else it.updateToolbar()
-                                }
-                                .setNegativeButton(R.string.cancel) { _, _ -> }
-                                .create().show()
-                        }
+                        R.id.deleteItems -> activity?.delete(adapterPosition)
                         R.id.playItem -> activity?.let {
                             items[adapterPosition].number.play(it)
+                            it.lastPlayedInterval = adapterPosition
                         }
                     }
                     true
@@ -212,6 +203,7 @@ class RecyclerAdapter internal constructor(private val activity: ListActivity?, 
                 }
                 activity?.let {
                     outputText.setBackgroundColor(ContextCompat.getColor(it, MainActivity.resolveColor(android.R.attr.colorMultiSelectHighlight)))
+                    it.snackbar?.dismiss()
                 }
                 popupMenu.show()
             }
@@ -223,12 +215,14 @@ class RecyclerAdapter internal constructor(private val activity: ListActivity?, 
 class ListActivity : AppCompatActivity() {
 
     private var listWhat = ""
+    private lateinit var coordinator: CoordinatorLayout
     private lateinit var toolbar: Toolbar
     private lateinit var baseText: TextView
     private lateinit var recycler: RecyclerView
     private lateinit var adapter: RecyclerAdapter
     lateinit var outputRadioGroup: RadioGroup
     var outputRadioIds = arrayOf(R.id.defaultRadio, R.id.prettyRadio, R.id.compatibleRadio)
+    var snackbar: Snackbar? = null
     private lateinit var preferences: SharedPreferences
     private val items = mutableListOf<QNumberEntry>()
     private var listSel = ""
@@ -243,6 +237,7 @@ class ListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_list)
 
+        coordinator = findViewById(R.id.coordinator)
         toolbar = findViewById(R.id.listToolbar)
         baseText = findViewById(R.id.baseText)
         recycler = findViewById(R.id.recycler)
@@ -265,6 +260,13 @@ class ListActivity : AppCompatActivity() {
         }
         adapter = RecyclerAdapter(this, items)
         recycler.adapter = adapter
+        if (listWhat == "H") ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.END) {
+            override fun onMove(view: RecyclerView, holder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean = false
+            override fun onSwiped(holder: RecyclerView.ViewHolder, direction: Int) {
+                if (direction == ItemTouchHelper.END) delete(holder.adapterPosition)
+            }
+        }).attachToRecyclerView(recycler)
+
         preferences = PreferenceManager.getDefaultSharedPreferences(this)
         var base = 10
         var system = NumSystem.STANDARD
@@ -323,6 +325,7 @@ class ListActivity : AppCompatActivity() {
         outputRadioGroup.check(outputRadioIds[(try { DisplayMode.valueOf(preferences.getString("listDisplay", null) ?: "") }
             catch(e: Exception) { DisplayMode.STANDARD }).ordinal])
         for (r in outputRadioIds) findViewById<RadioButton>(r).setOnClickListener {
+            snackbar?.dismiss()
             for (listItem in items) listItem.outputBuffer = ""
             adapter.notifyDataSetChanged()
         }
@@ -336,8 +339,15 @@ class ListActivity : AppCompatActivity() {
         updateToolbar()
         return true
     }
+
+    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
+        if (items.size > 0) snackbar?.dismiss()
+        return super.onPrepareOptionsMenu(menu)
+    }
+
     @SuppressLint("NotifyDataSetChanged")
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (items.size > 0) snackbar?.dismiss()
         var text = ""
         if (item.itemId in setOf(R.id.copyItems, R.id.shareItems))
             for (listItem in (if (listWhat == "H") items.reversed() else items)) if (adapter.selectedItems == 0 || listItem.selected)
@@ -359,25 +369,26 @@ class ListActivity : AppCompatActivity() {
             }
             R.id.copyItems -> {
                 clipboard?.setPrimaryClip(ClipData.newPlainText(null, text))
-                Toast.makeText(applicationContext, getString(if (adapter.selectedItems == 0 && items.size > 1)
+                Toast.makeText(applicationContext, getString(if ((adapter.selectedItems == 0 || adapter.selectedItems == items.size) && items.size > 1)
                     R.string.clipboard_all_ok else R.string.clipboard_ok, items.size), Toast.LENGTH_SHORT).show()
             }
-            R.id.shareItems -> shareText(this, text, if (adapter.selectedItems == 0 && items.size > 1) getString(R.string.share_all, items.size) else null)
-            R.id.deleteItems -> AlertDialog.Builder(this)
-                .setTitle(if (adapter.selectedItems == 0)
-                    getString(R.string.delete_history_q) else resources.getQuantityString(R.plurals.delete_q, adapter.selectedItems))
-                .setMessage(R.string.cant_be_undone)
-                .setPositiveButton(R.string.delete) { _, _ ->
-                    if (adapter.selectedItems == 0) items.clear() else
-                        for ((i, listItem) in items.withIndex().reversed()) if (listItem.selected) {
-                            adapter.notifyItemRemoved(i)
-                            items.remove(listItem)
-                        }
-                    adapter.selectedItems = 0
-                    if (items.size == 0) finish() else updateToolbar()
+            R.id.shareItems -> shareText(this, text, if ((adapter.selectedItems == 0 || adapter.selectedItems == items.size) && items.size > 1)
+                getString(R.string.share_all, items.size) else null)
+            R.id.deleteItems -> {
+                if (adapter.selectedItems == 0) {
+                    backup(items.size, 0)
+                    adapter.notifyDataSetChanged()
+                    items.clear()
+                } else {
+                    backup(adapter.selectedItems, adapter.selectedItems)
+                    for ((i, listItem) in items.withIndex().reversed()) if (listItem.selected) {
+                        adapter.notifyItemRemoved(i)
+                        items.remove(listItem)
+                    }
                 }
-                .setNegativeButton(R.string.cancel) { _, _ -> }
-                .create().show()
+                adapter.selectedItems = 0
+                updateToolbar()
+            }
             R.id.settingsListItem -> startActivity(Intent(this, SettingsActivity::class.java))
         }
         return true
@@ -398,6 +409,7 @@ class ListActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
+        snackbar?.dismiss()
         val editor = preferences.edit()
         editor.putString("listSel${listWhatToken(merge = true)}", prefsMapping.mapIndexed { i, it ->
             if (it in 0 until items.size) { if (items[it].selected) '1' else '0' } else if (it == -1 && i < listSel.length) listSel[i] else '0'
@@ -424,11 +436,45 @@ class ListActivity : AppCompatActivity() {
         editor.apply()
     }
 
+    fun delete(pos: Int) {
+        backup(1, if (items[pos].selected) 1 else 0, pos)
+        adapter.notifyItemRemoved(pos)
+        if (items[pos].selected) adapter.selectedItems--
+        items.remove(items[pos])
+        updateToolbar()
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun backup(count: Int, selectedCount: Int, pos: Int = -1) {
+        val backupItems = mutableListOf<QNumberEntry>()
+        backupItems.clear()
+        backupItems.addAll(items)
+        snackbar = Snackbar.make(coordinator, if (count > 1 && count == items.size) resources.getString(R.string.deleted_all, count) else
+                resources.getQuantityString(R.plurals.deleted, count, count), Snackbar.LENGTH_INDEFINITE)
+            .addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
+                override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+                    if (items.size == 0 && event != DISMISS_EVENT_CONSECUTIVE) finish()
+                    super.onDismissed(transientBottomBar, event)
+                }
+            })
+            .setAction(R.string.undo) {
+                items.clear()
+                items.addAll(backupItems)
+                adapter.selectedItems += selectedCount
+                if (count == 1 && pos > -1) adapter.notifyItemInserted(pos) else adapter.notifyDataSetChanged()
+                updateToolbar()
+            }
+        snackbar?.show()
+    }
+
     fun updateToolbar() {
         supportActionBar?.setHomeAsUpIndicator(if (adapter.selectedItems == 0) 0 else R.drawable.ic_close)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
             toolbar.title = if (adapter.selectedItems == 0) toolbar.contentDescription else "${adapter.selectedItems}/${items.size}"
-        toolbar.menu?.findItem(R.id.selectAllItems)?.isVisible = adapter.selectedItems > 0
+        toolbar.menu?.findItem(R.id.copyItems)?.isEnabled = items.size > 0
+        toolbar.menu?.findItem(R.id.shareItems)?.isEnabled = items.size > 0
+        toolbar.menu?.findItem(R.id.deleteItems)?.isEnabled = items.size > 0
+        toolbar.menu?.findItem(R.id.selectAllItems)?.isVisible = adapter.selectedItems in 1 until items.size
     }
 
     fun listWhatToken(merge: Boolean) = listWhat.firstOrNull().let { if (merge && it in 'a'..'z') "" else it.toString() }

@@ -1,6 +1,6 @@
 package org.tessoft.qonvert;
 
-/**
+/*
  * created by Maddie Abboud, based on a Stack Overflow thread
  * <https://mabboud.net/android-tonebuzzer-generator/>
  * minor modifications by Anypodetos for the Qonvert app
@@ -71,8 +71,8 @@ public abstract class TonePlayer {
         double dnumSamples = seconds * sampleRate;
         dnumSamples = Math.ceil(dnumSamples);
         int numSamples = (int) dnumSamples;
-        double sample[] = new double[numSamples];
-        byte soundData[] = new byte[2 * numSamples];
+        double[] sample = new double[numSamples];
+        byte[] soundData = new byte[2 * numSamples];
 
         // Fill the sample array
         for (int i = 0; i < numSamples; ++i)
@@ -83,7 +83,7 @@ public abstract class TonePlayer {
         // convert to 16 bit pcm sound array
         // assumes the sample buffer is normalised.
         int idx = 0;
-        int i = 0;
+        int i;
 
         // Amplitude ramps as a percent of sample count
         int rampUp = numSamples / 20;
@@ -99,9 +99,8 @@ public abstract class TonePlayer {
             soundData[idx++] = (byte) ((val & 0xff00) >>> 8);
         }
 
-
         // Max amplitude for most of the samples
-        for (i = i; i < numSamples - rampDown; ++i) {
+        for (; i < numSamples - rampDown; ++i) {
             double dVal = sample[i];
             // scale to maximum amplitude
             final short val = (short) ((dVal * 32767));
@@ -111,7 +110,7 @@ public abstract class TonePlayer {
         }
 
         // Ramp amplitude down
-        for (i = i; i < numSamples; ++i) {
+        for (; i < numSamples; ++i) {
             double dVal = sample[i];
             // Ramp down to zero
             final short val = (short) ((dVal * 32767 * (1 + cos((i - numSamples + rampDown) * Math.PI / rampDown)) / 2));
@@ -119,7 +118,6 @@ public abstract class TonePlayer {
             soundData[idx++] = (byte) (val & 0x00ff);
             soundData[idx++] = (byte) ((val & 0xff00) >>> 8);
         }
-
         playSound(sampleRate, soundData);
     }
 
@@ -132,7 +130,6 @@ public abstract class TonePlayer {
                     AudioTrack.MODE_STREAM);
 
             float gain = (float) (volume / 100.0);
-            //noinspection deprecation
             audioTrack.setStereoVolume(gain, gain);
 
             audioTrack.play();

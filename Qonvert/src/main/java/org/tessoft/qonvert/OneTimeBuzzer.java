@@ -1,6 +1,6 @@
 package org.tessoft.qonvert;
 
-/**
+/*
  * A buzzer that will end after the set duration has ended or stop() is called.
  * Default duration is 5 seconds.
  * created by Maddie Abboud, based on a Stack Overflow thread
@@ -10,7 +10,7 @@ package org.tessoft.qonvert;
  */
 
 public class OneTimeBuzzer extends TonePlayer {
-    protected double duration = 5;
+    protected double duration;
 
     public OneTimeBuzzer(double toneFreqInHz, int volume, double duration) {
         this.toneFreqInHz = toneFreqInHz;
@@ -19,11 +19,7 @@ public class OneTimeBuzzer extends TonePlayer {
     }
 
     protected void asyncPlayTrack(final double toneFreqInHz) {
-        playerWorker = new Thread(new Runnable() {
-            public void run() {
-                playTone(toneFreqInHz, duration);
-            }
-        });
+        playerWorker = new Thread(() -> playTone(toneFreqInHz, duration));
 
         playerWorker.start();
     }
