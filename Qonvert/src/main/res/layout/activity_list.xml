@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <!--
-Copyright 2021 Anypodetos (Michael Weber)
+Copyright 2021, 2022 Anypodetos (Michael Weber)
 
 This file is part of Qonvert.
 
@@ -20,6 +20,7 @@ along with Qonvert. If not, see <https://www.gnu.org/licenses/>.
 
 Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
 -->
+
 
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
@@ -41,6 +42,17 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
             app:layout_constraintEnd_toEndOf="parent"
             app:popupTheme="@style/ThemeOverlay.AppCompat.DayNight"
             app:titleTextColor="@color/white" />
+
+    <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/baseText"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/listToolbar"
+            android:background="?attr/colorPrimary"
+            android:textColor="@color/white"
+            android:gravity="center" />
 
     <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
@@ -68,9 +80,9 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/recycler"
             android:id="@+id/outputRadioGroup"
             android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="parent"
             android:checkedButton="@id/defaultRadio">
 
         <RadioButton
@@ -92,15 +104,14 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
                 android:id="@+id/compatibleRadio" />
     </RadioGroup>
 
-    <TextView
-            android:layout_width="0dp"
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/baseText"
-            app:layout_constraintStart_toStartOf="parent"
+            android:id="@+id/coordinator"
+            tools:context=".ListActivity"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/listToolbar"
-            android:background="?attr/colorPrimary"
-            android:textColor="@color/white"
-            android:gravity="center" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/outputRadioGroup"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

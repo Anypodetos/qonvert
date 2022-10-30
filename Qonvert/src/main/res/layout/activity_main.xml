@@ -181,6 +181,18 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
                         android:textOn="@string/b26"
                         tools:ignore="TouchTargetSizeCheck" />
 
+                <ToggleButton
+                        android:id="@+id/outToggleButton60"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ellipsize="none"
+                        android:singleLine="true"
+                        android:textColor="@color/base_buttons"
+                        android:textOff="@string/b60"
+                        android:textOn="@string/b60"
+                        tools:ignore="TouchTargetSizeCheck" />
+
                 <Button
                         android:id="@+id/outSystemButton"
                         android:layout_width="match_parent"
@@ -204,7 +216,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
                     style="@style/Widget.AppCompat.SeekBar.Discrete"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:max="34"
+                    android:max="35"
                     android:progress="0"
                     app:layout_constraintBottom_toTopOf="@+id/textOutput0"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -589,6 +601,18 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
                 android:textOn="@string/b26"
                 tools:ignore="TouchTargetSizeCheck" />
 
+        <ToggleButton
+                android:id="@+id/inToggleButton60"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ellipsize="none"
+                android:singleLine="true"
+                android:textColor="@color/base_buttons"
+                android:textOff="@string/b60"
+                android:textOn="@string/b60"
+                tools:ignore="TouchTargetSizeCheck" />
+
         <Button
                 android:id="@+id/inSystemButton"
                 android:layout_width="match_parent"
@@ -611,7 +635,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
             style="@style/Widget.AppCompat.SeekBar.Discrete"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:max="34"
+            android:max="35"
             android:progress="0"
             app:layout_constraintBottom_toTopOf="@+id/editInput"
             app:layout_constraintEnd_toEndOf="parent"
@@ -631,8 +655,9 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
             app:layout_constraintBottom_toTopOf="@+id/keyboard"
             app:layout_constraintEnd_toStartOf="@+id/clearButton"
             app:layout_constraintStart_toStartOf="parent"
-            android:inputType="textNoSuggestions|text" >
-            <requestFocus />
+            android:inputType="textNoSuggestions|text">
+
+        <requestFocus />
     </org.tessoft.qonvert.EditInput>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
