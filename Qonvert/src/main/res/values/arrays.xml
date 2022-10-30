@@ -63,8 +63,8 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     </string-array>
 
     <string-array name="choose_base">
-        <item>Type an input base (±2..36)</item>
-        <item>Type an output base (±2..36)</item>
+        <item>Type an input base (±2…%d)</item>
+        <item>Type an output base (±2…%d)</item>
     </string-array>
 
     <string-array name="interval_names">
@@ -96,22 +96,38 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
         <item>major*07 (Pythagorean)</item>
     </string-array>
     <string-array name="basic_intervals">
-        <!-- 00 --><item>unison</item>
-        <!-- 01 --><item>second</item>
-        <!-- 02 --><item>third</item>
-        <!-- 03 --><item>fourth</item>
-        <!-- 04 --><item>tritone</item>
-        <!-- 05 --><item>fifth</item>
-        <!-- 06 --><item>sixth</item>
-        <!-- 07 --><item>seventh</item>
-        <!-- 00 --><item>octave</item>
-        <!-- 01 --><item>ninth</item>
-        <!-- 02 --><item>tenth</item>
-        <!-- 03 --><item>eleventh</item>
-        <!-- 04 --><item>octave + tritone</item>
-        <!-- 05 --><item>twelfth</item>
-        <!-- 06 --><item>thirteenth</item>
-        <!-- 07 --><item>fourteenth</item>
+        <!-- 00 -->
+        <item>unison</item>
+        <!-- 01 -->
+        <item>second</item>
+        <!-- 02 -->
+        <item>third</item>
+        <!-- 03 -->
+        <item>fourth</item>
+        <!-- 04 -->
+        <item>tritone</item>
+        <!-- 05 -->
+        <item>fifth</item>
+        <!-- 06 -->
+        <item>sixth</item>
+        <!-- 07 -->
+        <item>seventh</item>
+        <!-- 00 -->
+        <item>octave</item>
+        <!-- 01 -->
+        <item>ninth</item>
+        <!-- 02 -->
+        <item>tenth</item>
+        <!-- 03 -->
+        <item>eleventh</item>
+        <!-- 04 -->
+        <item>octave + tritone</item>
+        <!-- 05 -->
+        <item>twelfth</item>
+        <!-- 06 -->
+        <item>thirteenth</item>
+        <!-- 07 -->
+        <item>fourteenth</item>
     </string-array>
     <string-array name="octaves">
         <item>double octave</item>
@@ -119,8 +135,8 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
         <item>quadruple octave</item>
     </string-array>
 
-   <!-- Settings -->
-   <string-array name="digits_entries">
+    <!-- Settings -->
+    <string-array name="digits_entries">
         <item>10</item>
         <item>30</item>
         <item>100</item>
@@ -180,6 +196,15 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
         <item>OFF</item>
     </string-array>
 
+    <string-array name="num_systems_values" translatable="false">
+        <item>STANDARD</item>
+        <item>BALANCED</item>
+        <item>BIJECTIVE_1</item>
+        <item>BIJECTIVE_A</item>
+        <item>GREEK</item>
+        <item>ROMAN</item>
+    </string-array>
+
     <string-array name="buttons_entries">
         <item>Switch sign (+/−)</item>
         <item>Binary (2)</item>
@@ -191,6 +216,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
         <item>Hexadecimal (16)</item>
         <item>Vigesimal (20)</item>
         <item>Hexavigesimal (26)</item>
+        <item>Sexagesimal (60)</item>
     </string-array>
     <string-array name="buttons_values" translatable="false">
         <item>-1</item>
@@ -203,6 +229,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
         <item>16</item>
         <item>20</item>
         <item>26</item>
+        <item>60</item>
     </string-array>
     <string-array name="buttons_def_values" translatable="false">
         <item>-1</item>
@@ -232,7 +259,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
         <item>Light</item>
         <item>Dark</item>
         <item>System</item>
-     <!--   <item>Light blue</item>
+        <!--   <item>Light blue</item>
         <item>Dark blue</item>
         <item>System blue</item>-->
     </string-array>
@@ -244,4 +271,5 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
         <item>DB</item>
         <item>SB</item>
     </string-array>
+
 </resources>

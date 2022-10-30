@@ -35,6 +35,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     <string name="b16" translatable="false">hex</string>
     <string name="b20" translatable="false">vig</string>
     <string name="b26" translatable="false">hxv</string>
+    <string name="b60" translatable="false">sex</string>
 
     <string name="complement">complement</string>
     <string name="dms">DMS</string>
@@ -50,14 +51,16 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     <string name="clipboard_compat">… as compatible as possible</string>
     <string name="clipboard_ok">Copied to clipboard</string>
     <string name="to_fraction">Converted to fraction to preserve precision</string>
-    <string name="to_history_indep">Removed reference to history entry</string>
+    <string name="to_tokenFree">Removed base tokens from input string</string>
     <string name="range_toast">%1$s: digit range %2$s…%3$s</string>
     <string name="range_toast_greek">%1$s: Greek numerals or digit range %2$s…%3$s</string>
     <string name="range_toast_onlyGreek">%1$s: Greek numerals</string>
     <string name="range_toast_roman">%1$s: Roman numerals or digit range %2$s…%3$s</string>
     <string name="range_toast_onlyRoman">%1$s: Roman numerals</string>
-    <string name="no_q_number">This button would show all available formats. However, there is no valid number in the input line.</string>
+    <string name="no_q_number">There is no valid number in the input line.</string>
     <string name="no_history">The history is empty. Type a number, then tap Enter or delete it with the 🗑 button, to store it there.</string>
+    <string name="no_history_short">The history is empty.</string>
+    <string name="dont_show_again">Don’t show this message again.</string>
 
     <string name="err_quote">is only valid at start or end of input.</string>
     <string name="err_bracket">is only valid around continued fraction.</string>
@@ -71,17 +74,18 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     <string name="err_twoDegs">– the degrees symbol – is only valid once.</string>
     <string name="err_twoMins">– the minutes symbol – is only valid once and after the degrees symbol.</string>
     <string name="err_baseTokenOrMinus">is only valid at start of number.</string>
-    <string name="err_notInHistory">denotes a history entry that doesn’t exist.</string>
     <string name="err_ellipsis">denotes a number that’s been cut off.</string>
     <string name="err_infinity">[Those having problems with infinities] aren’t nearly appreciative enough of projective geometry. (Grant Sanderson)</string>
     <string name="err_undefined">Does your input have Buddha-nature?</string>
     <string name="err_keraia">– the keraia – is only valid at the end of a Greek numeral.</string>
-    <string name="err_onlyGreek">is only valid in Greek numerals.</string>
-    <string name="err_noGreek">is neither a valid Greek nor an Arabic numeral.</string>
-    <string name="err_onlyRoman">is only valid in Roman numerals.</string>
-    <string name="err_noRoman">is neither a valid Roman nor an Arabic numeral.</string>
+    <string name="err_digit">has no defined value in balanced systems.</string>
     <string name="err_fraction">is only valid at end of integer.</string>
+    <string name="err_onlyGreek">is only valid in Greek numerals.</string>
+    <string name="err_onlyRoman">is only valid in Roman numerals.</string>
     <string name="err_load">error loading the number</string>
+    <string name="err_noGreek">is neither a valid Greek nor an Arabic numeral.</string>
+    <string name="err_noRoman">is neither a valid Roman nor an Arabic numeral.</string>
+    <string name="err_notInHistory">denotes a history entry that doesn’t exist.</string>
     <string name="err_generic">isn’t a valid character.</string>
 
     <string name="menu_formats">All formats</string>
@@ -115,13 +119,12 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     <string name="share">Share</string>
     <string name="share_all">Share all %d entries with</string>
     <string name="delete">Delete</string>
-    <string name="delete_history_q">Delete the complete history?</string>
-    <plurals name="delete_q">
-        <item quantity="one">Delete the selected entry?</item>
-        <item quantity="other">Delete the selected entries?</item>
+    <plurals name="deleted">
+        <item quantity="one">Deleted entry</item>
+        <item quantity="other">Deleted %d entries</item>
     </plurals>
-    <string name="delete_this_q">Delete this entry?</string>
-    <string name="cant_be_undone">This can’t be undone.</string>
+    <string name="deleted_all">Deleted all %d entries</string>
+    <string name="undo">Undo</string>
     <string name="cancel">Cancel</string>
     <string name="close">Close</string>
     <string name="default_output">default</string>
@@ -132,7 +135,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     <string name="out_header">Output</string>
     <string name="digits_title">Maximum digits in fractional part</string>
     <string name="group_title">Group digits</string>
-    <string name="group_hint">by 4 in bases ±2, 4, 8, 16, 32, else by 3</string>
+    <string name="group_hint">by 4 in bases ±2, 4, 8, 16, 32, 64, else by 3</string>
     <string name="lowercase_title">Lower case digits</string>
     <string name="natural_title">Show natural numbers as</string>
     <string name="apostrophus_title">Roman apostrophus</string>
@@ -144,6 +147,14 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     <string name="autoScroll_hint">on input change</string>
     <string name="wrongDigits_title">Warn on non-standard input</string>
     <string name="wrongDigits_hint">turns weird but still interpretable input orange (e.g.&#xA0;digit out of range)</string>
+
+    <string name="tokens_header">Base tokens</string>
+    <string name="tokens_title">Customize base tokens</string>
+    <string name="tokens_reset">Reset all tokens</string>
+    <string name="tokens_reset_ok">Tokens reset</string>
+    <string name="tokens_dollar">$ (and also €, £, ¥)</string>
+    <string name="base_title">Base</string>
+    <string name="numSystem_title">Numeral system</string>
 
     <string name="appearance_header">Appearance</string>
     <string name="buttons_title">Show base buttons</string>
@@ -169,7 +180,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     ul {padding-left: 1.5em}
     a {color: rgb(224, 83, 0)} /* orange_light */
     code {border: 1px solid rgb(224, 224, 224); border-bottom-color: rgb(224, 83, 0); border-radius: 2px}
-    code.apostrophus {font-family: inherit}
+    code.inherit {font-family: inherit}
     .roman-frame {border: 1px solid black; border-bottom: none}
 </style>
     ]]></string>
@@ -199,20 +210,26 @@ tap the input line for it to re-emerge.</p>
 <p>Short-tap a result to copy it to the input line, and long-tap to copy it to the clipboard.</p>
 
 <h2>Choosing input and output systems</h2>
-<p>Choose an input <a href="https://en.wikipedia.org/wiki/Radix">base</a> from 2 to 36 via the slider or the shortcut buttons in the lower part of the screen,
+<p>Choose an input <a href="https://en.wikipedia.org/wiki/Radix">base</a> via the slider or the shortcut buttons in the lower part of the screen,
 and an output base via the corresponding controls in the upper part. You can choose the displayed shortcut buttons, including ones to switch
 to <a href="https://en.wikipedia.org/wiki/Negative_base">negative bases</a>, in the settings under “Show base buttons”.
-Long-tapping a button brings up a dialog for choosing a base.</p>
+Long-tapping a button or moving a slider all the way to the right brings up a dialog for choosing a base between ±2 and ±70.</p>
 <p>The coloured buttons on the right let you switch between various kinds of numeral systems (standard, balanced, bijective, Greek, and Roman),
-on which more below. Not every option can be combined with every base; for invalid combinations,
-the buttons are greyed and the app uses the standard positional number system.</p>
+on which more below. Not every option can be combined with every base; for invalid combinations, the buttons are greyed and the app uses
+the standard numeral system.</p>
+<p>You can also prefix a number with one of five tokens (<code>@ %23 $ % &</code>) to set its base and numeral system on the fly. The meaning of these tokens
+can be changed in the settings; by default, they represent bases 2, 8, 10, 12 and 16 in the standard system, respectively.</p>
 
 <h2>Standard positional notation</h2>
 <p>If you choose to convert from standard DECimal (base 10) to standard HEXadecimal (base 16), an input of (say) <code>345</code> is interpreted as
 <strong>3</strong>×10<sup>2</sup>+<strong>4</strong>×10<sup>1</sup>+<strong>5</strong>×10<sup>0</sup> and converted to
 <strong>1</strong>×16<sup>2</sup>+<strong>5</strong>×16<sup>1</sup>+<strong>9</strong>×16<sup>0</sup>, which is displayed as 159.</p>
 <p>Digits from <code>0</code> to <code>9</code> work as expected. Those with values higher than 9 are represented by letters, from <code>A</code>&nbsp;=&nbsp;10
-to <code>Z</code>&nbsp;=&nbsp;35; and they are case insensitive. Spaces are ignored.</p>
+to <code>Z</code>&nbsp;=&nbsp;35, <code class="inherit">Þ</code>&nbsp;=&nbsp;36, <code class="inherit">Ч</code>&nbsp;=&nbsp;37,
+<code class="inherit">ʔ</code>&nbsp;=&nbsp;38, <code class="inherit">ʖ</code>&nbsp;=&nbsp;39 and <code>Ą</code> to <code>Ẓ</code>,
+<code class="inherit">Ꝧ</code>, <code class="inherit">Ҷ</code>, <code class="inherit">?</code>, <code class="inherit">¿</code>&nbsp;=&nbsp;40 to 69.
+(The latter turn up in a pop-up when you tap one of the letters A–ʖ.)</p>
+<p>The digits are case insensitive; and spaces are ignored.</p>
 
 <h3>Non-integers</h3>
 <p>Digits after a radix point <code>.</code> are of course interpreted as the fractional part of the number: <code>1.A6</code> in DOZenal (base 12) is
@@ -232,6 +249,8 @@ as necessary, so both of these inputs will result in 3/4.</p>
 <p>For mixed numbers, separate integer and fractional part with an underscore <code>_</code>: for example <code>1_9/8</code>, or something more complicated
 such as <code>1.˙3&nbsp;_&nbsp;1/3</code>. Fractions with an absolute value over 1 will be shown both as improper fractions (17/8 or 5/3 in our examples)
 and as mixed numbers (2_1/8 or 1_2/3).</p>
+<p>Base tokens apply to the individual parts of fractions, so you can type <code>$10_@10/&13</code> or <code>%251B/14</code> (where <code>14</code> is interpreted
+according to the currently set base and numeral system). The same is true of the other types of compound numbers described below.</p>
 
 <h3>Continued fractions</h3>
 <p><a href="https://en.wikipedia.org/wiki/Continued_fraction">Continued fractions</a> start with an integer part, followed by a semicolon <code>;</code> and
@@ -259,44 +278,31 @@ are valid inputs.</p>
 <h2>Negative numbers</h2>
 <p>You can type negative numbers either in ordinary notation with a leading minus <code>-</code>, or in
 <a href="https://en.wikipedia.org/wiki/Method_of_complements">complement notation</a> with two leading points <code>..</code>: these points basically mean
-“the highest digit in this base repeated all the way to the left”. Complement notation is known from computing, where −1 is represented as hexadecimal FFFFFFFF,
-−2 as FFFFFFFE, and so on (with as many F’s as there is space). So, typing <code>..FFD</code> or simply <code>..D</code> in hexadecimal, or <code>..997</code>
-or simply <code>..7</code> in decimal, all mean −3.</p>
+“the highest digit in this base repeated all the way to the left”. Complement notation works with positive bases in the standard system.
+It is known from computing, where −1 is represented as hexadecimal FFFFFFFF, −2 as FFFFFFFE, and so on (with as many F’s as there is space).
+So, typing <code>..FFD</code> or simply <code>..D</code> in hexadecimal, or <code>..997</code> or simply <code>..7</code> in decimal, all mean −3.</p>
 <p>Output of negative numbers is either in ordinary or complement notation, depending on the complement switch at the top right.</p>
-
-<h2>Input with base tokens</h2>
-<p>You can type in numbers in standard binary, octal, decimal, dozenal and hexadecimal without changing the input base, and even use different bases for integer part,
-numerator and denominator of a fraction, or for the numbers in a continued or Egyptian fraction. To do this, prefix a number with one of these tokens:</p>
-<ul>
- <li>binary: <code>@</code></li>
- <li>octal: <code>%23</code></li>
- <li>decimal: <code>$</code>, <code>€</code>, <code>£</code>, or <code>¥</code></li>
- <li>dozenal: <code>%</code></li>
- <li>hexadecimal: <code>&</code></li>
-</ul>
-<p>Try typing <code>@10010&nbsp;/&nbsp;&13</code> or <code>%2312;&nbsp;@1010,&nbsp;$10</code> or <code>1° &1E\'</code>.</p>
 
 <h2>Non-standard numeral systems</h2>
 <h3>Balanced</h3>
 <p>In balanced numeral systems (the best-known being <a href="https://en.wikipedia.org/wiki/Balanced_ternary">balanced ternary</a>, i.e. base 3), the letters
 <code>J</code> to <code>Z</code> have <em>negative</em> values, with <code>Z</code>&nbsp;=&nbsp;−1, <code>Y</code>&nbsp;=&nbsp;−2, down to
-<code>J</code>&nbsp;=&nbsp;−17. They only work with odd bases. Thus, in balanced ternary, <code>10Z</code> means
+<code>J</code>&nbsp;=&nbsp;−17. They only work with odd bases up to 35. Thus, in balanced ternary, <code>10Z</code> means
 <strong>1</strong>×3<sup>2</sup>+<strong>0</strong>×3<sup>1</sup><strong>−1</strong>×3<sup>0</sup>&nbsp;=&nbsp;8. Negative numbers don’t need a minus sign
 in this notation: <code>Z01</code> means <strong>−1</strong>×3<sup>2</sup>+<strong>0</strong>×3<sup>1</sup>+<strong>1</strong>×3<sup>0</sup>&nbsp;=&nbsp;−8</p>
-<p>Complement notation is disabled for balanced numeral systems.</p>
 
 <h3>Bijective</h3>
 <p>In a <a href="https://en.wikipedia.org/wiki/Bijective_numeration">bijective system</a> of a base b, the digits go from 1 to b instead of 0 to b−1.
-There are two variants: “bijective 1” uses the digits <code>1</code> to <code>9</code> and <code>A</code> to <code>Z</code> as in standard notation;
-“bijective A” uses <code>A</code>&nbsp;=&nbsp;1, <code>B</code>&nbsp;=&nbsp;2,&nbsp;… <code>Z</code>&nbsp;=&nbsp;26 and only works up to hexavigesimal (base 26).
-So, the first natural numbers in decimal bijective 1 are 1, 2, 3, 4, 5, 6, 7, 8, 9, A&nbsp;(=10), 11, 12,&nbsp;…, 19, 1A, 21,&nbsp;…,
-and the first natural numbers in hexavigesimal bijective A are A, B, C, D,&nbsp;…, X, Y, Z, AA, AB, AC,&nbsp;…. Zero is technically an empty string; it is
-denoted with “/”.</p>
+There are two variants: “bijective 1” uses the digits <code>1</code> to <code>9</code> and from <code>A</code> upwards as in standard notation
+and works up to base 69; “bijective A” uses <code>A</code>&nbsp;=&nbsp;1, <code>B</code>&nbsp;=&nbsp;2,&nbsp;… <code>Z</code>&nbsp;=&nbsp;26,
+<code class="inherit">Þ</code>&nbsp;=&nbsp;27, etc., and only works up to base 60. So, the first natural numbers in decimal bijective 1 are
+1, 2, 3, 4, 5, 6, 7, 8, 9, A&nbsp;(=10), 11, 12,&nbsp;…, 19, 1A, 21,&nbsp;…, and the first natural numbers in hexavigesimal (base 26) bijective A are
+A, B, C, D,&nbsp;…, X, Y, Z, AA, AB, AC,&nbsp;…. Zero is technically an empty string; it is denoted with “/”.</p>
 <p>Numbers with a radix point don’t work well with bijective systems, so non-integers are only displayed as fractions.</p>
 
 <h3>Greek numerals</h3>
 <p><a href="https://en.wikipedia.org/wiki/Greek_numerals">Greek (Milesian) numerals</a> are always base 10. The Greek letters <code>Α Β Γ Δ Ε Ϛ Ζ Η Θ</code>
-have values 1 to 9, <code>Ι Κ Λ Μ Ν Ξ Ο Π Ϟ</code> are 10 to 90, <code>Ρ Σ Τ Υ Φ Χ Ψ Ω </code> and <code class="apostrophus">Ϡ</code> are 100 to 900, and
+have values 1 to 9, <code>Ι Κ Λ Μ Ν Ξ Ο Π Ϟ</code> are 10 to 90, <code>Ρ Σ Τ Υ Φ Χ Ψ Ω </code> and <code class="inherit">Ϡ</code> are 100 to 900, and
 <code>͵Α ͵Β ͵Γ</code> etc. are 1000 to 9000. They are normally ordered from largest to smallest: 1231 is <code>͵ΑΣΛΑ</code>. In the output section
 they are followed by a keraia (ʹ) to better distinguish them from Roman numerals (see below), but the keraia is optional for input.</p>
 <p>Myriads (10&nbsp;000s) are marked with a dot, following Diophantus: <code>Θ.ΦΛ</code> means 9 myriads 530 = 90530. Repeated dots are used for still
@@ -308,8 +314,8 @@ are always accepted regardless of input system as they – consisting of Greek l
 
 <h3>Roman numerals</h3>
 <p><a href="https://en.wikipedia.org/wiki/Roman_numerals">Roman numerals</a> are also base 10. They can contain the letters <code>I V X L C D M</code>.
-Symbols for larger values are <code class="apostrophus">ↁ</code>&nbsp;=&nbsp;5000, <code class="apostrophus">ↂ</code>&nbsp;=&nbsp;10&nbsp;000,
-<code class="apostrophus">ↇ</code>&nbsp;=&nbsp;50&nbsp;000, and <code class="apostrophus">ↈ</code>&nbsp;=&nbsp;100&nbsp;000.
+Symbols for larger values are <code class="inherit">ↁ</code>&nbsp;=&nbsp;5000, <code class="inherit">ↂ</code>&nbsp;=&nbsp;10&nbsp;000,
+<code class="inherit">ↇ</code>&nbsp;=&nbsp;50&nbsp;000, and <code class="inherit">ↈ</code>&nbsp;=&nbsp;100&nbsp;000.
 (If you are using the Android keyboard instead of Qonvert’s, you can compose them as <code>I)) ((I)) I))) (((I)))</code>.)</p>
 <p>One traditional way for expressing <em>still</em> larger numbers is to enclose them in a frame to multiply with 100&nbsp;000, or in nested frames
 for even higher powers. Qonvert uses pipes <code>|</code> for this purpose:
@@ -331,7 +337,6 @@ Since odd powers of negative numbers are negative, and even powers are positive,
 thus, we don’t need a minus sign in negative bases.</p>
 <p>Note that “bijective” systems with negative bases aren’t actually bijective: for example, in nega-decimal, you can always add or remove a leading
 <strong>1A</strong> without changing a number’s value.</p>
-<p>Complement notation is disabled for negative bases.</p>
 
 <h2>Unicode characters</h2>
 <p>Inputs that are integers from hexadecimal <code>20</code> to <code>10FFFF</code> (decimal <code>32</code> to <code>1114111</code>) are not only
@@ -353,6 +358,7 @@ Qonvert is your <strong>only</strong> source. (The answer is 1YX&nbsp;215.)</p>
  <li><strong>Base buttons</strong>: left/right swipe decreases/increases base by 1, long-tap brings up dialog for choosing a base.</li>
  <li>“<strong>in: base</strong>” and “<strong>out: base</strong>”: tap displays digit range for currently selected base and number system.</li>
  <li><strong>Number system buttons</strong>: long-tap toggles between standard and balanced.</li>
+ <li><strong>Base sliders</strong>: sliding all the way to the right brings up dialog for choosing a base.</li>
  <li><strong>Clear button (🗑)</strong>: long-tap sets input and output to standard decimal.</li>
  <li><strong>Qonvert keyboard</strong>: long-tap accesses the second character on a key; ◀ or swiping down vanishes it,
  and tapping the input line lets it re-emerge.</li>
@@ -360,21 +366,14 @@ Qonvert is your <strong>only</strong> source. (The answer is 1YX&nbsp;215.)</p>
 </ul>
 
 <h2>Input syntax</h2>
-<h3>Base tokens</h3>
-<ul>
- <li><code>@</code>: standard binary (2)</li>
- <li><code>%23</code>: standard octal (8)</li>
- <li><code>$</code>, <code>€</code>, <code>£</code>, <code>¥</code>: standard decimal (10)</li>
- <li><code>%</code>: standard dozenal (12)</li>
- <li><code>&</code>: standard hexadecimal (16)</li>
-</ul>
-
 <h3>Digits</h3>
 <ul>
  <li><code>0</code>…<code>9</code></li>
- <li><code>A</code>…<code>Z</code>: normally 10…35, in bijective A: 1…26</li>
+ <li><code>A</code>…<code>Z</code> and <code class="inherit">Þ Ч ʔ ʖ</code>: normally 10…39, in bijective A: 1…30</li>
  <li><code>J</code>…<code>Z</code> in balanced: −17…−1</li>
+ <li><code>Ą</code>…<code>Ẓ</code> and <code class="inherit">Ꝧ Ҷ ? ¿</code>: normally 40…69, in bijective A: 31…60</li>
 </ul>
+<p>(The latter turn up in a pop-up when you tap one of the letters A–ʖ.)</p>
 
 <h3>Negative numbers</h3>
 <ul>
@@ -385,7 +384,7 @@ Qonvert is your <strong>only</strong> source. (The answer is 1YX&nbsp;215.)</p>
 <h3>Non-integers</h3>
 <ul>
  <li><code>.</code>: radix point</li>
- <li><code>˙</code>: start of repeating part</li>
+ <li><code>˙</code> or <code>:</code>: start of repeating part</li>
  <li><code>/</code>: fraction slash</li>
  <li><code>_</code>: separates integer and fraction in a mixed number (e.g. <code>2_1/8</code>)</li>
  <li><code>° \' \"</code>: degrees, minutes and seconds</li>
@@ -397,7 +396,7 @@ Qonvert is your <strong>only</strong> source. (The answer is 1YX&nbsp;215.)</p>
 <ul>
  <li><code>Α Β Γ Δ Ε Ϛ Ζ Η Θ</code>: 1…9</li>
  <li><code>Ι Κ Λ Μ Ν Ξ Ο Π Ϟ</code>: 10…90</li>
- <li><code>Ρ Σ Τ Υ Φ Χ Ψ Ω </code> and <code class="apostrophus">Ϡ</code>: 100…900</li>
+ <li><code>Ρ Σ Τ Υ Φ Χ Ψ Ω </code> and <code class="inherit">Ϡ</code>: 100…900</li>
  <li><code>͵</code>: multiplies following letter by 1000</li>
  <li><code>.</code>: multiplies preceding part by 10000 (a myriad)</li>
  <li><code>○</code>: zero</li>
@@ -405,11 +404,21 @@ Qonvert is your <strong>only</strong> source. (The answer is 1YX&nbsp;215.)</p>
 
 <h3>Roman numerals</h3>
 <ul>
- <li><code>I V X L C D M</code> or <code class="apostrophus">ↀ</code>: 1…1000</li>
- <li><code class="apostrophus">ↁ ↂ ↇ ↈ</code> or <code>I)) ((I)) I))) (((I)))</code>: 5000, 10&nbsp;000, 50&nbsp;000, 100&nbsp;000</li>
+ <li><code>I V X L C D M</code> or <code class="inherit">ↀ</code>: 1…1000</li>
+ <li><code class="inherit">ↁ ↂ ↇ ↈ</code> or <code>I)) ((I)) I))) (((I)))</code>: 5000, 10&nbsp;000, 50&nbsp;000, 100&nbsp;000</li>
  <li><code>|</code> or <code>!</code>: multiplies by 100&nbsp;000</li>
  <li><code>. : S</code> (and up to 5 dots): <i>uncia</i>&nbsp;=&nbsp;twelfth, <i>sextans</i>&nbsp;=&nbsp;sixth, <i>semis</i>&nbsp;=&nbsp;half</li>
  <li><code>N</code>: <i>nulla/nihil</i>&nbsp;=&nbsp;zero</li>
+</ul>
+
+<h3>Base tokens</h3>
+<p>… can be customized in the settings. Put them in front of a number. The default values are:</p>
+<ul>
+ <li><code>@</code>: standard binary (2)</li>
+ <li><code>%23</code>: standard octal (8)</li>
+ <li><code>$</code>, <code>€</code>, <code>£</code>, <code>¥</code>: standard decimal (10)</li>
+ <li><code>%</code>: standard dozenal (12)</li>
+ <li><code>&</code>: standard hexadecimal (16)</li>
 </ul>
 
 <h3>Unicode characters</h3>
@@ -420,7 +429,15 @@ Qonvert is your <strong>only</strong> source. (The answer is 1YX&nbsp;215.)</p>
 
     <!-- What’s new -->
     <string name="whatsNew"><![CDATA[
-<h2>Version 1.5.0</h2>
+<h2>Version 1.6.0</h2>
+<p><strong>Bases up to 70</strong> are now supported, including negative ones. The larger digits are only available in landscape orientation for the time being.
+On the settings screen, you can activate new base buttons for <strong>sexagesimal</strong> (base 60).</p>
+<p>The <strong>base tokens</strong> (<code>@ %23 $ % &</code>) can be customized in the settings to represent any valid combination of base and numeral system.</p>
+<p><strong>Degrees, minutes and seconds</strong>: non-integer seconds are also shown as fractions.</p>
+<p>I removed support for complement notation in bijective systems; I have to admit that this never made any sense.</p>
+<p>Many fixes and improvements – for example, you can now delete history entries by swiping them away.</p>
+
+<h2>Version 1.5.0 <small>– 9 Oct 2022</small></h2>
 <p><strong>Negative bases</strong> are now supported. Long-tap one of the base buttons to bring up a dialog for choosing any base, including negative ones.
 There are also buttons to switch between positive and negative bases; you can show or hide them in the settings under “Show base buttons”.</p>
 <p><strong>Degrees, minutes and seconds</strong> (<strong>DMS</strong>, such as <code>1° 45\' 10\"</code>) are supported.</p>
@@ -430,10 +447,10 @@ the minutes sign. The keyboard layout has been adapted slightly. Sorry for the i
 <p><strong>Settings</strong>: Auto-scrolling of the output area when the output doesn’t fit can now be switched off. Text size now also affects the
 DMS- and complement-switches and the “in: base” and “out: base” texts. And the height of the switches area can be increased.</p>
 
-<h2>Version 1.4.1</h2>
+<h2>Version 1.4.1 <small>– 17 Jul 2022</small></h2>
 <p>Improvements and bugfixes to the <strong>waveform</strong> display of musical intervals: the phase shift can now be changed by swiping.</p>
 
-<h2>Version 1.4.0</h2>
+<h2>Version 1.4.0 <small>– 16 May 2022</small></h2>
 <p><strong>Greek (Milesian) numerals</strong> are now fully supported.</p>
 <p>Playing a musical interval now also shows a <strong>waveform</strong> of this interval. (These are examples; for different phase shifts
 waveforms of the same interval look different.)</p>
@@ -441,7 +458,7 @@ waveforms of the same interval look different.)</p>
 the one at the start of the range and then long-tapping the one at the end.</p>
 <p>… and bugfixes, as usual.</p>
 
-<h2>Version 1.3.0</h2>
+<h2>Version 1.3.0 <small>– 2 Apr 2022</small></h2>
 <p>Qonvert has a <strong>new keyboard</strong>! (for Android version 5 Lollipop and higher) – It adapts to the current input system and to your phone’s
 orientation. To access the second character on a key, long-tap it. You can vanish the keyboard by tapping ◀ on the navigation bar or by swiping down;
 tap the input line for it to re-emerge.<br>
@@ -455,16 +472,17 @@ in the settings (or you could hide the Roman numerals, or the Unicode symbols).<
 <p>Next to Unicode symbols in the history and on the all formats screen there’s a new button opening a <strong>web link about that symbol</strong>
 (on fileformat.info).</p>
 
-<h2>Version 1.2.0</h2>
+<h2>Version 1.2.0 <small>– 18 Feb 2022</small></h2>
 <p>There is a new screen called <strong>All formats</strong> which opens when you tap ⛶. It lets you copy and share your calculation results.
 The appearance of the history is new, providing the same functionality as the all formats screen.</p>
 <p>Output of <strong>Egyptian fractions</strong> is supported now. You can choose a calculation method for the main screen in the settings;
 the results of the other methods are available on the all formats screen.</p>
 <p>Support for <strong>German</strong> was added. Also, speed has been improved significantly.</p>
 
-<h2>Version 1.1.0</h2>
+<h2>Version 1.1.0 <small>– 26 Jan 2021</small></h2>
 <p>The switches for balanced numeral systems have been replaced with dropdown menus which let you choose between standard, balanced, <strong>bijective</strong>
-and <strong>Roman</strong> numerals. You can still toggle between standard and balanced systems with a long tap. See the Help page for how these new systems work.</p>
+and <strong>Roman</strong> numerals. You can still toggle between standard and balanced systems with a long tap. See the Help page for how these
+new systems work.</p>
 <p>On the settings screen, you can activate new base buttons for <strong>hexavigesimal</strong> (base 26).</p>
 <p>Input of <strong>Egyptian fractions</strong> is supported: <code>{2;3,4</code> is interpreted as 2&nbsp;+&nbsp;1/3&nbsp;+&nbsp;1/4 = 2_7/12.</p>
 <p>You can now use <strong>fraction characters</strong> such as <code>¾</code> and use them in numbers: <code>2¾</code>.</p>
@@ -472,7 +490,7 @@ and <strong>Roman</strong> numerals. You can still toggle between standard and b
 (Now you can swipe right to get there.)</p>
 <p>Many fixes and improvements – for example, calculating digits of long repeating parts is faster now.</p>
 
-<h2>Version 1.0.0</h2>
+<h2>Version 1.0.0 <small>– 20 Dec 2020</small></h2>
 <p>Initial release with standard and balanced numeral systems as well as Roman output for positive integers and Unicode characters,
 and playing musical intervals (by tapping ♫).</p>
     ]]></string>
@@ -480,8 +498,8 @@ and playing musical intervals (by tapping ♫).</p>
     <!-- About -->
     <string name="about"><![CDATA[
 <h2>Thank you for using Qonvert!</h2>
-<p>This is a toy and maybe an educational tool, and it’s free. It was written by me, Anypodetos. If you have any suggestions or questions, or you want to report a bug,
-or you just want to tell me whether you like this app, please <a href="https://lemizh.conlang.org/home/contact.php?about=qonvert">contact me</a>.</p>
+<p>This is a toy and maybe an educational tool, and it’s free. It was written by me, Anypodetos. If you have any suggestions or questions, or you want to report
+a bug, or you just want to tell me whether you like this app, please <a href="https://lemizh.conlang.org/home/contact.php?about=qonvert">contact me</a>.</p>
 <p>Source code:<br><a href="https://github.com/Anypodetos/qonvert">https://github.com/Anypodetos/qonvert</a></p>
 <p>My Wikipedia page:<br><a href="https://en.wikipedia.org/wiki/User:Anypodetos">https://en.wikipedia.org/wiki/User:Anypodetos</a></p>
 <p>My conlanging homepage:<br><a href="https://lemizh.conlang.org">https://lemizh.conlang.org</a></p>
@@ -490,6 +508,7 @@ or you just want to tell me whether you like this app, please <a href="https://l
 <p>The algorithms for calculating Egyptian fractions are from <a href="https://www.ics.uci.edu/~eppstein/numth/egypt/intro.html">David Eppstein’s page</a>
 and <a href="https://ami.uni-eszterhazy.hu/uploads/papers/finalpdf/AMI_42_from129to134.pdf">a paper by Gyimesi and Nyul</a>;
 see there for explanations on how they work.</p>
+<p>The development of this app wouldn‘t have been possible without the many valiant Android programmers at <a href="https://stackoverflow.com/>stackoverflow</a>.</p>
 
 <h2>GNU General Public License</h2>
 <p>Copyright 2020, 2021, 2022 Anypodetos (Michael Weber)</p>
