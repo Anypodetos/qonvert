@@ -1,0 +1,152 @@
+<!--
+Copyright 2022 Anypodetos (Michael Weber)
+
+This file is part of Qonvert.
+
+Qonvert is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Qonvert is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Qonvert. If not, see <https://www.gnu.org/licenses/>.
+
+Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
+-->
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        app:iconSpaceReserved="false">
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="\@">
+
+        <org.tessoft.qonvert.EditBasePreference
+                android:title="@string/base_title"
+                app:iconSpaceReserved="false"
+                android:key="tokenBase0"
+                app:useSimpleSummaryProvider="true"
+                app:defaultValue="2" >
+
+        </org.tessoft.qonvert.EditBasePreference>
+
+        <ListPreference
+                app:entries="@array/num_systems"
+                app:entryValues="@array/num_systems_values"
+                app:iconSpaceReserved="false"
+                app:key="tokenSystem0"
+                app:title="@string/numSystem_title"
+                app:useSimpleSummaryProvider="true"
+                app:defaultValue="STANDARD" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="#">
+
+        <org.tessoft.qonvert.EditBasePreference
+                android:title="@string/base_title"
+                app:iconSpaceReserved="false"
+                android:key="tokenBase1"
+                app:useSimpleSummaryProvider="true"
+                app:defaultValue="8" >
+
+        </org.tessoft.qonvert.EditBasePreference>
+
+        <ListPreference
+                app:entries="@array/num_systems"
+                app:entryValues="@array/num_systems_values"
+                app:iconSpaceReserved="false"
+                app:key="tokenSystem1"
+                app:title="@string/numSystem_title"
+                app:useSimpleSummaryProvider="true"
+                app:defaultValue="STANDARD" />
+
+    </PreferenceCategory>
+
+<PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/tokens_dollar">
+
+    <org.tessoft.qonvert.EditBasePreference
+            android:title="@string/base_title"
+            app:iconSpaceReserved="false"
+            android:key="tokenBase2"
+            app:useSimpleSummaryProvider="true"
+            app:defaultValue="10">
+
+    </org.tessoft.qonvert.EditBasePreference>
+
+    <ListPreference
+            app:entries="@array/num_systems"
+            app:entryValues="@array/num_systems_values"
+            app:iconSpaceReserved="false"
+            app:key="tokenSystem2"
+            app:title="@string/numSystem_title"
+            app:useSimpleSummaryProvider="true"
+            app:defaultValue="STANDARD" />
+
+</PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="%">
+
+        <org.tessoft.qonvert.EditBasePreference
+                android:title="@string/base_title"
+                app:iconSpaceReserved="false"
+                android:key="tokenBase3"
+                app:useSimpleSummaryProvider="true"
+                app:defaultValue="12" >
+
+        </org.tessoft.qonvert.EditBasePreference>
+
+        <ListPreference
+                app:entries="@array/num_systems"
+                app:entryValues="@array/num_systems_values"
+                app:iconSpaceReserved="false"
+                app:key="tokenSystem3"
+                app:title="@string/numSystem_title"
+                app:useSimpleSummaryProvider="true"
+                app:defaultValue="STANDARD" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="&amp;">
+
+        <org.tessoft.qonvert.EditBasePreference
+                android:title="@string/base_title"
+                app:iconSpaceReserved="false"
+                android:key="tokenBase4"
+                app:useSimpleSummaryProvider="true"
+                app:defaultValue="16" >
+
+        </org.tessoft.qonvert.EditBasePreference>
+
+        <ListPreference
+                app:entries="@array/num_systems"
+                app:entryValues="@array/num_systems_values"
+                app:iconSpaceReserved="false"
+                app:key="tokenSystem4"
+                app:title="@string/numSystem_title"
+                app:useSimpleSummaryProvider="true"
+                app:defaultValue="STANDARD" />
+
+    </PreferenceCategory>
+
+    <Preference
+            android:title="@string/tokens_reset"
+            app:icon="@drawable/ic_reset"
+            app:key="tokensReset"
+            app:allowDividerAbove="true" />
+
+</PreferenceScreen>
