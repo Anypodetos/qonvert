@@ -64,15 +64,15 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     <string name="err_infinity">[Leute, die Probleme mit Unendlichkeiten haben,] würdigen die projektive Geometrie viel zu wenig. (Grant Sanderson)</string>
     <string name="err_undefined">Hat deine Eingabe Buddha-Natur?</string>
     <string name="err_keraia">– die Keraia – ist nur am Ende einer griechischen Zahl erlaubt.</string>
-    <string name="err_digit">hat in balancierten Systemen keinen definierten Wert.</string>
+    <string name="err_balancedDigit">hat in balancierten Systemen keinen definierten Wert.</string>
     <string name="err_fraction">ist nur nach einer ganzen Zahl erlaubt.</string>
     <string name="err_onlyGreek">ist nur in griechischen Zahlen erlaubt.</string>
     <string name="err_onlyRoman">ist nur in römischen Zahlen erlaubt.</string>
-    <string name="err_load">Fehler beim Laden</string>
     <string name="err_noGreek">ist weder eine gültige griechische noch eine arabische Zahl.</string>
     <string name="err_noRoman">ist weder eine gültige römische noch eine arabische Zahl.</string>
     <string name="err_notInHistory">bezeichnet einen Eintrag im Verlauf, der nicht existiert.</string>
     <string name="err_generic">ist kein gültiges Zeichen.</string>
+    <string name="err_load">Fehler beim Laden</string>
 
     <string name="menu_formats">Alle Formate</string>
     <string name="menu_history">Verlauf</string>
@@ -98,6 +98,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     <string name="expand_hint">Aus- und einklappen</string>
     <string name="egyptian_method">Ägytischer Bruch: %s</string>
     <string name="select_all">Alles auswählen</string>
+    <string name="clear_selection">Auswahl aufheben</string>
     <string name="copy_my">Kopieren</string>
     <string name="clipboard_all_ok">Alle %d Einträge in die Zwischenablage kopiert</string>
     <string name="share">Freigeben</string>
@@ -332,9 +333,9 @@ im balancierten Undezimalsystem benötigst, ist Qonvert deine <strong>einzige</s
 <h3>Ziffern</h3>
 <ul>
  <li><code>0</code>…<code>9</code></li>
- <li><code>A</code>…<code>Z</code> und <code class="inherit">Þ Ч ʔ ʖ</code>: normalerweise 10…39; bijektiv A: 1…30</li>
+ <li><code>A</code>…<code>Z</code> und <code class="inherit">Þ Ч ʔ ʖ</code>: 10…39; bijektiv A: 1…30</li>
  <li><code>J</code>…<code>Z</code> in balancierten Systemen: −17…−1</li>
- <li><code>Ą</code>…<code>Ẓ</code> und <code class="inherit">Ꝧ Ҷ ? ¿</code>: normalerweise 40…69, bijektiv A: 31…60</li>
+ <li><code>Ą</code>…<code>Ẓ</code> und <code class="inherit">Ꝧ Ҷ ? ¿</code>: 40…69; bijektiv A: 31…60</li>
 </ul>
 <p>(Letztere erscheinen in einem Pop-up, wenn du einen der Buchstaben A–ʖ antippst.)</p>
 
@@ -367,7 +368,7 @@ im balancierten Undezimalsystem benötigst, ist Qonvert deine <strong>einzige</s
 
 <h3>Römische Zahlen</h3>
 <ul>
- <li><code>I V X L C D M</code> or <code class="inherit">ↀ</code>: 1…1000</li>
+ <li><code>I V X L C D M</code> oder <code class="inherit">ↀ</code>: 1…1000</li>
  <li><code class="inherit">ↁ ↂ ↇ ↈ</code> oder <code>I)) ((I)) I))) (((I)))</code>: 5000, 10&nbsp;000, 50&nbsp;000, 100&nbsp;000</li>
  <li><code>|</code> oder <code>!</code>: multipliziert mit 100&nbsp;000</li>
  <li><code>. : S</code> (und bis zu 5 Punkten): <i>uncia</i>&nbsp;=&nbsp;Zwölftel, <i>sextans</i>&nbsp;=&nbsp;Sechstel, <i>semis</i>&nbsp;=&nbsp;ein&nbsp;Halb</li>
@@ -392,7 +393,7 @@ im balancierten Undezimalsystem benötigst, ist Qonvert deine <strong>einzige</s
 
     <!-- What’s new -->
     <string name="whatsNew"><![CDATA[
-<h2>Version 1.6.0</h2>
+<h2>Version 1.6.0 <small>– 5 Nov 2022</small></h2>
 <p><strong>Basen bis 70</strong> werden jetzt unterstützt, einschließlich negativer. Die größeren Ziffern sind bis auf weiteres nur im Querformat verfügbar.
 In den Einstellungen kannst du neue Basis-Tasten für <strong>sexagesimal</strong> (Basis 60) aktivieren.</p>
 <p>Für die <strong>Basis-Kürzel</strong> (<code>@ %23 $ % &</code>) kann in den Einstellungen jede gültige Kombination von Basis und Zahlensystem
