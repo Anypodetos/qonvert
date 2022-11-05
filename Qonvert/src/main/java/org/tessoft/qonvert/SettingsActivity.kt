@@ -33,8 +33,6 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.preference.*
 import com.google.android.material.snackbar.Snackbar
 
-const val TOKENS = "@#$%&"
-
 class SettingsActivity : AppCompatActivity(), PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
 
     lateinit var layout: CoordinatorLayout

@@ -109,7 +109,7 @@ class RecyclerAdapter internal constructor(private val activity: ListActivity?, 
         val expandButton: FloatingActionButton = itemView.findViewById(R.id.expandButton)
 
         private fun changeSelection(range: Boolean) {
-            if (range) {
+            if (range && lastSelectedItem > -1) {
                 val start = min(adapterPosition, lastSelectedItem)
                 val end   = max(adapterPosition, lastSelectedItem)
                 for (i in start..end) with (items[i]) {
@@ -469,6 +469,7 @@ class ListActivity : AppCompatActivity() {
 
     fun updateToolbar() {
         supportActionBar?.setHomeAsUpIndicator(if (adapter.selectedItems == 0) 0 else R.drawable.ic_close)
+        supportActionBar?.setHomeActionContentDescription(if (adapter.selectedItems == 0) 0 else R.string.clear_selection)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
             toolbar.title = if (adapter.selectedItems == 0) toolbar.contentDescription else "${adapter.selectedItems}/${items.size}"
         toolbar.menu?.findItem(R.id.copyItems)?.isEnabled = items.size > 0

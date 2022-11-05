@@ -187,6 +187,7 @@ class KeyboardView(context: Context, attrs: AttributeSet) : View(context, attrs)
 
     fun fillButtons(baseAndSystem: Pair<Int, NumSystem> = Pair(base, system), always: Boolean = false) {
         if (baseAndSystem.first.absoluteValue != base || baseAndSystem.second != system || always) {
+            if (!always) showPopup = ' '
             base = baseAndSystem.first.absoluteValue
             system = baseAndSystem.second
             val oldButtonCols = buttonCols
@@ -211,6 +212,7 @@ class KeyboardView(context: Context, attrs: AttributeSet) : View(context, attrs)
                     if (APOSTROPHUS_OPTIONS[MainActivity.apostrophus][1] == '+' || APOSTROPHUS_OPTIONS[MainActivity.apostrophus][4] == '+')
                         buttonTexts[if (landscape) 8 else 5][1][0] = 'ↀ'
                     buttonTexts[if (landscape) 9 else 6][0][0] = '|'
+                    buttonTexts[if (landscape) 9 else 6][1][1] = 'Ↄ'
                     for (j in 0..2) for (k in 0..1) buttonTexts[if (landscape) 11 - k else 7][j][if (landscape) 0 else k] = "∷⁙S·∶∴"[2 - j + 3 * k]
                     for (d in 1..9) buttonTexts[(d - 1) % 3 + 3][(9 - d) / 3][if (landscape) 0 else 1] = d.digitToChar()
                     bottomRow[0] = if (landscape) "0.˙N∞無␣" else "N.˙"
@@ -255,8 +257,8 @@ class KeyboardView(context: Context, attrs: AttributeSet) : View(context, attrs)
             if (showPopup != ' ') {
                 val shiftLeft = (popupX + popupWidths[popupX][popupY][popupLong] - buttonCols).coerceAtLeast(0)
                 popupRect = buttonRects[popupX - shiftLeft][popupY].let {
-                    RectF(it.left - padding, it.top - padding,
-                        buttonRects[popupX - shiftLeft + popupWidths[popupX][popupY][popupLong] - 1][popupY].right + padding, it.bottom + padding)
+                    RectF(it.left - padding / 2, it.top - padding / 2,
+                        buttonRects[popupX - shiftLeft + popupWidths[popupX][popupY][popupLong] - 1][popupY].right + padding / 2, it.bottom + padding / 2)
                 }
                 for (i in 0 until popupWidths[popupX][popupY][popupLong]) {
                     buttonTexts[popupX - shiftLeft + i][popupY][0] = DIGITS.getOrNull(DIGITS.indexOf(showPopup) + 30 * i) ?: '☹'
@@ -310,6 +312,7 @@ class KeyboardView(context: Context, attrs: AttributeSet) : View(context, attrs)
 
     fun show() {
         hidden = false
+        fillButtons(always = true)
         with(animate()) {
             duration = 150
             withStartAction { visibility = VISIBLE }
@@ -326,5 +329,10 @@ class KeyboardView(context: Context, attrs: AttributeSet) : View(context, attrs)
             translationY(layoutParams.height.toFloat() / 2)
             alpha(0f)
         }
+        showPopup = ' '
+    }
+
+    fun pause() {
+        showPopup = ' '
     }
 }

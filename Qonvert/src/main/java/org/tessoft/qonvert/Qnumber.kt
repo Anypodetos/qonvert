@@ -244,9 +244,10 @@ class QNumber {
         val d = if (degs > -1) parseFraction(st.substring(0, degs)) else Pair(ZERO, ONE)
         val m = if (minutes > -1 || !seconds) parseFraction(st.substring(degs + 1, if (minutes > -1) minutes else st.length)) else Pair(ZERO, ONE)
         val s = if (minutes > -1 ||  seconds) parseFraction(st.substring((if (minutes > -1) minutes else degs) + 1).removeSuffix("\"")) else Pair(ZERO, ONE)
+        val minus = st.dropWhile { it in ALL_TOKENS }.startsWith('-')
         val result = reduceFraction(d.first  * m.second * s.second * N3600 +
-                              d.second * m.first  * s.second * SIXTY * (if (degs > -1 && st[0] == '-') -ONE else ONE) +
-                              d.second * m.second * s.first          * (if ((degs > -1 || minutes > -1) && st[0] == '-') -ONE else ONE),
+                              d.second * m.first  * s.second * SIXTY * (if (degs > -1 && minus) -ONE else ONE) +
+                              d.second * m.second * s.first          * (if ((degs > -1 || minutes > -1) && minus) -ONE else ONE),
                               N3600 * d.second * m.second * s.second)
         if (result.second != ZERO && N3600 % result.second == ZERO) format = QFormat.POSITIONAL
         return result
@@ -262,7 +263,8 @@ class QNumber {
             val numer =   parsePositional(st.substring(under + 1, slash))
             val integer = parsePositional(st.substring(0, max(under, 0)))
             format = if (under == -1) QFormat.FRACTION else QFormat.MIXED
-            reduceFraction(numer.first    * denom.second * integer.second * (if (under > -1 && st[0] == '-') -ONE else ONE) +
+            reduceFraction(numer.first    * denom.second * integer.second *
+                                (if (under > -1 && st.dropWhile { it in ALL_TOKENS }.startsWith('-')) -ONE else ONE) +
                            numer.second   * denom.first  * integer.first,
                            integer.second * numer.second * denom.first)
         }
@@ -308,7 +310,7 @@ class QNumber {
                     (if (useSystem == NumSystem.BIJECTIVE_A && c !in '0'..'9') 9 else 0)
                 in LOWER_DIGITS -> digit = LOWER_DIGITS.indexOf(c) - (if (useSystem == NumSystem.BALANCED && c in 'j'..'z') 36 else 0) -
                     (if (useSystem == NumSystem.BIJECTIVE_A) 9 else 0)
-                '-' -> if (numer == ZERO && !neg && !point && !rep && leftPad == -1) neg = true else error = c.toString()
+                '-' -> if (!isNumber && !neg && !point && !rep && leftPad == -1) neg = true else error = c.toString()
                 '.' -> if (!point) point = true else error = c.toString()
                 '˙', ':' -> if (!rep) {
                     rep = true
@@ -874,12 +876,12 @@ class QNumber {
             '˙', ':' -> R.string.err_twoReps
             '°' -> R.string.err_twoDegs
             '\'' -> R.string.err_twoMins
-            in "@#$€£¥%&-" -> R.string.err_baseTokenOrMinus
+            in "-$ALL_TOKENS" -> R.string.err_baseTokenOrMinus
             '…' -> R.string.err_ellipsis
             '∞' -> R.string.err_infinity
             '無' -> R.string.err_undefined
             'ʹ' -> R.string.err_keraia
-            in DIGITS + LOWER_DIGITS -> R.string.err_digit
+            in DIGITS + LOWER_DIGITS -> R.string.err_balancedDigit
             in FRACTION_CHARS.keys -> R.string.err_fraction
             in GREEK_CHARS -> R.string.err_onlyGreek
             in ROMAN_CHARS -> R.string.err_onlyRoman

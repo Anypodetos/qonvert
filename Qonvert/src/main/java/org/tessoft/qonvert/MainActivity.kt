@@ -55,6 +55,8 @@ import kotlin.math.*
 const val HG2G = 42
 const val TAXICAB = 1729
 val MONSTER = BigInteger("808017424794512875886459904961710757005754368000000000")
+const val TOKENS = "@#$%&"
+const val ALL_TOKENS = "@#$€£¥%&"
 val BUTTON_BASES = listOf(2, 3, 6, 8, 10, 12, 16, 20, 26, 60)
 val DEFAULT_BUTTONS = listOf(-1, 2, 8, 10, 12, 16)
 val THEMES = mapOf('A' to R.style.Theme_Qonvert, 'B' to R.style.Theme_QonvertBlue)
@@ -506,6 +508,7 @@ class MainActivity : AppCompatActivity() {
         editor.putInt("thisVersion", BuildConfig.VERSION_CODE)
         if (!showWhatsNewStar) editor.putInt("version", BuildConfig.VERSION_CODE)
         editor.apply()
+        keyboard.pause()
     }
 
     /*  C a l c u l a t e  */
@@ -593,7 +596,7 @@ class MainActivity : AppCompatActivity() {
 
     fun updateKeyboardToCaretPos(base: Int = bases[0], actualSystem: NumSystem = allowedSystem(base, numSystems[0]).first, always: Boolean = false) {
         if (keyboardId == KeyboardId.CUSTOM) keyboard.fillButtons(tokenBaseSystem(editInput.string.substring(0, editInput.selectionStart).findLast {
-            it in "_/°\'[{;,@#$€£¥%&"
+            it in "_/°\'[{;,$ALL_TOKENS"
         }) ?: Pair(base, actualSystem), always)
     }
 
@@ -601,7 +604,7 @@ class MainActivity : AppCompatActivity() {
                 complement: Boolean = q.complement, dms: Boolean = q.dms, switchBases: Boolean = false) {
         if (switchBases && lastQNumber.numerator < ZERO) complementSwitch.isChecked = lastQNumber.complement
         if (switchBases) dmsSwitch.isChecked = lastQNumber.dms
-        val hasToken = st.indexOfAny("@#$€£¥%&".toCharArray()) > -1 && !st.trimStart().startsWith('"')
+        val hasToken = st.indexOfAny(ALL_TOKENS.toCharArray()) > -1 && !st.trimStart().startsWith('"')
         val outputSt = if (hasToken) q.toString() else st
         val rounded = outputSt.endsWith("…") || outputSt.endsWith("…}") || outputSt.endsWith("…\"")
         editInput.string = if (hasToken || rounded) {
@@ -740,33 +743,34 @@ fun shareText(activity: Activity?, text: String, title: String? = null) {
         action = Intent.ACTION_SEND
         putExtra(Intent.EXTRA_TEXT, text)
         type = "text/plain"
-        activity?.startActivity(Intent.createChooser(this, title))
+        activity?.startActivity(Intent.createChooser(this, title)) // title works only up to API ~28
     }
 }
 
 fun makePretty(text: String): Pair<String, Int> {
     if (text.startsWith("\"")) return if (text.endsWith("\"") && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
         Pair("$text " + (Character.getName(text.codePointAt(1)) ?: ""), R.string.clipboard_withUnicodeName) else Pair(text, 0)
-    var prettyText = text
+    val dms = text.endsWith('"')
+    var prettyText = text.removeSuffix("\"")
     var prettyMenuTitle = 0
     val rep = prettyText.indexOf('˙')
     if (rep > -1) {
         val s = StringBuilder(prettyText).deleteAt(rep)
-        for (i in s.length downTo rep + 1) if (s[i - 1] !in " \"") s.insert(i, '\u0305')
+        for (i in s.length downTo rep + 1) if (s[i - 1] != ' ') s.insert(i, '\u0305') /* overline */
         prettyText = s.toString()
         prettyMenuTitle = R.string.clipboard_rep
     }
-    prettyText = prettyText.replace('\'', '′').replace('"', '″')
+    val fractionStart =prettyText.indexOfLast { it in "_°'" }
     val slash = prettyText.indexOf('/')
-    val under = prettyText.indexOf('_')
-    if (slash > -1 && prettyText.substring(under + 1).all { it in '0'..'9' || it in "/-. " }) {
+    if (slash > -1 && prettyText.substring(fractionStart + 1).all { it in '0'..'9' || it in "/-. " }) {
         prettyText = "_${prettyText}_"
         for ((unicode, frac) in FRACTION_CHARS)
             prettyText = prettyText.replace("_${frac.first}/${frac.second}_", unicode.toString())
                                    .replace("-${frac.first}/${frac.second}_", "⁻$unicode")
         prettyText = prettyText.removePrefix("_").removeSuffix("_")
-        if (prettyText == text) prettyText = (if (under > -1) prettyText.substring(0, under) else "") +
-                prettyText.substring(under + 1, slash).map {
+        if (text.startsWith(prettyText)) prettyText = (if (fractionStart > -1)
+                prettyText.substring(0, fractionStart + if (prettyText[fractionStart] == '_') 0 else 1) else "") +
+                prettyText.substring(fractionStart + 1, slash).map {
             when (it) {
                 in '0'..'9' -> SUPERSCRIPT_DIGITS[it.digitToInt()]
                 '-' -> '⁻'
@@ -778,6 +782,7 @@ fun makePretty(text: String): Pair<String, Int> {
             }.joinToString("")
         prettyMenuTitle = R.string.clipboard_fraction
     }
+    if (dms) prettyText = prettyText.replace('\'', '′') + '″'
     return Pair(prettyText, prettyMenuTitle)
 }
 
