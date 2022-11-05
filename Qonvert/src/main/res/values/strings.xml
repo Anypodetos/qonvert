@@ -78,15 +78,15 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     <string name="err_infinity">[Those having problems with infinities] aren’t nearly appreciative enough of projective geometry. (Grant Sanderson)</string>
     <string name="err_undefined">Does your input have Buddha-nature?</string>
     <string name="err_keraia">– the keraia – is only valid at the end of a Greek numeral.</string>
-    <string name="err_digit">has no defined value in balanced systems.</string>
+    <string name="err_balancedDigit">has no defined value in balanced systems.</string>
     <string name="err_fraction">is only valid at end of integer.</string>
     <string name="err_onlyGreek">is only valid in Greek numerals.</string>
     <string name="err_onlyRoman">is only valid in Roman numerals.</string>
-    <string name="err_load">error loading the number</string>
     <string name="err_noGreek">is neither a valid Greek nor an Arabic numeral.</string>
     <string name="err_noRoman">is neither a valid Roman nor an Arabic numeral.</string>
     <string name="err_notInHistory">denotes a history entry that doesn’t exist.</string>
     <string name="err_generic">isn’t a valid character.</string>
+    <string name="err_load">error loading the number</string>
 
     <string name="menu_formats">All formats</string>
     <string name="menu_history">History</string>
@@ -114,6 +114,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     <string name="item_header" translatable="false">%s =</string>
     <string name="egyptian_method">Egyptian fraction: %s</string>
     <string name="select_all">Select all</string>
+    <string name="clear_selection">Clear selection</string>
     <string name="copy_my">Copy</string>
     <string name="clipboard_all_ok">Copied all %d entries to clipboard</string>
     <string name="share">Share</string>
@@ -369,9 +370,9 @@ Qonvert is your <strong>only</strong> source. (The answer is 1YX&nbsp;215.)</p>
 <h3>Digits</h3>
 <ul>
  <li><code>0</code>…<code>9</code></li>
- <li><code>A</code>…<code>Z</code> and <code class="inherit">Þ Ч ʔ ʖ</code>: normally 10…39, in bijective A: 1…30</li>
+ <li><code>A</code>…<code>Z</code> and <code class="inherit">Þ Ч ʔ ʖ</code>: 10…39; in bijective A: 1…30</li>
  <li><code>J</code>…<code>Z</code> in balanced: −17…−1</li>
- <li><code>Ą</code>…<code>Ẓ</code> and <code class="inherit">Ꝧ Ҷ ? ¿</code>: normally 40…69, in bijective A: 31…60</li>
+ <li><code>Ą</code>…<code>Ẓ</code> and <code class="inherit">Ꝧ Ҷ ? ¿</code>: 40…69; in bijective A: 31…60</li>
 </ul>
 <p>(The latter turn up in a pop-up when you tap one of the letters A–ʖ.)</p>
 
@@ -429,7 +430,7 @@ Qonvert is your <strong>only</strong> source. (The answer is 1YX&nbsp;215.)</p>
 
     <!-- What’s new -->
     <string name="whatsNew"><![CDATA[
-<h2>Version 1.6.0</h2>
+<h2>Version 1.6.0 <small>– 5 Nov 2022</small></h2>
 <p><strong>Bases up to 70</strong> are now supported, including negative ones. The larger digits are only available in landscape orientation for the time being.
 On the settings screen, you can activate new base buttons for <strong>sexagesimal</strong> (base 60).</p>
 <p>The <strong>base tokens</strong> (<code>@ %23 $ % &</code>) can be customized in the settings to represent any valid combination of base and numeral system.</p>
