@@ -1,0 +1,1 @@
+Supports the golden ratio base and bases up to ±100; new functionality to count digits; the keyboard now includes fraction characters; and many minor improvements
