@@ -27,8 +27,9 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     <string name="dms">DMS</string>
     <string name="edit_hint">Gib eine Zahl ∈ ℚ ein.</string>
     <string name="clear_hint">Eingabe löschen</string>
-    <string name="base">%1$s: Basis %2$d, %3$s</string>
-    <string name="bare_base">Basis %1$d, %2$s</string>
+    <string name="base">%1$s: Basis %2$s, %3$s</string>
+    <string name="bare_base">Basis %1$s, %2$s</string>
+    <string name="base_message">Für Basis φ (den Goldenen Schnitt) 1 eingeben.</string>
     <string name="clipboard_asIs">In die Zwischenablage kopieren</string>
     <string name="clipboard_rep">… mit Überstrich für Periode</string>
     <string name="clipboard_fraction">… als formatierten Bruch</string>
@@ -53,7 +54,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     <string name="err_brace">ist nur um einen ägyptischen Bruch erlaubt.</string>
     <string name="err_semicolon">in einem Ketten- oder ägyptischen Bruch darf nur einmal und nur vor Kommas vorkommen.</string>
     <string name="err_comma">in einem Ketten- oder ägyptischen Bruch darf nur nach \";\" vorkommen.</string>
-    <string name="err_underscore">in einer gemischten Zahl darf nur einmal und vor \"/\" vorkommen.</string>
+    <string name="err_underscore">in einem gemischten Bruch darf nur einmal und vor \"/\" vorkommen.</string>
     <string name="err_slash">in einem Bruch darf nur einmal vorkommen.</string>
     <string name="err_twoPoints">– der Trennpunkt für Nachkommastellen – darf nur einmal vorkommen.</string>
     <string name="err_twoReps">– das Periodenzeichen – darf nur einmal vorkommen.</string>
@@ -65,11 +66,12 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     <string name="err_undefined">Hat deine Eingabe Buddha-Natur?</string>
     <string name="err_keraia">– die Keraia – ist nur am Ende einer griechischen Zahl erlaubt.</string>
     <string name="err_balancedDigit">hat in balancierten Systemen keinen definierten Wert.</string>
-    <string name="err_fraction">ist nur nach einer ganzen Zahl erlaubt.</string>
+    <string name="err_fraction">ist nur am Ende einer Zahl erlaubt.</string>
     <string name="err_onlyGreek">ist nur in griechischen Zahlen erlaubt.</string>
     <string name="err_onlyRoman">ist nur in römischen Zahlen erlaubt.</string>
     <string name="err_noGreek">ist weder eine gültige griechische noch eine arabische Zahl.</string>
     <string name="err_noRoman">ist weder eine gültige römische noch eine arabische Zahl.</string>
+    <string name="err_irrational">ist nicht rational.</string>
     <string name="err_notInHistory">bezeichnet einen Eintrag im Verlauf, der nicht existiert.</string>
     <string name="err_generic">ist kein gültiges Zeichen.</string>
     <string name="err_load">Fehler beim Laden</string>
@@ -109,6 +111,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
         <item quantity="other">%d Einträge gelöscht</item>
     </plurals>
     <string name="deleted_all">Alle %d Einträge gelöscht</string>
+    <string name="clear_history">Verlauf löschen</string>
     <string name="undo">Rückgängig</string>
     <string name="cancel">Abbrechen</string>
     <string name="close">Schließen</string>
@@ -116,11 +119,39 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     <string name="pretty_output">formatiert</string>
     <string name="compatible_output">kompatibel</string>
 
+    <string name="count_denominators">Nenner zählen</string>
+    <string name="count_digits">Ziffern zählen</string>
+    <string name="count_denominators_title">Nenner</string>
+    <string name="count_digits_title">Ziffern</string>
+    <plurals name="denominators">
+        <item quantity="one">%s Nenner</item>
+        <item quantity="other">%s Nenner</item>
+    </plurals>
+    <plurals name="digits">
+        <item quantity="one">%s Ziffer</item>
+        <item quantity="other">%s Ziffern</item>
+    </plurals>
+    <string name="digits_in_denoms">Ziffern: %s</string>
+    <string name="many_digits">beliebig viele Ziffern</string>
+    <string name="digits_deg">Grad:</string>
+    <string name="digits_min">Minuten:</string>
+    <string name="digits_sec">Sekunden:</string>
+    <string name="digits_all">%s</string>
+    <string name="digits_int">%s im ganzzahligen Teil</string>
+    <string name="digits_int_phi">%s im Phinteger-Teil</string>
+    <string name="digits_frac">%s im Nachkommaanteil</string>
+    <string name="digits_frac_phi">%s im Nachkommaanteil</string>
+    <string name="digits_pre">%s in der Vorperiode</string>
+    <string name="digits_pre_phi">%s in der Vorperiode</string>
+    <string name="digits_rep">%s in der Periode</string>
+    <string name="digits_numer">%s im Zähler</string>
+    <string name="digits_denom">%s im Nenner</string>
+
     <!-- Settings -->
     <string name="out_header">Ausgabe</string>
     <string name="digits_title">Höchstzahl Nachkommastellen</string>
     <string name="group_title">Ziffern gruppieren</string>
-    <string name="group_hint">Vierergruppen für Basen ±2, 4, 8, 16, 32, 64, sonst Dreiergruppen</string>
+    <string name="group_hint">Vierergruppen für Basen φ, ±2, 4, 8, 16, etc., sonst Dreiergruppen</string>
     <string name="lowercase_title">Kleinbuchstaben</string>
     <string name="natural_title">Für natürliche Zahlen anzeigen</string>
     <string name="apostrophus_title">Römischer Apostrophus</string>
@@ -168,9 +199,9 @@ sie taucht wieder auf, wenn du die Eingabezeile antippst.</p>
 oder den Tasten direkt darüber einstellen, die Ausgabe-Basis mit den Kontrollen im oberen Teil. Welche Tasten angezeigt werden
 (einschließlich welcher für <a href="https://de.wikipedia.org/wiki/Stellenwertsystem%23Negative_Basen">negative Basen</a>), kannst Du in den Einstellungen
 unter „Tasten für Basen“ ändern. Wenn du eine Taste lang antippst oder einen Schieberegler ganz nach rechts ziehst, wird eine Dialogbox zum Einstellen der Basis
-(von ±2 bis ±70) angezeigt.</p>
-<p>Die farbigen Tasten am rechten Rand wechseln zwischen verschiedenen Zahlensystemen (Standard, balanciert, bijektiv, griechisch und römisch) – mehr dazu gleich.
-Nicht jedes Zahlensystem lässt sich mit jeder Basis kombinieren. Wenn du eine unmögliche Kombination einstellst, wird die entsprechende Taste grau,
+(von ±2 bis ±100 oder φ, dem Goldenen Schnitt) angezeigt.</p>
+<p>Die farbigen Tasten am rechten Rand wechseln zwischen verschiedenen Zahlensystemen (Standard, balanciert, bijektiv, griechisch und römisch) – mehr dazu
+gleich. Nicht jedes Zahlensystem lässt sich mit jeder Basis kombinieren. Wenn du eine unmögliche Kombination einstellst, wird die entsprechende Taste grau,
 und die App verwendet das Standard-Zahlensystem.</p>
 <p>Basis und Zahlensystem lassen sich auch direkt in der Eingabezeile mit den Kürzeln <code>@ %23 $ % &</code> angeben. Diese stehen normalerweise
 für die Standard-Zahlensysteme mit den Basen 2, 8, 10, 12 und 16; sie lassen sich aber in den Einstellungen anpassen.</p>
@@ -180,10 +211,8 @@ für die Standard-Zahlensysteme mit den Basen 2, 8, 10, 12 und 16; sie lassen si
 <strong>3</strong>×10<sup>2</sup>+<strong>4</strong>×10<sup>1</sup>+<strong>5</strong>×10<sup>0</sup> interpretiert und zu
 <strong>1</strong>×16<sup>2</sup>+<strong>5</strong>×16<sup>1</sup>+<strong>9</strong>×16<sup>0</sup> konvertiert, angezeigt als 159.</p>
 <p>Ziffern von <code>0</code> bis <code>9</code> funktionieren wie üblich. Für Ziffern über 9 werden die Buchstaben <code>A</code>&nbsp;=&nbsp;10
-bis <code>Z</code>&nbsp;=&nbsp;35, <code class="inherit">Þ</code>&nbsp;=&nbsp;36, <code class="inherit">Ч</code>&nbsp;=&nbsp;37,
-<code class="inherit">ʔ</code>&nbsp;=&nbsp;38, <code class="inherit">ʖ</code>&nbsp;=&nbsp;39 und <code>Ą</code> bis <code>Ẓ</code>,
-<code class="inherit">Ꝧ</code>, <code class="inherit">Ҷ</code>, <code class="inherit">?</code>, <code class="inherit">¿</code>&nbsp;=&nbsp;40 bis 69
-verwendet. (Letztere erscheinen in einem Pop-up, wenn du einen der Buchstaben A–ʖ antippst.)</p>
+bis <code>Z</code>&nbsp;=&nbsp;35, <code>Þ</code>&nbsp;=&nbsp;36, <code>Ч</code>&nbsp;=&nbsp;37, <code>ʔ</code>&nbsp;=&nbsp;38, <code>ʖ</code>&nbsp;=&nbsp;39,
+etc. (Jetzt nach links wischen zeigt den Spickzettel mit weitere Ziffern an.)</p>
 <p>Es wird nicht zwischen Klein- und Großbuchstaben unterschieden; und Leerzeichen werden ignoriert.</p>
 
 <h3>Nicht-ganze Zahlen</h3>
@@ -194,15 +223,15 @@ Der Beginn der <a href="https://de.wikipedia.org/wiki/Periodische_Zahl">Periode<
 Zum Beispiel bedeuten <code>0.1˙486</code> 0.1486486486… und <code>21˙3.4</code> 213.43434….</p>
 <p>Das Ergebnis hat immer entweder eine endliche Anzahl von Kommastellen oder eine Periode. Manchmal ist diese aber sehr lang. Damit die App nicht
 einfriert, werden standardmäßig nicht mehr als 300 Stellen berechnet. Dieser Wert lässt sich in den Einstellungen ändern.</p>
-<p>Wenn der Bildschirm zu klein für alle Ausgabeformate ist (Stellenwertsystem, Bruch, gemischte Zahl, Kettenbruch, ägyptischer Bruch),
+<p>Wenn der Bildschirm zu klein für alle Ausgabeformate ist (Stellenwertsystem, Bruch, gemischter, Ketten- und ägyptischer Bruch),
 kannst Du die Anzeige rauf und runter wischen.</p>
 
 <h2>Brüche</h2>
 <p>Gib den Zähler ein, dann einen Schrägstrich <code>/</code> und dann den Nenner, wie zum Beispiel <code>6/8</code> oder <code>1.5/2</code>.
 Brüche werden nach Bedarf gekürzt oder erweitert, sodass das Ergebnis dieser beiden Eingaben 3/4 ist.</p>
-<p>Gemischte Zahlen verwenden einen Unterstrich <code>_</code> zur Trennung von ganzzahligem Teil und Bruch: zum Beispiel <code>1_9/8</code>,
-oder etwas Komplizierteres wie <code>1.˙3&nbsp;_&nbsp;1/3</code>. Brüche mit einem Absolutwert über 1 werden sowohl als unechte Brüche
-(17/8 oder 5/3 in unseren Beispielen) als auch als gemischte Zahlen (2_1/8 oder 1_2/3) angezeigt.</p>
+<p>Gemischte Brüche verwenden einen Unterstrich <code>_</code> zur Trennung von ganzzahligem Teil und eigentlichem Bruch: zum Beispiel <code>1_9/8</code>,
+oder etwas Komplizierteres wie <code>1.˙3&nbsp;_&nbsp;1/3</code>. Brüche mit einem Absolutwert über 1 werden sowohl als unechte
+(17/8 oder 5/3 in unseren Beispielen) als auch als gemischte Brüche (2_1/8 oder 1_2/3) angezeigt.</p>
 <p>Basis-Kürzel gelten für die einzelnen Teile eines Bruchs, sodass <code>$10_@10/&13</code> eine gültige Eingabe ist. In <code>%251B/14</code> gilt
 das Kürzel <code>%25</code> nur für <code>1B</code>, und <code>14</code> wird gemäß den aktuellen Einstellungen für Basis und Zahlensysteme interpretiert.
 Dasselbe gilt für die anderen zusammengesetzten Arten von Zahlen, die im Folgenden beschrieben werden.</p>
@@ -234,9 +263,9 @@ dieses Formats müssen in dieser Reihenfolge stehen, aber nicht unbedingt alle v
 <h2>Negative Zahlen</h2>
 <p>Negative Zahlen lassen sich entweder in der gewöhnlichen Schreibweise mit einem Minus <code>-</code> eingeben, oder in Komplement-Notation
 mit zwei Punkten <code>..</code> davor: Diese Punkte bedeuten „die höchste Ziffer in dieser Basis bis ganz nach links wiederholt“.
-Die Komplement-Notation funktioniert mit positiven Basen im Standard-System. Sie kommt vor allem in der EDV vor, wo −1 hexadezimal als FFFFFFFF gespeichert wird,
-−2 als FFFFFFFE und so weiter (mit so vielen Fs wie Platz ist). In Qonvert bedeuten also <code>..FFD</code> oder einfach <code>..D</code> im Hexadezimalsystem,
-oder <code>..997</code> oder einfach <code>..7</code> im Dezimalsystem, alle −3.</p>
+Die Komplement-Notation funktioniert mit positiven Basen im Standard-System. Sie kommt vor allem in der EDV vor, wo −1 hexadezimal als FFFFFFFF gespeichert
+wird, −2 als FFFFFFFE und so weiter (mit so vielen Fs wie Platz ist). In Qonvert bedeuten also <code>..FFD</code> oder einfach <code>..D</code> im
+Hexadezimalsystem, oder <code>..997</code> oder einfach <code>..7</code> im Dezimalsystem, alle −3.</p>
 <p>Ob negative Zahlen in gewöhnlicher oder Komplement-Notation ausgegeben werden, hängt vom Komplement-Schalter oben rechts ab.</p>
 
 <h2>Nicht-Standard-Zahlensysteme</h2>
@@ -251,17 +280,17 @@ Negative Zahlen benötigen in dieser Notation kein Minuszeichen: <code>Z01</code
 <h3>Bijektiv</h3>
 <p>In einem bijektiven Zahlensystem einer Basis b gehen die Ziffern von 1 bis b, nicht von 0 bis b−1 wie üblich. Diese App kennt zwei Varianten:
 „bijektiv 1“ verwendet die Ziffern <code>1</code> bis <code>9</code> und von <code>A</code> aufwärts wie in der Standardnotation und funktioniert bis
-zur Basis 69, „bijektiv A“ verwendet <code>A</code>&nbsp;=&nbsp;1, <code>B</code>&nbsp;=&nbsp;2,&nbsp;… <code>Z</code>&nbsp;=&nbsp;26,
-<code class="inherit">Þ</code>&nbsp;=&nbsp;27, usw. und funktioniert nur bis zur Basis 60. Die ersten natürlichen Zahlen im Dezimalsystem bijektiv 1 sind also
+zur Basis 99, „bijektiv A“ verwendet <code>A</code>&nbsp;=&nbsp;1, <code>B</code>&nbsp;=&nbsp;2,&nbsp;… <code>Z</code>&nbsp;=&nbsp;26,
+<code>Þ</code>&nbsp;=&nbsp;27, usw. und funktioniert nur bis zur Basis 90. Die ersten natürlichen Zahlen im Dezimalsystem bijektiv 1 sind also
 1, 2, 3, 4, 5, 6, 7, 8, 9, A&nbsp;(=10), 11, 12,&nbsp;…, 19, 1A, 21,&nbsp;…, die ersten natürlichen Zahlen im Hexavigesimalsystem (Basis 26) bijektiv A sind
 A, B, C, D,&nbsp;…, X, Y, Z, AA, AB, AC,&nbsp;…. Null ist eigentlich eine leere Zeichenkette; sie wird als „/“ angezeigt.</p>
 <p>Kommazahlen funktionieren in bijektiven Systemen nicht wirklich; daher werden nicht-ganze Zahlen nur als Brüche angezeigt.</p>
 
 <h3>Griechische Zahlen</h3>
 <p><a href="https://de.wikipedia.org/wiki/Griechische_Zahlzeichen">Griechische (milesische) Zahlen</a> gibt es nur in der Basis 10. Die griechischen
-Buchstaben <code>Α Β Γ Δ Ε Ϛ Ζ Η Θ</code> haben die Werte 1 bis 9, <code>Ι Κ Λ Μ Ν Ξ Ο Π Ϟ</code> sind 10 bis 90, <code>Ρ Σ Τ Υ Φ Χ Ψ Ω </code> und
-<code class="inherit">Ϡ</code> sind 100 bis 900, und <code>͵Α ͵Β ͵Γ</code> usw. sind 1000 bis 9000. Sie werden normalerweise von groß nach klein
-geordnet: 1231 ist <code>͵ΑΣΛΑ</code>. In der Ausgabe werden sie zur besseren Unterscheidung von römischen Zahlen (siehe unten) von einer Keraia (ʹ) gefolgt,
+Buchstaben <code>Α Β Γ Δ Ε Ϛ Ζ Η Θ</code> haben die Werte 1 bis 9, <code>Ι Κ Λ Μ Ν Ξ Ο Π Ϟ</code> sind 10 bis 90, <code>Ρ Σ Τ Υ Φ Χ Ψ Ω Ϡ</code> sind
+100 bis 900, und <code>͵Α ͵Β ͵Γ</code> usw. sind 1000 bis 9000. Sie werden normalerweise von groß nach klein geordnet: 1231 ist <code>͵ΑΣΛΑ</code>.
+In der Ausgabe werden sie zur besseren Unterscheidung von römischen Zahlen (siehe unten) von einer Keraia (ʹ) gefolgt,
 aber für die Eingabe ist die Keraia optional.</p>
 <p>Myriaden (10&nbsp;000er) werden nach Diophant mit einem Punkt gekennzeichnet: <code>Θ.ΦΛ</code> bedeutet 9 Myriaden 530 = 90530. Noch größere Zahlen
 werden mit mehreren Punkten konstruiert (<code>Π&nbsp;.&nbsp;.&nbsp;ʹ</code> für 80&nbsp;0000&nbsp;0000),
@@ -275,10 +304,9 @@ als griechische Zahlen angezeigt.</p>
 
 <h3>Römische Zahlen</h3>
 <p><a href="https://de.wikipedia.org/wiki/R%C3%B6mische_Zahlschrift">Römische Zahlen</a> gibt es auch nur in der Basis 10. Sie können die Buchstaben
-<code>I V X L C D M</code> enthalten. Symbole für größere Zahlen sind <code class="inherit">ↁ</code>&nbsp;=&nbsp;5000,
-<code class="inherit">ↂ</code>&nbsp;=&nbsp;10&nbsp;000, <code class="inherit">ↇ</code>&nbsp;=&nbsp;50&nbsp;000, und
-<code class="inherit">ↈ</code>&nbsp;=&nbsp;100&nbsp;000. (Wenn Du die Android-Tastatur statt der von Qonvert verwendest, kannst Du sie als
-<code>I)) ((I)) I))) (((I)))</code> eingeben.)</p>
+<code>I V X L C D M</code> enthalten. Symbole für größere Zahlen sind <code>ↁ</code>&nbsp;=&nbsp;5000, <code>ↂ</code>&nbsp;=&nbsp;10&nbsp;000,
+<code>ↇ</code>&nbsp;=&nbsp;50&nbsp;000, und <code>ↈ</code>&nbsp;=&nbsp;100&nbsp;000.
+(Wenn Du die Android-Tastatur statt der von Qonvert verwendest, kannst Du sie als <code>I)) ((I)) I))) (((I)))</code> eingeben.)</p>
 <p>Traditionellerweise werden <em>noch</em> größere Zahlen mit Rahmen geschrieben, die ihren Inhalt mit 100&nbsp;000 multiplizieren.
 Durch Verschachteln von Rahmen lassen sich sehr große Zahlen schreiben. Qonvert benutzt dazu den senkrechten Strich („Pipe“) <code>|</code>:
 <code style=\"white-space: nowrap\">|VI|((I))MM</code>&nbsp;=&nbsp;<span class="roman-frame">VI</span>ↂMM&nbsp;=&nbsp;6&nbsp;12000.
@@ -290,9 +318,19 @@ Die führenden Pipes können ausgelassen werden; und alle Pipes lassen sich durc
 <p>Wenn als Eingabe-System römische Zahlen ausgewählt sind, akzeptiert die App auch arabische Zahlen (Standard dezimal); und wenn als Ausgabe-System
 etwas anderes als Römisch eingestellt ist, werden positive ganze Zahlen <em>zusätzlich</em> in der dritten Ausgabe-Zeile als römische Zahlen angezeigt.</p>
 
+<h2>Spezielle Basen</h2>
+<h3>Phinär</h3>
+<p>Phinär, die Basis φ&nbsp;=&nbsp;(1+√5̄)/2, kann nur mit dem Standard-Zahlensystem kombiniert werden. Auf den Schiebereglern ist sie ganz links zu finden.</p>
+<p>Obwohl der <a href="https://de.wikipedia.org/wiki/Goldener_Schnitt">Goldene Schnitt</a> φ irrational ist, haben ganze Zahlen in der Basis φ immer
+endliche Darstellungen (allerdings meist mit Nachkommastellen), und nicht-ganze rationale Zahlen haben periodische Darstellungen. Das Gegenteil trifft nicht zu:
+Wenn du eine zufällige Ziffenfolge eingibst, bekommst du wahrscheinlich eine Fehlermeldung wie „101ᵩ (5/2+√5/2) ist nicht rational“.</p>
+<p>Die Ausgabe erfolgt ausschließlich mit den Ziffern 0 und 1, und nie mit zwei oder mehr 1en hintereinander. Die Bestandteile von Brüchen, einschließlich
+Kettenbrüchen, sind nicht notwendigerweise ganze Zahlen, aber es sind immer Zahlen ohne Nachkommastellen (englisch: <i>phintegers</i>).
+Derzeit werden phinäre Zahlen nicht als ägyptische Brüche ausgegeben.</p>
+
 <h3>Negative Basen</h3>
 <p><a href="https://de.wikipedia.org/wiki/Stellenwertsystem%23Negative_Basen">Negative Basen</a> lassen sich mit allen Standard- und Nicht-Standard-Systemen
-verwenden, einschließlich aller Notationen für nicht-ganze Zahlen – nur nicht mit griechischen und römischen Zahlen.
+verwenden, einschließlich aller Notationen für nicht-ganze Zahlen – nur nicht mit griechischen und römischen Zahlen und mit dem Phinärsystem.
 Da ungerade Potenzen von negativen Zahlen negativ sind und gerade Potenzen positiv, wird <code>345</code> in Standard nega-dezimal als
 <strong>3</strong>×10<sup>2</sup><strong>−4</strong>×10<sup>1</sup>+<strong>5</strong>×10<sup>0</sup>&nbsp;=&nbsp;265 interpretiert,
 und <code>3450</code> als <strong>−3</strong>×10<sup>3</sup>+<strong>4</strong>×10<sup>2</sup><strong>−5</strong>×10<sup>1</sup>&nbsp;=&nbsp;−2650:
@@ -317,7 +355,8 @@ im balancierten Undezimalsystem benötigst, ist Qonvert deine <strong>einzige</s
     <string name="cheatSheet"><![CDATA[
 <h2>Gesten</h2>
 <ul>
- <li><strong>Ausgabebereich</strong>: kurz antippen kopiert in die Eingabezeile und tauscht Ein- und Ausgabe-Basis, lang antippen kopiert in die Zwischenablage.</li>
+ <li><strong>Ausgabebereich</strong>: kurz antippen kopiert in die Eingabezeile und tauscht Ein- und Ausgabe-Basis, lang antippen kopiert in die
+ Zwischenablage.</li>
  <li><strong>Tasten für Basen</strong>: wischen nach links/rechts erniedrigt/erhöht Basis um 1, lang antippen zeigt einen Dialog zur Auswahl der Basis an.</li>
  <li>“<strong>Eingabe: Basis</strong>” und “<strong>Ausgabe: Basis</strong>”: antippen zeigt den Ziffernbereich für die gewählte Basis an.</li>
  <li><strong>Tasten für Zahlensysteme</strong>: lang antippen wechselt zwischen Standard und balanciert.</li>
@@ -333,66 +372,77 @@ im balancierten Undezimalsystem benötigst, ist Qonvert deine <strong>einzige</s
 <h3>Ziffern</h3>
 <ul>
  <li><code>0</code>…<code>9</code></li>
- <li><code>A</code>…<code>Z</code> und <code class="inherit">Þ Ч ʔ ʖ</code>: 10…39; bijektiv A: 1…30</li>
+ <li><code>A</code>…<code>Z</code> und <code>Þ Ч ʔ ʖ</code> : 10…39; bijektiv A: 1…30</li>
  <li><code>J</code>…<code>Z</code> in balancierten Systemen: −17…−1</li>
- <li><code>Ą</code>…<code>Ẓ</code> und <code class="inherit">Ꝧ Ҷ ? ¿</code>: 40…69; bijektiv A: 31…60</li>
+ <li><code>Ą</code>…<code>Ẓ</code> und <code>Ꝧ Ҷ ? ¿</code> : 40…69; bijektiv A: 31…60</li>
+ <li><code>Ⱥ</code>…<code>Ƶ</code> und <code>Ꝥ Ҹ ʡ ƾ</code> : 70…99; bijektiv A: 61…90</li>
 </ul>
 <p>(Letztere erscheinen in einem Pop-up, wenn du einen der Buchstaben A–ʖ antippst.)</p>
 
 <h3>Negative Zahlen</h3>
 <ul>
- <li><code>-</code>: Minuszeichen</li>
- <li><code>..</code>: Komplement-Notation</li>
+ <li><code>-</code> : Minuszeichen</li>
+ <li><code>..</code> : Komplement-Notation</li>
 </ul>
 
 <h3>Nicht-ganze Zahlen</h3>
 <ul>
- <li><code>.</code>: Trennpunkt für Nachkommastellen („Komma“)</li>
- <li><code>˙</code> oder <code>:</code>: Beginn der Periode</li>
- <li><code>/</code>: Bruchstrich</li>
- <li><code>_</code>: zwischen ganzer Zahl und Bruch in einer gemischten Zahl (z.B. <code>2_1/8</code>)</li>
- <li><code>° \' \"</code>: Grad, Minuten und Sekunden</li>
- <li><code>[ ; , , ]</code>: Kettenbruch (Die Klammern sind optional.)</li>
- <li><code>{ ; , , }</code>: ägyptischer Bruch</li>
+ <li><code>.</code> : Trennpunkt für Nachkommastellen („Komma“)</li>
+ <li><code>˙</code> oder <code>:</code> : Beginn der Periode</li>
+ <li><code>/</code> : Bruchstrich</li>
+ <li><code>_</code> : zwischen ganzer Zahl und Bruch in einem gemischten Bruch (z.B. <code>2_1/8</code>)</li>
+ <li><code>° \' \"</code> : Grad, Minuten und Sekunden</li>
+ <li><code>[ ; , , ]</code> : Kettenbruch (Die Klammern sind optional.)</li>
+ <li><code>{ ; , , }</code> : ägyptischer Bruch</li>
 </ul>
 
 <h3>Griechische Zahlen</h3>
 <ul>
- <li><code>Α Β Γ Δ Ε Ϛ Ζ Η Θ</code>: 1…9</li>
- <li><code>Ι Κ Λ Μ Ν Ξ Ο Π Ϟ</code>: 10…90</li>
- <li><code>Ρ Σ Τ Υ Φ Χ Ψ Ω </code> und <code class="inherit">Ϡ</code>: 100…900</li>
- <li><code>͵</code>: multipliziert den folgenden Buchstaben mit 1000</li>
- <li><code>.</code>: multipliziert Voranstehendes mit 10000 (einer Myriade)</li>
- <li><code>○</code>: Null</li>
+ <li><code>Α Β Γ Δ Ε Ϛ Ζ Η Θ</code> : 1…9</li>
+ <li><code>Ι Κ Λ Μ Ν Ξ Ο Π Ϟ</code> : 10…90</li>
+ <li><code>Ρ Σ Τ Υ Φ Χ Ψ Ω Ϡ</code> : 100…900</li>
+ <li><code>͵</code> : multipliziert den folgenden Buchstaben mit 1000</li>
+ <li><code>.</code> : multipliziert Voranstehendes mit 10000 (einer Myriade)</li>
+ <li><code>○</code> : Null</li>
 </ul>
 
 <h3>Römische Zahlen</h3>
 <ul>
- <li><code>I V X L C D M</code> oder <code class="inherit">ↀ</code>: 1…1000</li>
- <li><code class="inherit">ↁ ↂ ↇ ↈ</code> oder <code>I)) ((I)) I))) (((I)))</code>: 5000, 10&nbsp;000, 50&nbsp;000, 100&nbsp;000</li>
- <li><code>|</code> oder <code>!</code>: multipliziert mit 100&nbsp;000</li>
- <li><code>. : S</code> (und bis zu 5 Punkten): <i>uncia</i>&nbsp;=&nbsp;Zwölftel, <i>sextans</i>&nbsp;=&nbsp;Sechstel, <i>semis</i>&nbsp;=&nbsp;ein&nbsp;Halb</li>
- <li><code>N</code>: <i>nulla/nihil</i>&nbsp;=&nbsp;Null</li>
+ <li><code>I V X L C D M</code> oder <code>ↀ</code> : 1…1000</li>
+ <li><code>ↁ ↂ ↇ ↈ</code> oder <code>I)) ((I)) I))) (((I)))</code> : 5000, 10&nbsp;000, 50&nbsp;000, 100&nbsp;000</li>
+ <li><code>|</code> oder <code>!</code> : multipliziert mit 100&nbsp;000</li>
+ <li><code>. : S</code> (und bis zu 5 Punkten): <i>uncia</i>&nbsp;=&nbsp;Zwölftel, <i>sextans</i>&nbsp;=&nbsp;Sechstel,
+ <i>semis</i>&nbsp;=&nbsp;ein&nbsp;Halb</li>
+ <li><code>N</code> : <i>nulla/nihil</i>&nbsp;=&nbsp;Null</li>
 </ul>
 
 <h3>Basis-Kürzel</h3>
 <p>… lassen sich in den Einstellungen definieren. Sie stehen vor einer Zahl. Die Standardwerte sind:</p>
 <ul>
- <li><code>@</code>: Standard binär (2)</li>
- <li><code>%23</code>: Standard oktal (8)</li>
- <li><code>$</code>, <code>€</code>, <code>£</code>, <code>¥</code>: Standard dezimal (10)</li>
- <li><code>%</code>: Standard dozenal (12)</li>
- <li><code>&</code>: Standard hexadezimal (16)</li>
+ <li><code>@</code> : Standard binär (2)</li>
+ <li><code>%23</code> : Standard oktal (8)</li>
+ <li><code>$</code>, <code>€</code>, <code>£</code>, <code>¥</code> : Standard dezimal (10)</li>
+ <li><code>%</code> : Standard dozenal (12)</li>
+ <li><code>&</code> : Standard hexadezimal (16)</li>
 </ul>
 
 <h3>Unicode-Zeichen</h3>
 <ul>
- <li><code>\"💃</code>: Tänzerin</li>
+ <li><code>\"💃</code> : Tänzerin</li>
 </ul>
     ]]></string>
 
     <!-- What’s new -->
     <string name="whatsNew"><![CDATA[
+<h2>Version 1.7.0 <small>– </small></h2>
+<p><strong>Phinär</strong>, also der Goldene Schnitt φ als Basis, wird jetzt unterstützt; auf den Schiebereglern ist er ganz links zu finden.
+Weiters werden <strong>Basen bis ±100</strong> unterstützt.</p>
+<p>Qonvert kann jetzt die <strong>Ziffern</strong> einzelner Einträge auf den Listen-Bildschirmen („Alle Formate, Verlauf, Musik-Intervalle“)
+<strong>zählen</strong> – und auch Nenner von Ketten- und ägyptischen Brüchen. Die neuen Menüpunkte sind über die ⋮ am rechten Rand verfügbar.</p>
+<p>Über „½“ auf der Qonvert-Tastatur (die Punkt-Taste lang antippen) erscheint ein Pop-up mit <strong>Brüchen</strong>.</p>
+<p>Für negative Basen werden die Basis-Tasten jetzt <i>kursiv</i> dargestellt.</p>
+<p>Zahlen in großen Basen werden schneller berechnet.</p>
+
 <h2>Version 1.6.0 <small>– 5 Nov 2022</small></h2>
 <p><strong>Basen bis 70</strong> werden jetzt unterstützt, einschließlich negativer. Die größeren Ziffern sind bis auf weiteres nur im Querformat verfügbar.
 In den Einstellungen kannst du neue Basis-Tasten für <strong>sexagesimal</strong> (Basis 60) aktivieren.</p>
@@ -433,8 +483,8 @@ Wenn Du die alte Standard-Tastatur wieder haben willst, kannst du das in den Ein
 <p>Mit der Taste ♫ in der Titelleiste wird ein musikalisches Intervall mit dem gegebenen Frequenzverhältnis abgespielt. Seit dieser Version wird auch
 der <strong>Name des Intervalls</strong>, oder der des nächstgelegenen benannten Intervalls, angezeigt. Der Menüpunkt „Musik-Intervalle“ listet alle
 Intervalle auf, die diese App kennt.</p>
-<p>Die Listen-Bildschirme haben eine dritte Option zum Anzeigen, Kopieren und Teilen von Zahlen bekommen:
-„<strong>kompatibel</strong>“ für größtmögliche Kompatibilität mit anderen Mathematik-Apps (zumindest für die weniger ausgefallenen Zahlenbasen und -systeme).</p>
+<p>Die Listen-Bildschirme haben eine dritte Option zum Anzeigen, Kopieren und Teilen von Zahlen bekommen: „<strong>kompatibel</strong>“ für größtmögliche
+Kompatibilität mit anderen Mathematik-Apps (zumindest für die weniger ausgefallenen Zahlenbasen und -systeme).</p>
 <p>Natürliche Zahlen werden jetzt auch als <strong>griechische Zahlen</strong> angezeigt. Wenn die Anzeige für deinen Geschmack überfüllt ist,
 kannst du sie in den Einstellungen deaktivieren (oder die römischen Zahlen, oder die Unicode-Zeichen).</p>
 <p>Neben den Unicode-Symbolen im Verlauf und auf der Alle-Formate-Seite ist eine neue Taste, die einen <strong>Weblink zum jeweiligen Symbol</strong> öffnet
@@ -477,7 +527,8 @@ jede andere Rückmeldung zu dieser App kannst du mich <a href="https://lemizh.co
 <p>Die Algorithmen für ägyptische Brüche sind von <a href="https://www.ics.uci.edu/~eppstein/numth/egypt/intro.html">David Eppsteins Seiten</a>
 und <a href="https://ami.uni-eszterhazy.hu/uploads/papers/finalpdf/AMI_42_from129to134.pdf">einer Arbeit von Gyimesi und Nyul</a>;
 dort werden sie auch näher erklärt.</p>
-<p>Diese App würde ohne die vielen tapferen Android-Programmierer auf <a href="https://stackoverflow.com/>stackoverflow</a> nicht existieren.</p>
+<p>Diese App würde ohne die vielen tapferen Android-Programmierer auf <a href="https://stackoverflow.com/>stackoverflow</a> nicht existieren.
+Besonderer Dank geht an Sweeper und leonbloy!</p>
 
 <h2>GNU General Public License (englisch)</h2>
 <p>Copyright 2020, 2021, 2022 Anypodetos (Michael Weber)</p>

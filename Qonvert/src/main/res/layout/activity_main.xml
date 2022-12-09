@@ -74,6 +74,18 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
                         tools:ignore="TouchTargetSizeCheck" />
 
                 <ToggleButton
+                        android:id="@+id/outToggleButtonPhi"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:ellipsize="none"
+                        android:singleLine="true"
+                        android:textColor="@color/base_buttons"
+                        android:textOff="@string/b1"
+                        android:textOn="@string/b1"
+                        tools:ignore="TouchTargetSizeCheck" />
+
+                <ToggleButton
                         android:id="@+id/outToggleButton2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -216,7 +228,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
                     style="@style/Widget.AppCompat.SeekBar.Discrete"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:max="35"
+                    android:max="36"
                     android:progress="0"
                     app:layout_constraintBottom_toTopOf="@+id/textOutput0"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -493,6 +505,18 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
                 tools:ignore="TouchTargetSizeCheck" />
 
         <ToggleButton
+                android:id="@+id/inToggleButtonPhi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ellipsize="none"
+                android:singleLine="true"
+                android:textColor="@color/base_buttons"
+                android:textOff="@string/b1"
+                android:textOn="@string/b1"
+                tools:ignore="TouchTargetSizeCheck" />
+
+        <ToggleButton
                 android:id="@+id/inToggleButton2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -635,7 +659,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
             style="@style/Widget.AppCompat.SeekBar.Discrete"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:max="35"
+            android:max="36"
             android:progress="0"
             app:layout_constraintBottom_toTopOf="@+id/editInput"
             app:layout_constraintEnd_toEndOf="parent"

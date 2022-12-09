@@ -85,10 +85,11 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
             android:focusable="true"
             android:background="?attr/selectableItemBackground"
             android:gravity="center_vertical"
-            android:paddingTop="5dp"
+            android:paddingTop="20dp"
             android:paddingBottom="5dp"
             android:text="@string/menu_dots"
-            app:layout_constraintTop_toBottomOf="@+id/inputText" />
+            app:layout_constraintTop_toBottomOf="@+id/inputText"
+            android:layout_marginTop="-15dp" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:layout_width="wrap_content"

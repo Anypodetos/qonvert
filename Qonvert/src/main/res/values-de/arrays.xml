@@ -139,6 +139,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
 
     <string-array name="buttons_entries">
         <item>Vorzeichen ändern (+/−)</item>
+        <item>Phinär (φ)</item>
         <item>Binär (2)</item>
         <item>Ternär (3)</item>
         <item>Senär (6)</item>

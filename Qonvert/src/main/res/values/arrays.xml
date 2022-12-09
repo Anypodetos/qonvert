@@ -63,8 +63,8 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     </string-array>
 
     <string-array name="choose_base">
-        <item>Type an input base (±2…%d)</item>
-        <item>Type an output base (±2…%d)</item>
+        <item>Input base (±2…%d)</item>
+        <item>Output base (±2…%d)</item>
     </string-array>
 
     <string-array name="interval_names">
@@ -207,6 +207,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
 
     <string-array name="buttons_entries">
         <item>Switch sign (+/−)</item>
+        <item>Phinary (φ)</item>
         <item>Binary (2)</item>
         <item>Ternary (3)</item>
         <item>Senary (6)</item>
@@ -220,6 +221,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     </string-array>
     <string-array name="buttons_values" translatable="false">
         <item>-1</item>
+        <item>1</item>
         <item>2</item>
         <item>3</item>
         <item>6</item>
