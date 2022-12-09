@@ -26,10 +26,11 @@ import android.content.*
 import android.graphics.Typeface
 import android.net.Uri
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.*
 import android.widget.*
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
@@ -70,6 +71,10 @@ class RecyclerAdapter internal constructor(private val activity: ListActivity?, 
     var clickedItem = -1
         private set
     private val inflater: LayoutInflater = LayoutInflater.from(activity)
+
+    private val rDigitsInt  = arrayOf(R.string.digits_int, R.string.digits_int_phi)
+    private val rDigitsFrac = arrayOf(R.string.digits_frac, R.string.digits_frac_phi)
+    private val rDigitsPre  = arrayOf(R.string.digits_pre, R.string.digits_pre_phi)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
         ViewHolder(inflater.inflate(R.layout.fragment_list, parent, false))
@@ -179,11 +184,29 @@ class RecyclerAdapter internal constructor(private val activity: ListActivity?, 
                 MenuCompat.setGroupDividerEnabled(popupMenu.menu, true)
                 popupMenu.inflate(R.menu.menu_list)
                 popupMenu.menu.findItem(R.id.deleteItems).isVisible = listWhatToken == "H"
-                popupMenu.menu.findItem(R.id.playItem).isVisible = listWhatToken == "H"
+                popupMenu.menu.findItem(R.id.playItem).isVisible = listWhatToken == "H" &&
+                    with(items[adapterPosition].number) { abs(numerator.toDouble() / denominator.toDouble()).toFloat() } in 1/128.0..128.0
                 popupMenu.menu.findItem(R.id.settingsListItem).isVisible = false
+                val countItem = popupMenu.menu.findItem(R.id.countItem)
+                val countDenominators = with(items[adapterPosition].number) {
+                    countItem.isVisible = format != QFormat.UNICODE
+                    format in setOf(QFormat.CONTINUED, QFormat.EGYPTIAN)
+                }
+                countItem.setTitle(if (countDenominators) R.string.count_denominators else R.string.count_digits)
                 popupMenu.setOnMenuItemClickListener { item: MenuItem ->
-                    val text = if (item.itemId in setOf(R.id.copyItems, R.id.shareItems))
-                        items[adapterPosition].toStrings(activity).second else ""
+                    val text = when (item.itemId) {
+                        R.id.copyItems, R.id.shareItems -> items[adapterPosition].toStrings(activity).second
+                        R.id.countItem -> {
+                            var st = items[adapterPosition].number.toString(aEgyptianMethod = if (items[adapterPosition].egyptianMethod == EgyptianMethod.OFF)
+                                MainActivity.preferredEgyptianMethod() else items[adapterPosition].egyptianMethod).lowercase()
+                            for ((key, value) in ROMAN_APOSTROPHUS) st = st.replace(key, value)
+                            if (items[adapterPosition].number.system == NumSystem.ROMAN) st.findAnyOf(ROMAN_1_12.drop(1) + "…", ignoreCase = true)?.first?.let {
+                                st = st.substring(0, it) + "." + st.substring(it)
+                            }
+                            st.replace(". ", "").filterNot { it in " -\"͵ʹ|" }
+                        }
+                        else -> ""
+                    }
                     when (item.itemId) {
                         R.id.copyItems -> activity?.let {
                             it.clipboard?.setPrimaryClip(ClipData.newPlainText(null, text))
@@ -191,6 +214,36 @@ class RecyclerAdapter internal constructor(private val activity: ListActivity?, 
                         }
                         R.id.shareItems -> shareText(activity, text)
                         R.id.deleteItems -> activity?.delete(adapterPosition)
+                        R.id.countItem -> activity?.let { it ->
+                            val title = it.getString(if (countDenominators) R.string.count_denominators_title else R.string.count_digits_title)
+                            val message = if (countDenominators) {
+                                val cutOff = '…' in text
+                                val list = text.drop(1).dropLast(1).split(";", ",").let { if (cutOff) it.dropLast(1) else it }
+                                val n = list.size - 1
+                                it.resources.getQuantityString(R.plurals.denominators, n, if (cutOff) "> $n" else "$n") +
+                                    "\n" + it.resources.getString(R.string.digits_in_denoms,
+                                        list.joinToString(", ") { it.length.toString() }.replaceFirst(',', ';') + if (cutOff) ", …" else "")
+                            } else if (text in listOf("∞", "無" , "/", "/°")) formatDigits(0) else {
+                                val deg = text.indexOf('°')
+                                val min = text.indexOf('\'')
+                                val degMin = max(deg, min)
+                                (if (deg > -1) countDigits(if (deg == text.length - 1) 0 else R.string.digits_deg,
+                                        text.substring(0, deg)) + "\n\n" else "") +
+                                    (if (min > -1) countDigits(if (min == text.length - 1 && deg == -1) 0 else R.string.digits_min,
+                                        text.substring(deg + 1, min)) + "\n\n" else "") +
+                                    (if (text.length - 1 > degMin) countDigits(if (degMin == -1) 0 else R.string.digits_sec,
+                                        text.substring(degMin + 1)) else "")
+                            }
+                            AlertDialog.Builder(it)
+                                .setTitle(title)
+                                .setMessage(message)
+                                .setPositiveButton(R.string.copy_my) { _, _ ->
+                                    it.clipboard?.setPrimaryClip(ClipData.newPlainText(null, title + "\n\n" + message))
+                                    Toast.makeText(it.applicationContext, it.getString(R.string.clipboard_ok), Toast.LENGTH_SHORT).show()
+                                }
+                                .setNegativeButton(R.string.close) { _, _ -> }
+                                .create().show()
+                        }
                         R.id.playItem -> activity?.let {
                             items[adapterPosition].number.play(it)
                             it.lastPlayedInterval = adapterPosition
@@ -207,6 +260,33 @@ class RecyclerAdapter internal constructor(private val activity: ListActivity?, 
                 }
                 popupMenu.show()
             }
+        }
+
+        private fun countDigits(header: Int, text: String): String = activity?.let {
+            val complement = text.startsWith("..")
+            val slash = text.indexOf('/')
+            val rType = if (abs(items[adapterPosition].number.base) == 1) 1 else 0
+            (if (header == 0) "" else it.getString(header) + "\n") + if (slash == -1) {
+                val point = "$text.".indexOf('.', if (complement) 2 else 0)
+                val rep = text.indexOf('˙')
+                val cutOff = '…' in text
+                it.getString(if (point < text.length) rDigitsInt[rType] else R.string.digits_all, formatDigits(point, complement)) +
+                    (if (point < text.length && rep == -1)
+                        "\n" + it.getString(rDigitsFrac[rType], formatDigits(text.length - point - 1, cutOff = cutOff)) else "") +
+                    (if (rep > -1) (if (rep - point > 1) "\n" + it.getString(rDigitsPre[rType], formatDigits(rep - point - 1)) else "") +
+                        "\n" + it.getString(R.string.digits_rep, formatDigits(text.length - rep - 1, cutOff = cutOff)) else "")
+            } else {
+                val under = text.indexOf('_')
+                (if (under > -1) it.getString(rDigitsInt[rType], formatDigits(under, complement)) + "\n" else "") +
+                    it.getString(R.string.digits_numer, formatDigits(slash - under - 1, complement && under == -1)) + "\n" +
+                    it.getString(R.string.digits_denom, formatDigits(text.length - slash - 1))
+            }
+        } ?: ""
+
+        private fun formatDigits(n: Int, complement: Boolean = false, cutOff: Boolean = false): String? {
+            val m = if (cutOff) n - 1 else n
+            return if (complement) activity?.getString(R.string.many_digits) else
+                activity?.resources?.getQuantityString(R.plurals.digits, m, if (cutOff) "> $m" else "$m")
         }
     }
 }
@@ -305,7 +385,7 @@ class ListActivity : AppCompatActivity() {
             }
         }
         baseText.visibility = if (listWhat == "H") View.GONE else {
-            val textList = mutableListOf(getString(R.string.bare_base, base, resources.getStringArray(R.array.num_systems)[system.ordinal]))
+            val textList = mutableListOf(getString(R.string.bare_base, baseToString(base), resources.getStringArray(R.array.num_systems)[system.ordinal]))
             if (complement) textList.add(getString(R.string.complement))
             if (dms) textList.add(getString(R.string.dms))
             baseText.text = textList.joinToString()
@@ -341,6 +421,7 @@ class ListActivity : AppCompatActivity() {
     }
 
     override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
+        menu?.findItem(R.id.deleteItems)?.setTitle(if (adapter.selectedItems == 0) R.string.clear_history else R.string.delete)
         if (items.size > 0) snackbar?.dismiss()
         return super.onPrepareOptionsMenu(menu)
     }

@@ -29,14 +29,15 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentPagerAdapter
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.*
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.viewpager.widget.ViewPager
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 
 private const val SECTION_NUMBER = "section_number"
 
@@ -70,14 +71,11 @@ class HelpFragment : Fragment() {
                     0 -> getString(R.string.menu_help)
                     1 -> getString(R.string.menu_cheatSheet)
                     2 -> getString(R.string.menu_whatsNew)
-                    else -> getString(R.string.title_about, context?.packageManager?.getPackageInfo(context?.packageName ?: "", 0)?.versionName ?: "…")
+                    3 -> getString(R.string.title_about, context?.packageManager?.getPackageInfo(context?.packageName ?: "", 0)?.versionName ?: "…")
+                    else -> ""
                 } + "</h1>" +
-                getString(when (it) {
-                    0 -> R.string.help
-                    1 -> R.string.cheatSheet
-                    2 -> R.string.whatsNew
-                    else -> R.string.about
-                }), "text/html", "UTF-8")
+                getString(arrayOf(R.string.help, R.string.cheatSheet, R.string.whatsNew, R.string.about)[it]),
+                "text/html", "UTF-8")
         })
         return root
     }
@@ -100,10 +98,10 @@ class HelpFragment : Fragment() {
     }
 }
 
-class PagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+class Adapter(activity: FragmentActivity) : FragmentStateAdapter(activity) {
 
-    override fun getItem(position: Int): Fragment = HelpFragment.newInstance(position)
-    override fun getCount() = 4
+    override fun createFragment(position: Int): Fragment = HelpFragment.newInstance(position)
+    override fun getItemCount() = 4
 }
 
 class HelpActivity : AppCompatActivity() {
@@ -115,17 +113,20 @@ class HelpActivity : AppCompatActivity() {
 
         val toolbar = findViewById<Toolbar>(R.id.helpToolbar)
         val tabs = findViewById<TabLayout>(R.id.tabs)
-        val pager = findViewById<ViewPager>(R.id.pager)
+        val pager = findViewById<ViewPager2>(R.id.pager)
 
         toolbar.title = ""
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        pager.adapter = PagerAdapter(supportFragmentManager)
-        tabs.setupWithViewPager(pager)
-        tabs.getTabAt(0)?.setIcon(R.drawable.ic_help)
-        tabs.getTabAt(1)?.setIcon(R.drawable.ic_cheat_sheet)
-        tabs.getTabAt(2)?.setIcon(R.drawable.ic_whats_new)
-        tabs.getTabAt(3)?.setIcon(R.drawable.ic_about)
+        pager.adapter = Adapter(this)
+        TabLayoutMediator(tabs, pager) { tab, position ->
+            tab.setContentDescription(arrayOf(R.string.menu_help, R.string.menu_cheatSheet, R.string.menu_whatsNew, R.string.menu_about)[position])
+            tab.setIcon(arrayOf(
+                R.drawable.ic_help,
+                R.drawable.ic_cheat_sheet,
+                R.drawable.ic_whats_new,
+                R.drawable.ic_about)[position])
+        }.attach()
         tabs.getTabAt(when (intent.getIntExtra("help", R.id.helpItem)) {
             R.id.helpItem -> 0
             R.id.cheatSheetItem -> 1

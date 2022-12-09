@@ -21,12 +21,14 @@ along with Qonvert. If not, see <https://www.gnu.org/licenses/>.
 Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
 */
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
 import android.util.AttributeSet
 import android.view.MenuItem
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -50,8 +52,26 @@ class SettingsActivity : AppCompatActivity(), PreferenceFragmentCompat.OnPrefere
                 .replace(R.id.settings, SettingsFragment())
                 .commit()
         }
-        setSupportActionBar(findViewById(R.id.settingsToolbar))
+        setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                goUp()
+            }
+        })
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem) = if (item.itemId == android.R.id.home) {
+        goUp()
+        true
+    } else false
+
+    private fun goUp() {
+        if (supportFragmentManager.backStackEntryCount > 0) {
+            supportFragmentManager.popBackStack()
+            toolbar.title = getString(R.string.menu_settings)
+        } else finish()
     }
 
     override fun onPreferenceStartFragment(caller: PreferenceFragmentCompat, pref: Preference): Boolean {
@@ -61,25 +81,6 @@ class SettingsActivity : AppCompatActivity(), PreferenceFragmentCompat.OnPrefere
             .commit()
         toolbar.title = getString(R.string.tokens_header)
         return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem) = if (item.itemId == android.R.id.home) {
-        if (popToMain()) finish()
-        true
-    } else false
-
-    override fun onBackPressed() {
-        if (popToMain()) super.onBackPressed()
-    }
-
-    private fun popToMain(): Boolean {
-        with(supportFragmentManager.backStackEntryCount > 0) {
-            if (this) {
-                supportFragmentManager.popBackStack()
-                toolbar.title = getString(R.string.menu_settings)
-            }
-            return !this
-        }
     }
 
     override fun onResume() {
@@ -112,6 +113,7 @@ class SettingsActivity : AppCompatActivity(), PreferenceFragmentCompat.OnPrefere
             apostrophus?.summary = apostrophus?.entry.toString()
         }
 
+        @SuppressLint("DiscouragedApi")
         private fun buttonSummary() {
             findPreference<MultiSelectListPreference>("buttons")?.let {
                 it.summary = it.values.sortedBy { i -> i.toInt() }.joinToString(" • ") { i ->
@@ -137,8 +139,9 @@ class SettingsActivity : AppCompatActivity(), PreferenceFragmentCompat.OnPrefere
             buttonSummary()
             findPreference<Preference>("baseTokens")?.summary = TOKENS.mapIndexed { index, char ->
                 preferenceManager.sharedPreferences?.let { MainActivity.getTokenSettings(it) }
-                MainActivity.tokens[index].let { char.toString() +
-                    (if (it.second !in setOf(NumSystem.GREEK, NumSystem.ROMAN)) it.first else "") +
+                MainActivity.tokens[index].let {
+                    char.toString() +
+                    (if (it.second !in setOf(NumSystem.GREEK, NumSystem.ROMAN)) baseToString(it.first) else "") +
                     (if (it.second != NumSystem.STANDARD) "\u00A0" + resources.getStringArray(R.array.num_systems)[it.second.ordinal] else "") }
             }.joinToString(" • ")
          }
@@ -169,7 +172,7 @@ class SettingsActivity : AppCompatActivity(), PreferenceFragmentCompat.OnPrefere
                     snackbar = Snackbar.make(it, R.string.tokens_reset_ok, Snackbar.LENGTH_INDEFINITE)
                         .setAction(R.string.undo) {
                             for (i in 0..4) {
-                                basePreferences[i]?.value = backupBase[i]
+                                basePreferences[i]?.value = backupBase[i] ?: DEFAULT_BUTTONS[i + 1]
                                 systemPreferences[i]?.value = backupSystem[i]
                             }
                         }
@@ -204,14 +207,14 @@ class SettingsActivity : AppCompatActivity(), PreferenceFragmentCompat.OnPrefere
             if (key.startsWith("tokenBase")) findPreference<EditBasePreference>(key)?.let {
                 val systemPreference = findPreference<ListPreference>("tokenSystem$id")
                 try {
-                    if (allowedBase(it.value ?: 10, NumSystem.valueOf(systemPreference?.value ?: "")) != it.value)
+                    if (allowedBase(it.value, NumSystem.valueOf(systemPreference?.value ?: "")) != it.value)
                         systemPreference?.value = NumSystem.STANDARD.toString()
                 } catch (_: Exception) { }
             }
             if (key.startsWith("tokenSystem")) findPreference<ListPreference>(key)?.let {
                 val basePreference = findPreference<EditBasePreference>("tokenBase$id")
                 try {
-                    basePreference?.value = allowedBase(basePreference?.value ?: 10, NumSystem.valueOf(it.value ?: ""))
+                    basePreference?.value = allowedBase(basePreference?.value ?: DEFAULT_BUTTONS[id + 1], NumSystem.valueOf(it.value ?: ""))
                 } catch (_: Exception) { }
             }
         }
@@ -231,11 +234,13 @@ class SettingsActivity : AppCompatActivity(), PreferenceFragmentCompat.OnPrefere
 
 class EditBasePreference(context: Context, attrs: AttributeSet) : Preference(context, attrs) {
 
+    private val default = DEFAULT_BUTTONS[(key.last().digitToIntOrNull() ?: -1) + 1]
+
     var dialogTitle: String = ""
-    var value: Int? = null
-        set(v) {
-            field = saneBase(v) ?: DEFAULT_BUTTONS[(key.last().digitToIntOrNull() ?: -1) + 1]
-            summary = field.toString()
+    var value: Int = default
+        set(value) {
+            field = value
+            summary = baseToString(field)
             val editor = preferenceManager.sharedPreferences?.edit()
             editor?.putString(key, field.toString())
             editor?.apply()
@@ -243,13 +248,13 @@ class EditBasePreference(context: Context, attrs: AttributeSet) : Preference(con
 
     override fun onAttached() {
         super.onAttached()
-        value = preferenceManager.sharedPreferences?.getString(key, null)?.toIntOrNull()
+        value = preferenceManager.sharedPreferences?.getString(key, null)?.toIntOrNull() ?: default
     }
 
     override fun onClick() {
         super.onClick()
-        showBaseDialog(context, dialogTitle, value) { edit ->
-            value = edit.text.toString().toIntOrNull()
+        showBaseDialog(context, dialogTitle, value, default) { base, _ ->
+            value = base
         }
     }
 }
