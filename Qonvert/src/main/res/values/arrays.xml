@@ -143,8 +143,9 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
         <item>300</item>
         <item>1 000</item>
         <item>3 000</item>
-        <item>10 000 (may be slow)</item>
-        <item>30 000 (may freeze the app)</item>
+        <item>10 000 (may be slow for base φ)</item>
+        <item>30 000 (may be slow)</item>
+        <item>100 000 (may freeze the app)</item>
     </string-array>
     <string-array name="digits_values" translatable="false">
         <item>10</item>
@@ -155,6 +156,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
         <item>3000</item>
         <item>10000</item>
         <item>30000</item>
+        <item>100000</item>
     </string-array>
 
     <string-array name="natural_entries">

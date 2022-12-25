@@ -50,11 +50,11 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     </group>
     <group android:id="@+id/group2">
         <item
-            android:id="@+id/countItem"
-            android:visible="false" />
-        <item
             android:title="@string/menu_interval"
             android:id="@+id/playItem"
+            android:visible="false" />
+        <item
+            android:id="@+id/countItem"
             android:visible="false" />
     </group>
 </menu>

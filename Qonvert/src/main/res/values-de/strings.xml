@@ -127,12 +127,15 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
         <item quantity="one">%s Nenner</item>
         <item quantity="other">%s Nenner</item>
     </plurals>
+    <plurals name="denom_digit_list">
+        <item quantity="one">%s im Nenner</item>
+        <item quantity="other">%s in den Nennern</item>
+    </plurals>
     <plurals name="digits">
         <item quantity="one">%s Ziffer</item>
         <item quantity="other">%s Ziffern</item>
     </plurals>
-    <string name="digits_in_denoms">Ziffern: %s</string>
-    <string name="many_digits">beliebig viele Ziffern</string>
+    <string name="complement_digits">beliebig viele Ziffern</string>
     <string name="digits_deg">Grad:</string>
     <string name="digits_min">Minuten:</string>
     <string name="digits_sec">Sekunden:</string>
@@ -146,6 +149,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     <string name="digits_rep">%s in der Periode</string>
     <string name="digits_numer">%s im Zähler</string>
     <string name="digits_denom">%s im Nenner</string>
+    <string name="digits_not_supported">Anzahl der Ziffern ist für phinäre ägyptische Brüche nicht verfügbar</string>
 
     <!-- Settings -->
     <string name="out_header">Ausgabe</string>
@@ -326,7 +330,7 @@ endliche Darstellungen (allerdings meist mit Nachkommastellen), und nicht-ganze 
 Wenn du eine zufällige Ziffenfolge eingibst, bekommst du wahrscheinlich eine Fehlermeldung wie „101ᵩ (5/2+√5/2) ist nicht rational“.</p>
 <p>Die Ausgabe erfolgt ausschließlich mit den Ziffern 0 und 1, und nie mit zwei oder mehr 1en hintereinander. Die Bestandteile von Brüchen, einschließlich
 Kettenbrüchen, sind nicht notwendigerweise ganze Zahlen, aber es sind immer Zahlen ohne Nachkommastellen (englisch: <i>phintegers</i>).
-Derzeit werden phinäre Zahlen nicht als ägyptische Brüche ausgegeben.</p>
+Derzeit werden phinäre Zahlen weder als ägyptische Brüche noch als Brüche im DMS-Format ausgegeben.</p>
 
 <h3>Negative Basen</h3>
 <p><a href="https://de.wikipedia.org/wiki/Stellenwertsystem%23Negative_Basen">Negative Basen</a> lassen sich mit allen Standard- und Nicht-Standard-Systemen
@@ -434,18 +438,18 @@ im balancierten Undezimalsystem benötigst, ist Qonvert deine <strong>einzige</s
 
     <!-- What’s new -->
     <string name="whatsNew"><![CDATA[
-<h2>Version 1.7.0 <small>– </small></h2>
+<h2>Version 1.7.0 <small>– 25. Dez. 2022</small></h2>
 <p><strong>Phinär</strong>, also der Goldene Schnitt φ als Basis, wird jetzt unterstützt; auf den Schiebereglern ist er ganz links zu finden.
 Weiters werden <strong>Basen bis ±100</strong> unterstützt.</p>
 <p>Qonvert kann jetzt die <strong>Ziffern</strong> einzelner Einträge auf den Listen-Bildschirmen („Alle Formate, Verlauf, Musik-Intervalle“)
 <strong>zählen</strong> – und auch Nenner von Ketten- und ägyptischen Brüchen. Die neuen Menüpunkte sind über die ⋮ am rechten Rand verfügbar.</p>
 <p>Über „½“ auf der Qonvert-Tastatur (die Punkt-Taste lang antippen) erscheint ein Pop-up mit <strong>Brüchen</strong>.</p>
 <p>Für negative Basen werden die Basis-Tasten jetzt <i>kursiv</i> dargestellt.</p>
-<p>Zahlen in großen Basen werden schneller berechnet.</p>
+<p>Periodische Zahlen und Zahlen in großen Basen werden schneller berechnet. Und, unnötig zu erwähnen: Fehlerkorrekturen.</p>
 
-<h2>Version 1.6.0 <small>– 5 Nov 2022</small></h2>
-<p><strong>Basen bis 70</strong> werden jetzt unterstützt, einschließlich negativer. Die größeren Ziffern sind bis auf weiteres nur im Querformat verfügbar.
-In den Einstellungen kannst du neue Basis-Tasten für <strong>sexagesimal</strong> (Basis 60) aktivieren.</p>
+<h2>Version 1.6.0 <small>– 5. Nov. 2022</small></h2>
+<p><strong>Basen bis 70</strong> werden jetzt unterstützt, einschließlich negativer. In den Einstellungen kannst du neue Basis-Tasten für
+<strong>sexagesimal</strong> (Basis 60) aktivieren.</p>
 <p>Für die <strong>Basis-Kürzel</strong> (<code>@ %23 $ % &</code>) kann in den Einstellungen jede gültige Kombination von Basis und Zahlensystem
 definiert werden.</p>
 <p><strong>Grad, Minuten und Sekunden</strong>: Nicht-ganze Sekunden werden auch in Bruchform angezeigt.</p>

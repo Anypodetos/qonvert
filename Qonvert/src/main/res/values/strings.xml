@@ -144,12 +144,15 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
         <item quantity="one">%s denominator</item>
         <item quantity="other">%s denominators</item>
     </plurals>
+    <plurals name="denom_digit_list">
+        <item quantity="one">%s in denominator</item>
+        <item quantity="other">%s in denominators</item>
+    </plurals>
     <plurals name="digits">
         <item quantity="one">%s digit</item>
         <item quantity="other">%s digits</item>
     </plurals>
-    <string name="digits_in_denoms">digit count: %s</string>
-    <string name="many_digits">any number of digits</string>
+    <string name="complement_digits">any number of digits</string>
     <string name="digits_deg">degrees:</string>
     <string name="digits_min">minutes:</string>
     <string name="digits_sec">seconds:</string>
@@ -163,6 +166,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     <string name="digits_rep">%s in repeating part</string>
     <string name="digits_numer">%s in numerator</string>
     <string name="digits_denom">%s in denominator</string>
+    <string name="digits_not_supported">digit count not available for phinary Egyptian fractions</string>
 
     <!-- Settings -->
     <string name="out_header">Output</string>
@@ -367,7 +371,7 @@ radix point), and non-integer rational numbers have repeating representations. H
 you will likely get an error message along the lines of “101ᵩ (5/2+√5/2) isn’t rational”.</p>
 <p>The output will only contain the digits 0 and 1, and never two or more 1’s in a row. The parts of fractions, including continued ones, aren’t necessarily
 integers, but they are always numbers without a radix point. (Let’s coin a cheesy term: they are always <i>phintegers</i>.)
-Phinary output currently does not support Egyptian fractions.</p>
+Phinary output currently supports neither Egyptian fractions nor fractions in DMS format.</p>
 
 <h3>Negative bases</h3>
 <p><a href="https://en.wikipedia.org/wiki/Negative_base">Negative bases</a> work together with all standard and non-standard systems – including all
@@ -472,18 +476,18 @@ Qonvert is your <strong>only</strong> source. (The answer is 1YX&nbsp;215.)</p>
 
     <!-- What’s new -->
     <string name="whatsNew"><![CDATA[
-<h2>Version 1.7.0 <small>– </small></h2>
-<p><strong>Phinary</strong>, the golden ratio base, is now supported. On the sliders, it is located on the leftmost tick.
-Also, <strong>bases up to ±100</strong> are supported.</p>
+<h2>Version 1.7.0 <small>– 25 Dec 2022</small></h2>
+<p><strong>Phinary</strong>, the golden ratio base, is now supported. On the sliders, it is located on the leftmost tick. Also, <strong>bases up to
+±100</strong> are supported.</p>
 <p>Qonvert can now <strong>count digits</strong> – as well as <strong>denominators</strong> of continued and Egyptian fractions – of the list screens’
 (All formats, History, Musical intervals) individual entries. Tap the ⋮ on the right edge to bring up the new menu items.</p>
 <p>“½” on Qonvert’s keyboard (long-tap the radix point) brings up a pop-up with <strong>fraction characters</strong>.</p>
 <p>Setting a negative base <i>italicises</i> the base buttons for added clarity.</p>
-<p>Speed has been improved (again), especially for large bases.</p>
+<p>Speed has been improved (again), especially for repeating digits and for large bases. And needless to say: bugfixes.</p>
 
 <h2>Version 1.6.0 <small>– 5 Nov 2022</small></h2>
-<p><strong>Bases up to 70</strong> are now supported, including negative ones. The larger digits are only available in landscape orientation for the time being.
-On the settings screen, you can activate new base buttons for <strong>sexagesimal</strong> (base 60).</p>
+<p><strong>Bases up to 70</strong> are now supported, including negative ones. On the settings screen, you can activate new base buttons for
+<strong>sexagesimal</strong> (base 60).</p>
 <p>The <strong>base tokens</strong> (<code>@ %23 $ % &</code>) can be customized in the settings to represent any valid combination of base and numeral
 system.</p>
 <p><strong>Degrees, minutes and seconds</strong>: non-integer seconds are also shown as fractions.</p>
