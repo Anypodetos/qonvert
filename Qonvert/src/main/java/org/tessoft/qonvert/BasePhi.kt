@@ -59,22 +59,23 @@ class PhiNumber(var aNumer: BigInteger, var bNumer: BigInteger = ZERO, var denom
     constructor(a: BigFraction): this(a.first, ZERO, a.second)
 
     constructor(phinary: String, continuedOrEgyptian: Int = 0, negative: Boolean = false): this(ZERO) {
-        val st = phinary.filterNot { it in " \t\n\r" }
+        val st = phinary.filterNot { it.isWhitespace() }
         val semi = st.indexOf(';')
         when {
             semi == -1 -> parseFraction(st, negative)
             continuedOrEgyptian and IS_EGYPTIAN != 0 -> { /* Egyptian fraction */
-                parseResult = parseResult or IS_EGYPTIAN
+                parseResult = parseResult or IS_NUMBER or IS_EGYPTIAN
                 var x = parseFraction(st.substring(0, semi), negative)
                 for ((i, subSt) in st.substring(semi + 1).split(',').reversed().withIndex())
                     x += parseFraction(subSt, negative, if (i > 0) FRACTION_ZERO else FRACTION_INFINITY).inv()
                 x
             }
             else -> { /* continued fraction */
-                parseResult = parseResult or IS_CONTINUED
+                parseResult = parseResult or IS_NUMBER or IS_CONTINUED
                 var x = PHI_INFINITY
-                for ((i, subSt) in ((st.substring(semi + 1).split(',')).reversed() + st.substring(0, semi)).withIndex())
+                for ((i, subSt) in ((st.substring(semi + 1).split(',')).reversed() + st.substring(0, semi)).withIndex()) {
                     x = parseFraction(subSt, negative, if (i > 0) FRACTION_ZERO else FRACTION_INFINITY) + x.inv()
+                }
                 x
             }
         }.let {
@@ -213,14 +214,14 @@ class PhiNumber(var aNumer: BigInteger, var bNumer: BigInteger = ZERO, var denom
                 remainders.add(x)
                 x *= PHI
                 result.append(if (x >= ONE) { x -= ONE; '1' } else '0')
-            } while (x > ZERO && x !in remainders && remainders.size < maxDigits)
+            } while (x > ZERO && x !in remainders && remainders.size <= maxDigits)
             val rep = remainders.indexOf(x)
             if (rep > -1) result.insert(point + rep + 1, ':')
-            if (remainders.size >= maxDigits) result.append('…')
+            if (remainders.size > maxDigits) result[result.lastIndex] = '…'
         }
         if (alt && result.toString() == "0") return "..1010.:10"
-        if (alt && ':' !in result) {
-            if (point > -1) result.deleteAt(result.length - 1).append(":01") else {
+        if (alt && ':' !in result && '…' !in result) {
+            if (point > -1) result.deleteAt(result.lastIndex).append(":01") else {
                 val last1 = result.lastIndexOf('1')
                 result[last1] = '0'
                 for (i in last1 + 1 until result.length) if ((i - last1) % 2 != 0) result[i] = '1'
@@ -258,7 +259,7 @@ class PhiNumber(var aNumer: BigInteger, var bNumer: BigInteger = ZERO, var denom
 
     private tailrec fun continuedFraction(x: PhiNumber, groupDigits: Boolean = false, complement: Boolean = false, pre: String = ""): String {
         var (integer, fraction) = x.phintegerPart(complement)
-        if (x < ZERO && fraction != PHI_ZERO) {
+        if (x < ZERO && !complement && fraction != PHI_ZERO) {
             val diff = if (integer.endsWith('0')) PHI_ONE else INV_PHI
             with((x - diff).phintegerPart(complement)) { integer = first; fraction = diff - second }
         }
@@ -269,7 +270,7 @@ class PhiNumber(var aNumer: BigInteger, var bNumer: BigInteger = ZERO, var denom
 
     private fun phintegerPart(complement: Boolean = false): Pair<StringBuilder, PhiNumber> {
         if (denom == ZERO) return Pair(StringBuilder(if (aNumer == ZERO && bNumer == ZERO) "NaN" else "Infinity"), PHI_ZERO)
-        if (this < ZERO && !complement) return with((-this).phintegerPart()) { Pair(first.insert(0, '-'), second) } // base -φ
+        if (this < ZERO && !complement) return with((-this).phintegerPart()) { Pair(first.insert(0, '-'), second) }
         var x = abs()
         val powers = mutableListOf(PHI_ONE, PHI)
         while (x >= powers.last()) powers.add(powers.last() * PHI)
@@ -285,8 +286,9 @@ class PhiNumber(var aNumer: BigInteger, var bNumer: BigInteger = ZERO, var denom
 
     private fun insertSpaces(s: StringBuilder, groupDigits: Boolean, point: Int = -1): String {
         if (groupDigits) {
-            var pos = if (point > -1) point - s.length + (if (':' in s) 2 else 1) else (if (".:" in s) -2 else 0)
-            for (i in s.length - 2 downTo 0) if (s[i] in "01" && ++pos % 4 == 0 && pos != 0) s.insert(i + 1, ' ')
+            val cutOffPos = s.length - if (s.endsWith('…')) 1 else 0
+            var pos = if (point > -1) point - cutOffPos + (if (':' in s) 2 else 1) else (if (".:" in s) -2 else 0)
+            for (i in cutOffPos - 2 downTo 0) if (s[i] in "01" && ++pos % 4 == 0 && pos != 0) s.insert(i + 1, ' ')
         }
         return s.toString()
     }
@@ -339,7 +341,7 @@ fun matrixFibonacci(n: Int): Pair<BigInteger, BigInteger> { /* https://stackover
 }
 
 private fun parseFinitePhinary(s: String, negative: Boolean = false): PhiNumber {
-    val st = s.filterNot { it in " \t\n\r" }
+    val st = s.filterNot { it.isWhitespace() }
     val minus = st.startsWith('-')
     val complement = st.startsWith("..")
     if (complement && negative) return PHI_INFINITY.also { it.parseResult = IS_NUMBER }

@@ -164,7 +164,7 @@ class WaveView(context: Context) : View(context) {
     }
 
     private fun calcWave() {
-        if (waveWidth > 0) with (path) {
+        if (waveWidth > 0) with(path) {
             reset()
             moveTo(waveWidth, waveHeight * 0.4f)
             lineTo(0f, waveHeight * 0.4f)

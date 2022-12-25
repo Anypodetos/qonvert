@@ -188,7 +188,7 @@ class QNumber {
         var stTrimmed = st.trimStart()
         if (stTrimmed.startsWith('"'))
             return Pair(if (stTrimmed.length > 1) { format = QFormat.UNICODE; stTrimmed.codePointAt(1).toBigInteger() } else ZERO, ONE)
-        stTrimmed = stTrimmed.filterNot { it in " \t\n\r" }
+        stTrimmed = stTrimmed.filterNot { it.isWhitespace() }
         val bracketMinus = stTrimmed.startsWith("-{") || stTrimmed.startsWith("-[")
         if (bracketMinus) {
             stTrimmed = stTrimmed.substring(1)
@@ -200,11 +200,11 @@ class QNumber {
             if (egyptian) stTrimmed = stTrimmed.removePrefix("{").removeSuffix("}")
         val semi = stTrimmed.indexOf(';')
         var x = FRACTION_INFINITY
-        val phiResult = if (base == 1 && stTrimmed.all { it !in ALL_TOKENS }) parsePhinary(stTrimmed, forbidden = if (egyptian) IS_CONTINUED else IS_EGYPTIAN,
-            FRACTION_ZERO) else null
+        val phiResult = if (abs(base) == 1 && stTrimmed.all { it !in ALL_TOKENS })
+            parsePhinary(stTrimmed, forbidden = if (egyptian) IS_CONTINUED else IS_EGYPTIAN, FRACTION_ZERO) else null
         if (phiResult == null) when {
             semi == -1 -> { /* positional number or fraction */
-                x = parseDMS(stTrimmed)
+                x = parseDms(stTrimmed)
                 if (!isValid) when (stTrimmed) {
                     "🐋💐" -> { error = ""; return Pair(38607030735492.toBigInteger(), ONE) }
                     "🚕"   -> { error = ""; return Pair(77002143071279.toBigInteger(), ONE) }
@@ -212,28 +212,26 @@ class QNumber {
                 }
             }
             egyptian -> { /* Egyptian fraction */
-                x = parseDMS(stTrimmed.substring(0, semi))
+                x = parseDms(stTrimmed.substring(0, semi))
                 for ((i, subSt) in stTrimmed.substring(semi + 1).split(',').reversed().withIndex()) {
-                    val c = parseDMS(subSt, if (i > 0) FRACTION_ZERO else FRACTION_INFINITY)
+                    val c = parseDms(subSt, if (i > 0) FRACTION_ZERO else FRACTION_INFINITY)
                     x = reduceFraction(c.first * x.first + c.second * x.second, c.first * x.second)
                 }
             }
             else -> { /* continued fraction */
                 for ((i, subSt) in ((stTrimmed.substring(semi + 1).split(',')).reversed() + stTrimmed.substring(0, semi)).withIndex()) {
-                    val c = parseDMS(subSt, if (i > 0) FRACTION_ZERO else FRACTION_INFINITY)
+                    val c = parseDms(subSt, if (i > 0) FRACTION_ZERO else FRACTION_INFINITY)
                     x = reduceFraction(c.first * x.first + c.second * x.second, c.second * x.first)
                 }
-             //   format = QFormat.CONTINUED
             }
         } else x = phiResult
         if (bracketMinus) x = reduceFraction(-x.first, x.second)
-//        if (continued) format = QFormat.CONTINUED else if (egyptian) format = QFormat.EGYPTIAN
         if (egyptian) format = QFormat.EGYPTIAN else if (continued || semi > -1) format = QFormat.CONTINUED
-        if (x.first >= ZERO) complement = false /* shouldn’t be necessary, but feels safer */
+        if (x.first >= ZERO) complement = false /* shouldn't be necessary, but feels safer */
         return x
     }
 
-    private fun parseDMS(st: String, default: BigFraction = FRACTION_ZERO): BigFraction {
+    private fun parseDms(st: String, default: BigFraction = FRACTION_ZERO): BigFraction {
         if (st.isEmpty()) return default
         val degs = st.indexOf('°')
         val minutes = st.indexOf('\'', degs)
@@ -257,7 +255,8 @@ class QNumber {
         var slash = st.indexOf('/')
         if (slash > -1 && under > slash) under = -1
         if (slash > -1 || under > -1) format = if (under == -1) QFormat.FRACTION else QFormat.MIXED
-        if (base == 1 && st.all { it !in ALL_TOKENS }) with(parsePhinary(st, forbidden = IS_CONTINUED or IS_EGYPTIAN, default)) { if (this != null) return this }
+        if (abs(base) == 1 && st.all { it !in ALL_TOKENS }) with(parsePhinary(st, forbidden = IS_CONTINUED or IS_EGYPTIAN, default))
+            { if (this != null) return this }
         return if (slash == -1 && under == -1) parsePositional(st, default) else {
             if (slash == -1) slash = st.length
             val denom =   parsePositional(st.substring(min(slash + 1, st.length)), FRACTION_ONE)
@@ -278,7 +277,7 @@ class QNumber {
         }
         if ((bareSt.trimStart { it in "-." }.firstOrNull() ?: ' ') in GREEK_CHARS) with(parseGreek(bareSt)) { if (this != null) return this }
         if (useSystem == NumSystem.ROMAN) with(parseRoman(bareSt)) { if (this != null) return if (bareSt.all { it in "-|!" }) default else this }
-        if (useBase == 1) with(parsePhinary(bareSt, forbidden = IS_ANY_FRACTION, default)) { if (this != null) return this }
+        if (abs(useBase) == 1) with(parsePhinary(bareSt, forbidden = IS_ANY_FRACTION, default)) { if (this != null) return this }
         val bigBase = useBase.toBigInteger()
         var numer = ZERO;      var numerSub = ZERO
         var denom = ONE;       var denomSub = ZERO
@@ -452,7 +451,8 @@ class QNumber {
         QFormat.POSITIONAL -> system !in setOf(NumSystem.BIJECTIVE_1, NumSystem.BIJECTIVE_A, NumSystem.GREEK) || denominator <= ONE ||
             (dms && N3600 % denominator == ZERO)
         QFormat.POSITIONAL_ALT -> {
-            val d = with(gcdPower()) { if (second + (if (system == NumSystem.STANDARD) 0 else 1) > MainActivity.maxDigitsAfter) ZERO else first }
+            val d = if (abs(base) == 1) denominator else
+                with(gcdPower()) { if (second + (if (system == NumSystem.STANDARD) 0 else 1) > MainActivity.maxDigitsAfter) ZERO else first }
             if (!dms) (system == NumSystem.STANDARD && ((base > 0 && d == ONE) || (base < 0 && (ONE - base.toBigInteger()).let { basePlusOne ->
                 QNumber(numerator * basePlusOne - denominator, denominator * basePlusOne, -base, system).usefulFormat(QFormat.POSITIONAL_ALT)
             }))) || (system == NumSystem.BALANCED && d == TWO)
@@ -460,8 +460,8 @@ class QNumber {
         }
         QFormat.FRACTION -> (denominator != ONE || (abs(base) == 1 && numerator.abs() > ONE)) &&
             (system !in NumSystem.BIJECTIVE_1..NumSystem.BIJECTIVE_A || denominator != ZERO)
-        QFormat.MIXED -> if (denominator <= ONE && !(abs(base) == 1 && numerator.abs() > ONE) /*|| abs(base) == 1*/) false else { ////////////
-            val useDms = dms && N3600 % denominator != ZERO
+        QFormat.MIXED -> if (denominator <= ONE && !(abs(base) == 1 && numerator.abs() > ONE)) false else {
+            val useDms = dms && abs(base) > 1 && N3600 % denominator != ZERO
             (!useDms && numerator.abs() > denominator) ||
                 (useDms && ((SIXTY * numerator) % denominator + if (complement) denominator else ZERO).abs() * SIXTY > denominator)
         }
@@ -495,7 +495,7 @@ class QNumber {
             QFormat.MIXED          -> toMixed()
             QFormat.CONTINUED      -> toContinued()
             QFormat.EGYPTIAN       -> toEgyptian(aEgyptianMethod)
-            QFormat.GREEK_NATURAL, QFormat.ROMAN_NATURAL -> ""
+            QFormat.GREEK_NATURAL, QFormat.ROMAN_NATURAL -> "" /* handled in constructor */
             QFormat.UNICODE        -> toUnicode()
         } + if (withBaseSystem && mode == DisplayMode.STANDARD && aFormat !in setOf(QFormat.GREEK_NATURAL, QFormat.ROMAN_NATURAL, QFormat.UNICODE) &&
                     system !in setOf(NumSystem.GREEK, NumSystem.ROMAN))
@@ -509,7 +509,7 @@ class QNumber {
         }
     }
 
-    private fun toDMS(format: QFormat) = if (denominator > ZERO) {
+    private fun toDms(format: QFormat) = if (denominator > ZERO) {
         var degs = numerator / denominator - (if (complement && denominator != ONE) ONE else ZERO)
         val minNumer = SIXTY * (numerator - degs * denominator)
         var mins = minNumer / denominator
@@ -533,22 +533,22 @@ class QNumber {
             (if (secNumer != ZERO) QNumber(if ((degs == ZERO && mins == ZERO) || keepSign) secNumer else secNumer.abs(), denominator, base, system)
                 .toString(aFormat = format).removeSuffix("ʹ") + "\"" else "")
         ).trimEnd()
-    } else toPositional() + "°"
+    } else toPositional()
 
-    fun toFraction() = if (dms && denominator != ZERO && N3600 % denominator != ZERO) toDMS(QFormat.FRACTION) else
+    fun toFraction() = if (dms && abs(base) > 1 && denominator != ZERO && N3600 % denominator != ZERO) toDms(QFormat.FRACTION) else
         if (abs(base) == 1) PhiNumber(numerator, ZERO, denominator).toBasePhiFraction(groupDigits = MainActivity.groupDigits, complement = complement) else
             if (denominator != ONE) "${intToBase(numerator, keraia = false)}/${intToBase(denominator)}" else intToBase(numerator)
 
-    fun toMixed() = if (dms && denominator != ZERO && N3600 % denominator != ZERO) toDMS(QFormat.MIXED) else
-        if (/*denominator > ONE && */numerator.abs() > denominator) {                     /////////////////////////////////
+    fun toMixed() = if (dms && abs(base) > 1 && denominator != ZERO && N3600 % denominator != ZERO) toDms(QFormat.MIXED) else
+        if (numerator.abs() > denominator) {
             if (abs(base) == 1) PhiNumber(numerator, ZERO, denominator).toBasePhiMixed(groupDigits = MainActivity.groupDigits, complement = complement) else
-                intToBase(numerator / denominator - (if (complement) ONE else ZERO), keraia = false) + '_' +
+                intToBase(numerator / denominator - (if (complement) ONE else ZERO), keraia = false) + if (denominator > ONE) ('_' +
                     intToBase((numerator % denominator + (if (complement) denominator else ZERO)).let {
                         if (system == NumSystem.BALANCED || base < 0) it else it.abs()
-                    }, keraia = false) + '/' + intToBase(denominator)
+                    }, keraia = false) + '/' + intToBase(denominator)) else ""
         } else toFraction()
 
-    fun toContinued() = if (abs(base) == 1) "[" +
+    fun toContinued() = if (abs(base) == 1 && !(numerator.abs() <= ONE && denominator <= ONE)) "[" +
         PhiNumber(numerator, ZERO, denominator).toBasePhiContinued(groupDigits = MainActivity.groupDigits, complement = complement) + "]" else
             if (denominator > ONE) continuedFraction(numerator, denominator) else toPositional()
 
@@ -568,21 +568,22 @@ class QNumber {
 
     fun toPositional(alt: Boolean = false): String {
         if (denominator == ZERO) return if (numerator == ZERO) "無" else "∞"
-        if (dms) return toDMS(if (alt) QFormat.POSITIONAL_ALT else QFormat.POSITIONAL)
+        if (dms) return toDms(if (alt) QFormat.POSITIONAL_ALT else QFormat.POSITIONAL)
         if (system == NumSystem.ROMAN) with(toRoman()) { if (this != "") return this }
         if (abs(base) == 1) return PhiNumber(numerator, ZERO, denominator).toBasePhi(groupDigits = MainActivity.groupDigits,
-            maxDigits = if (denominator == ONE) Int.MAX_VALUE else MainActivity.maxDigitsAfter, alt = alt, complement = complement).replace(':', '˙')
+            maxDigits = if (alt) Int.MAX_VALUE else MainActivity.maxDigitsAfter, alt = alt, complement = complement).replace(':', '˙')
         if (denominator == ONE && !alt) return intToBase(numerator)
         if (numerator == ZERO && alt && system == NumSystem.STANDARD && base > 0) return with(digitToChar(base - 1, base, system)) { "..$this$this.˙$this" }
         if (system in setOf(NumSystem.BIJECTIVE_1, NumSystem.BIJECTIVE_A, NumSystem.GREEK)) return toMixed()
         val bigBase = base.toBigInteger()
         val (d, nPre) = gcdPower()
+        val oneMinusD = ONE - d
         var nRep = 0
-        var power = ONE
+        var remainder = ONE
         if (d > ONE && nPre <= MainActivity.maxDigitsAfter) do {
             nRep++
-            power *= bigBase
-        } while ((power - ONE) % d != ZERO && nRep <= MainActivity.maxDigitsAfter - nPre)
+            remainder = remainder * bigBase % d
+        } while (remainder != ONE && remainder != oneMinusD && nRep <= MainActivity.maxDigitsAfter - nPre)
         if (base < 0 && nRep == 1 && usefulFormat(QFormat.POSITIONAL_ALT)) nRep = 2
         val cutOff = nRep > MainActivity.maxDigitsAfter - nPre
         if (cutOff) nRep = MainActivity.maxDigitsAfter - nPre
@@ -611,14 +612,15 @@ class QNumber {
     private fun intToBase(a: BigInteger, fracDigits: Int = 0, repDigits: Int = -1, forceMinus: Boolean = false, keraia: Boolean = true): String {
         if (system == NumSystem.GREEK) return toGreek(a, ONE, keraia)
         if (system == NumSystem.ROMAN) return toRoman(a, ONE)
-        if (abs(base) == 1) return PhiNumber(a).toBasePhi(groupDigits = MainActivity.groupDigits, complement = complement)
+        if (abs(base) == 1) return PhiNumber(a).toBasePhi(groupDigits = MainActivity.groupDigits, maxDigits = MainActivity.maxDigitsAfter,
+            complement = complement)
         if (system in NumSystem.BIJECTIVE_1..NumSystem.BIJECTIVE_A && a == ZERO) return "/"
         val x = if (!complement || a >= ZERO) a.abs() else a + base.toBigInteger().pow(max(complementDigits(-a, base) + 2, fracDigits + 1))
         val s = x.toStringBuilder(abs(base), fracDigits + 1)
         if (system in setOf(NumSystem.BALANCED, NumSystem.BIJECTIVE_1, NumSystem.BIJECTIVE_A) || base < 0) {
             val intDigits = s.length - fracDigits
             var roll = 0
-            for (i in s.length - 1 downTo 0) {
+            for (i in s.lastIndex downTo 0) {
                 var digit = DIGITS.indexOf(s[i]) + roll
                 val changed = roll != 0
                 val negPlace = base < 0 && (((intDigits - i) % 2 == 0) != (a < ZERO))
@@ -652,7 +654,7 @@ class QNumber {
         if (MainActivity.groupDigits) {
             val nDigits = s.length
             for (i in s.length - fracDigits % groupSize downTo 1 step groupSize) s.insert(i, ' ')
-            val fracPos = s.length - 1 - fracDigits - fracDigits / groupSize
+            val fracPos = s.lastIndex - fracDigits - fracDigits / groupSize
             if (fracDigits in 1..nDigits) s[fracPos] = '.'
             if (repDigits in 0..nDigits) s.insert(fracPos + 1 + fracDigits - repDigits + (fracDigits - repDigits) / groupSize, '˙')
         } else {
@@ -687,14 +689,14 @@ class QNumber {
         return result.removePrefix(", ").toString() + if (denom > ONE) ", …" else ""
     }
 
-    private fun egyptianBinaryList(r: BigInteger) =
-        r.toString(2).reversed().mapIndexed { i, c -> if (c == '1') TWO.pow(i) else null }.filterNotNull()
     private fun egyptianFractionBinary(fracNumer: BigInteger): String {
         var p = TWO
         while (fracNumer * p % denominator >= TWO * p) p *= TWO
         return (egyptianBinaryList(fracNumer * p % denominator).map { p / it * denominator } +
                 egyptianBinaryList(fracNumer * p / denominator).map { p / it }).sorted().joinToString { intToBase(it) }
     }
+    private fun egyptianBinaryList(r: BigInteger) =
+        r.toString(2).reversed().mapIndexed { i, c -> if (c == '1') TWO.pow(i) else null }.filterNotNull()
 
     private fun egyptianFractionGolomb(fracNumer: BigInteger): String {
         val result = StringBuilder()
@@ -1005,7 +1007,7 @@ fun saneBase(base: Int, default: Int) = if (base in -1..0) default else base.coe
 
 fun allowedBase(base: Int, system: NumSystem) = when (system) {
     NumSystem.STANDARD -> base.coerceIn(-MAX_BASE, MAX_BASE)
-    NumSystem.BALANCED -> (if (base % 2 != 0) base else base + 1).coerceIn(3, MAX_BAL_BASE) * base.sign
+    NumSystem.BALANCED -> (if (base % 2 != 0) abs(base) else abs(base) + 1).coerceIn(3, MAX_BAL_BASE) * base.sign
     NumSystem.BIJECTIVE_1 -> abs(base).coerceIn(2, MAX_BASE - 1) * base.sign
     NumSystem.BIJECTIVE_A -> abs(base).coerceIn(2, MAX_BASE - 10) * base.sign
     NumSystem.GREEK, NumSystem.ROMAN -> 10

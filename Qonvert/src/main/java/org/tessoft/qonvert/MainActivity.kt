@@ -58,8 +58,8 @@ const val TAXICAB = 1729
 val MONSTER = BigInteger("808017424794512875886459904961710757005754368000000000")
 const val TOKENS = "@#$%&"
 const val ALL_TOKENS = "@#$€£¥%&"
-val BUTTON_BASES = intArrayOf(1, 2, 3, 6, 8, 10, 12, 16, 20, 26, 60)
-val DEFAULT_BUTTONS = intArrayOf(-1, 2, 8, 10, 12, 16)
+val BUTTON_BASES = listOf(1, 2, 3, 6, 8, 10, 12, 16, 20, 26, 60)
+val DEFAULT_BUTTONS = listOf(-1, 2, 8, 10, 12, 16)
 val THEMES = mapOf('A' to R.style.Theme_Qonvert, 'B' to R.style.Theme_QonvertBlue)
 
 enum class KeyboardId {
@@ -620,7 +620,7 @@ class MainActivity : AppCompatActivity() {
         if (switchBases) dmsSwitch.isChecked = lastQNumber.dms
         val hasToken = st.indexOfAny(ALL_TOKENS.toCharArray()) > -1 && !st.trimStart().startsWith('"')
         val outputSt = if (hasToken) q.toString() else st
-        val rounded = outputSt.endsWith("…") || outputSt.endsWith("…}") || outputSt.endsWith("…\"")
+        val rounded = '…' in outputSt && !outputSt.startsWith('"')
         editInput.string = if (hasToken || rounded) {
             Toast.makeText(applicationContext,
                 ((if (hasToken) getString(R.string.to_tokenFree) else "") + "\n\n" + (if (rounded) getString(R.string.to_fraction) else "")).trim(),
@@ -777,7 +777,7 @@ fun makePretty(text: String): Pair<String, Int> {
         prettyText = s.toString()
         prettyMenuTitle = R.string.clipboard_rep
     }
-    val fractionStart =prettyText.indexOfLast { it in "_°'" }
+    val fractionStart = prettyText.indexOfLast { it in "_°'" }
     val slash = prettyText.indexOf('/')
     if (slash > -1 && prettyText.substring(fractionStart + 1).all { it in '0'..'9' || it in "/-. " }) {
         prettyText = "_${prettyText}_"
@@ -804,10 +804,15 @@ fun makePretty(text: String): Pair<String, Int> {
 }
 
 fun makeCompatible(text: String, base: Int, system: NumSystem): Pair<String, Int> {
+    /* Unicode */
     if (text.startsWith("\""))
         return if (text.endsWith("\"")) Pair(text.removeSurrounding("\""), R.string.clipboard_noQuotes) else Pair(text, 0)
-    var compatText = text.removeSuffix("…").
+
+    val seconds = text.endsWith("\"")
+    val cutOffPositional = text.endsWith("…") || text.endsWith("…\"")
+    var compatText = text.removeSuffix("\"").removeSuffix("…").trimEnd().
         replace("_", (if (system == NumSystem.GREEK) "ʹ" else "") + (if (text.firstOrNull() == '-') '-' else '+'))
+    /* continued and Egyptian fractions */
     val one = when (system) {
         NumSystem.BIJECTIVE_A -> 'a'
         NumSystem.GREEK -> 'α'
@@ -831,19 +836,20 @@ fun makeCompatible(text: String, base: Int, system: NumSystem): Pair<String, Int
         NumSystem.GREEK -> "○+"
         NumSystem.ROMAN -> if (MainActivity.lowerDigits) "n+" else "N+"
     })
+    /* repeating digits and DMS */
     if (system !in setOf(NumSystem.GREEK, NumSystem.ROMAN)) {
         compatText = compatText.filter { it != ' ' }
         val rep = compatText.indexOf('˙')
         if (rep > -1) {
-            val seconds = compatText.endsWith("\"")
-            compatText = compatText.removeRange(rep, rep + 1).removeSuffix("\"")
-            with (compatText.substring(rep).filter { it != '.' }) {
+            compatText = compatText.removeRange(rep, rep + 1)
+            if (!cutOffPositional) with(compatText.substring(rep).filterNot { it == '.' }) {
                 if (isNotEmpty()) compatText += repeat(MainActivity.maxDigitsAfter / length)
             }
-            if (seconds) compatText +="\""
         }
         compatText = compatText.replace("°", "° ").replace("'", "' ").trimEnd()
     }
+    if (seconds) compatText += "\""
+    /* complement notation */
     if (compatText.startsWith("..")) when (system) {
         NumSystem.GREEK -> {
             val leading9 = (compatText.getOrNull(2) ?: ' ').lowercaseChar()

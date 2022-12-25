@@ -36,6 +36,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.MenuCompat
 import androidx.preference.PreferenceManager
+import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -72,9 +73,9 @@ class RecyclerAdapter internal constructor(private val activity: ListActivity?, 
         private set
     private val inflater: LayoutInflater = LayoutInflater.from(activity)
 
-    private val rDigitsInt  = arrayOf(R.string.digits_int, R.string.digits_int_phi)
-    private val rDigitsFrac = arrayOf(R.string.digits_frac, R.string.digits_frac_phi)
-    private val rDigitsPre  = arrayOf(R.string.digits_pre, R.string.digits_pre_phi)
+    private val rDigitsInt  = listOf(R.string.digits_int, R.string.digits_int_phi)
+    private val rDigitsFrac = listOf(R.string.digits_frac, R.string.digits_frac_phi)
+    private val rDigitsPre  = listOf(R.string.digits_pre, R.string.digits_pre_phi)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder =
         ViewHolder(inflater.inflate(R.layout.fragment_list, parent, false))
@@ -112,29 +113,6 @@ class RecyclerAdapter internal constructor(private val activity: ListActivity?, 
         val outputText: TextView = itemView.findViewById(R.id.outputText)
         val extraButton: TextView = itemView.findViewById(R.id.extraButton)
         val expandButton: FloatingActionButton = itemView.findViewById(R.id.expandButton)
-
-        private fun changeSelection(range: Boolean) {
-            if (range && lastSelectedItem > -1) {
-                val start = min(adapterPosition, lastSelectedItem)
-                val end   = max(adapterPosition, lastSelectedItem)
-                for (i in start..end) with (items[i]) {
-                    if (!selected) {
-                        selected = true
-                        selectedItems++
-                    }
-                }
-                lastSelectedItem = adapterPosition
-                notifyItemRangeChanged(start, end - start + 1)
-            } else with(items[adapterPosition]) {
-                selected = !selected
-                if (selected) {
-                    lastSelectedItem = adapterPosition
-                    selectedItems++
-                } else selectedItems--
-                notifyItemChanged(adapterPosition)
-            }
-            activity?.updateToolbar()
-        }
 
         init {
             if (listWhatToken == "H" && activity != null) {
@@ -187,23 +165,23 @@ class RecyclerAdapter internal constructor(private val activity: ListActivity?, 
                 popupMenu.menu.findItem(R.id.playItem).isVisible = listWhatToken == "H" &&
                     with(items[adapterPosition].number) { abs(numerator.toDouble() / denominator.toDouble()).toFloat() } in 1/128.0..128.0
                 popupMenu.menu.findItem(R.id.settingsListItem).isVisible = false
-                val countItem = popupMenu.menu.findItem(R.id.countItem)
-                val countDenominators = with(items[adapterPosition].number) {
-                    countItem.isVisible = format != QFormat.UNICODE
-                    format in setOf(QFormat.CONTINUED, QFormat.EGYPTIAN)
+                var countSt = items[adapterPosition].number.toString(aEgyptianMethod = if (items[adapterPosition].egyptianMethod == EgyptianMethod.OFF)
+                                MainActivity.preferredEgyptianMethod() else items[adapterPosition].egyptianMethod).lowercase()
+                val countDenominators = (countSt.firstOrNull() ?: ' ') in "[{"
+                with(popupMenu.menu.findItem(R.id.countItem)) {
+                    isVisible = countSt.firstOrNull() != '"'
+                    setTitle(if (countDenominators) R.string.count_denominators else R.string.count_digits)
                 }
-                countItem.setTitle(if (countDenominators) R.string.count_denominators else R.string.count_digits)
                 popupMenu.setOnMenuItemClickListener { item: MenuItem ->
                     val text = when (item.itemId) {
                         R.id.copyItems, R.id.shareItems -> items[adapterPosition].toStrings(activity).second
                         R.id.countItem -> {
-                            var st = items[adapterPosition].number.toString(aEgyptianMethod = if (items[adapterPosition].egyptianMethod == EgyptianMethod.OFF)
-                                MainActivity.preferredEgyptianMethod() else items[adapterPosition].egyptianMethod).lowercase()
-                            for ((key, value) in ROMAN_APOSTROPHUS) st = st.replace(key, value)
-                            if (items[adapterPosition].number.system == NumSystem.ROMAN) st.findAnyOf(ROMAN_1_12.drop(1) + "…", ignoreCase = true)?.first?.let {
-                                st = st.substring(0, it) + "." + st.substring(it)
+                            for ((key, value) in ROMAN_APOSTROPHUS) countSt = countSt.replace(key, value)
+                            if (items[adapterPosition].number.system == NumSystem.ROMAN) countSt.findAnyOf(ROMAN_1_12.drop(1) + "…", ignoreCase = true)?.first?.
+                                    let {
+                                countSt = countSt.substring(0, it) + "." + countSt.substring(it)
                             }
-                            st.replace(". ", "").filterNot { it in " -\"͵ʹ|" }
+                            countSt.replace(". ", "").filterNot { it in " -\"͵ʹ|" }
                         }
                         else -> ""
                     }
@@ -217,21 +195,27 @@ class RecyclerAdapter internal constructor(private val activity: ListActivity?, 
                         R.id.countItem -> activity?.let { it ->
                             val title = it.getString(if (countDenominators) R.string.count_denominators_title else R.string.count_digits_title)
                             val message = if (countDenominators) {
+                                val phinary = abs(items[adapterPosition].number.base) == 1
                                 val cutOff = '…' in text
-                                val list = text.drop(1).dropLast(1).split(";", ",").let { if (cutOff) it.dropLast(1) else it }
+                                val list = text.substring(1, text.lastIndex).split(";", ",").let { if (cutOff) it.dropLast(1) else it }
                                 val n = list.size - 1
-                                it.resources.getQuantityString(R.plurals.denominators, n, if (cutOff) "> $n" else "$n") +
-                                    "\n" + it.resources.getString(R.string.digits_in_denoms,
-                                        list.joinToString(", ") { it.length.toString() }.replaceFirst(',', ';') + if (cutOff) ", …" else "")
+                                it.resources.getQuantityString(R.plurals.denominators, n, if (cutOff) "> $n" else "$n") + "\n\u2003—\n" +
+                                    if (phinary && countSt.firstOrNull() == '{') it.resources.getString(R.string.digits_not_supported) else
+                                        (it.getString(rDigitsInt[if (phinary) 1 else 0], list.firstOrNull()?.let { st ->
+                                            formatDigits(st.length, st.startsWith(".."))
+                                        }) +
+                                        if (list.size > 1) "\n" + it.resources.getQuantityString(R.plurals.denom_digit_list, list.size - 1,
+                                            list.drop(1).joinToString(", ") { it.length.toString() } + (if (cutOff) ", …" else ""))
+                                                else "")
                             } else if (text in listOf("∞", "無" , "/", "/°")) formatDigits(0) else {
                                 val deg = text.indexOf('°')
                                 val min = text.indexOf('\'')
                                 val degMin = max(deg, min)
-                                (if (deg > -1) countDigits(if (deg == text.length - 1) 0 else R.string.digits_deg,
+                                (if (deg > -1) countDigits(if (deg == text.lastIndex) 0 else R.string.digits_deg,
                                         text.substring(0, deg)) + "\n\n" else "") +
-                                    (if (min > -1) countDigits(if (min == text.length - 1 && deg == -1) 0 else R.string.digits_min,
+                                    (if (min > -1) countDigits(if (min == text.lastIndex && deg == -1) 0 else R.string.digits_min,
                                         text.substring(deg + 1, min)) + "\n\n" else "") +
-                                    (if (text.length - 1 > degMin) countDigits(if (degMin == -1) 0 else R.string.digits_sec,
+                                    (if (text.lastIndex > degMin) countDigits(if (degMin == -1) 0 else R.string.digits_sec,
                                         text.substring(degMin + 1)) else "")
                             }
                             AlertDialog.Builder(it)
@@ -262,6 +246,29 @@ class RecyclerAdapter internal constructor(private val activity: ListActivity?, 
             }
         }
 
+        private fun changeSelection(range: Boolean) {
+            if (range && lastSelectedItem > -1) {
+                val start = min(adapterPosition, lastSelectedItem)
+                val end   = max(adapterPosition, lastSelectedItem)
+                for (i in start..end) with(items[i]) {
+                    if (!selected) {
+                        selected = true
+                        selectedItems++
+                    }
+                }
+                lastSelectedItem = adapterPosition
+                notifyItemRangeChanged(start, end - start + 1)
+            } else with(items[adapterPosition]) {
+                selected = !selected
+                if (selected) {
+                    lastSelectedItem = adapterPosition
+                    selectedItems++
+                } else selectedItems--
+                notifyItemChanged(adapterPosition)
+            }
+            activity?.updateToolbar()
+        }
+
         private fun countDigits(header: Int, text: String): String = activity?.let {
             val complement = text.startsWith("..")
             val slash = text.indexOf('/')
@@ -285,7 +292,7 @@ class RecyclerAdapter internal constructor(private val activity: ListActivity?, 
 
         private fun formatDigits(n: Int, complement: Boolean = false, cutOff: Boolean = false): String? {
             val m = if (cutOff) n - 1 else n
-            return if (complement) activity?.getString(R.string.many_digits) else
+            return if (complement) activity?.getString(R.string.complement_digits) else
                 activity?.resources?.getQuantityString(R.plurals.digits, m, if (cutOff) "> $m" else "$m")
         }
     }
@@ -301,7 +308,7 @@ class ListActivity : AppCompatActivity() {
     private lateinit var recycler: RecyclerView
     private lateinit var adapter: RecyclerAdapter
     lateinit var outputRadioGroup: RadioGroup
-    var outputRadioIds = arrayOf(R.id.defaultRadio, R.id.prettyRadio, R.id.compatibleRadio)
+    var outputRadioIds = listOf(R.id.defaultRadio, R.id.prettyRadio, R.id.compatibleRadio)
     var snackbar: Snackbar? = null
     private lateinit var preferences: SharedPreferences
     private val items = mutableListOf<QNumberEntry>()
@@ -338,6 +345,9 @@ class ListActivity : AppCompatActivity() {
                 stackFromEnd = true
             }
         }
+        recycler.itemAnimator = object : DefaultItemAnimator() {
+            override fun canReuseUpdatedViewHolder(viewHolder: RecyclerView.ViewHolder) = true
+        }
         adapter = RecyclerAdapter(this, items)
         recycler.adapter = adapter
         if (listWhat == "H") ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.END) {
@@ -365,7 +375,7 @@ class ListActivity : AppCompatActivity() {
                     items.add(QNumberEntry(toInterval(resources), this))
                 }
             }
-            in 'a'..'z' -> {
+            in 'a'..'z' -> {                                               /* 'm' = from output area of MainActivity */
                 val q = QNumber(preferencesEntry = listWhat.substring(1))
                 base = q.base
                 system = q.system

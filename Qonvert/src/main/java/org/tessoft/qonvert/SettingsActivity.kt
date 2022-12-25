@@ -158,12 +158,12 @@ class SettingsActivity : AppCompatActivity(), PreferenceFragmentCompat.OnPrefere
 
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             setPreferencesFromResource(R.xml.token_preferences, rootKey)
-            val basePreferences = Array(5) { findPreference<EditBasePreference>("tokenBase$it") }
-            val systemPreferences = Array(5) { findPreference<ListPreference>("tokenSystem$it") }
+            val basePreferences = List(5) { findPreference<EditBasePreference>("tokenBase$it") }
+            val systemPreferences = List(5) { findPreference<ListPreference>("tokenSystem$it") }
 
             findPreference<Preference>("tokensReset")?.setOnPreferenceClickListener {
-                val backupBase = Array(5) { basePreferences[it]?.value }
-                val backupSystem = Array(5) { systemPreferences[it]?.value }
+                val backupBase = List(5) { basePreferences[it]?.value }
+                val backupSystem = List(5) { systemPreferences[it]?.value }
                 for (i in 0..4) {
                     basePreferences[i]?.value = DEFAULT_BUTTONS[i + 1]
                     systemPreferences[i]?.value = NumSystem.STANDARD.toString()

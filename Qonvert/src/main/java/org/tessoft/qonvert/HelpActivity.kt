@@ -74,7 +74,7 @@ class HelpFragment : Fragment() {
                     3 -> getString(R.string.title_about, context?.packageManager?.getPackageInfo(context?.packageName ?: "", 0)?.versionName ?: "…")
                     else -> ""
                 } + "</h1>" +
-                getString(arrayOf(R.string.help, R.string.cheatSheet, R.string.whatsNew, R.string.about)[it]),
+                getString(listOf(R.string.help, R.string.cheatSheet, R.string.whatsNew, R.string.about)[it]),
                 "text/html", "UTF-8")
         })
         return root
@@ -120,8 +120,8 @@ class HelpActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         pager.adapter = Adapter(this)
         TabLayoutMediator(tabs, pager) { tab, position ->
-            tab.setContentDescription(arrayOf(R.string.menu_help, R.string.menu_cheatSheet, R.string.menu_whatsNew, R.string.menu_about)[position])
-            tab.setIcon(arrayOf(
+            tab.setContentDescription(listOf(R.string.menu_help, R.string.menu_cheatSheet, R.string.menu_whatsNew, R.string.menu_about)[position])
+            tab.setIcon(listOf(
                 R.drawable.ic_help,
                 R.drawable.ic_cheat_sheet,
                 R.drawable.ic_whats_new,
