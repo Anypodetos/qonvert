@@ -1,5 +1,26 @@
 package org.tessoft.qonvert
 
+/*
+Copyright 2022 Anypodetos (Michael Weber)
+
+This file is part of Qonvert.
+
+Qonvert is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Qonvert is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Qonvert. If not, see <https://www.gnu.org/licenses/>.
+
+Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
+*/
+
 import java.math.BigInteger
 import java.math.BigInteger.*
 import java.util.*
@@ -250,20 +271,16 @@ class PhiNumber(var aNumer: BigInteger, var bNumer: BigInteger = ZERO, var denom
 
     fun toBasePhiMixed(groupDigits: Boolean = false, complement: Boolean = false): String {
         if (abs() <= ONE || denom == ZERO) return toBasePhiFraction(groupDigits, complement)
-        val (integer, fraction) = phintegerPart(complement)
-        return insertSpaces(integer, groupDigits) + if (fraction > ZERO) '_' + fraction.toBasePhiFraction(groupDigits) else ""
+        val (phinteger, fraction) = phintegerPart(complement)
+        return insertSpaces(phinteger, groupDigits) + if (fraction > ZERO) '_' + fraction.toBasePhiFraction(groupDigits) else ""
     }
 
     fun toBasePhiContinued(groupDigits: Boolean = false, complement: Boolean = false) =
         continuedFraction(this, groupDigits, complement)
 
     private tailrec fun continuedFraction(x: PhiNumber, groupDigits: Boolean = false, complement: Boolean = false, pre: String = ""): String {
-        var (integer, fraction) = x.phintegerPart(complement)
-        if (x < ZERO && !complement && fraction != PHI_ZERO) {
-            val diff = if (integer.endsWith('0')) PHI_ONE else INV_PHI
-            with((x - diff).phintegerPart(complement)) { integer = first; fraction = diff - second }
-        }
-        val st = "$pre, ${insertSpaces(integer, groupDigits)}"
+        val (phinteger, fraction) = x.phintegerFloorPart(complement)
+        val st = "$pre, ${insertSpaces(phinteger, groupDigits)}"
         return if (fraction == PHI_ZERO) st.substring(2).replaceFirst(',', ';') else
             continuedFraction(fraction.inv(), groupDigits, complement, st)
     }
@@ -282,6 +299,15 @@ class PhiNumber(var aNumer: BigInteger, var bNumer: BigInteger = ZERO, var denom
         for (p in powers.dropLast(1).reversed()) result.append(if (x >= p) { x -= p; '1' } else '0')
         if (this < ZERO && complement) result.insert(0, if (result.startsWith("10")) "..10" else "..1010")
         return Pair(result, x)
+    }
+
+    private fun phintegerFloorPart(complement: Boolean = false): Pair<StringBuilder, PhiNumber> {
+        var (phinteger, fraction) = phintegerPart(complement)
+        if (this < ZERO && !complement && fraction != PHI_ZERO) {
+            val diff = if (phinteger.endsWith('0')) PHI_ONE else INV_PHI
+            with((this - diff).phintegerPart()) { phinteger = first; fraction = diff - second }
+        }
+        return Pair(phinteger, fraction)
     }
 
     private fun insertSpaces(s: StringBuilder, groupDigits: Boolean, point: Int = -1): String {
