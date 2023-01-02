@@ -1,0 +1,1 @@
+Supports bases up to ±160; new keyboard layouts; bugfixes
