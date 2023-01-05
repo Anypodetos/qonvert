@@ -1,1 +1,1 @@
-Supports bases up to ±160; new keyboard layouts; bugfixes
+Digits outside the range 0…9 can now be dissected into their decimal representations; three additional keyboard layouts; bugfixes
