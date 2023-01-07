@@ -1,7 +1,7 @@
 package org.tessoft.qonvert
 
 /*
-Copyright 2022 Anypodetos (Michael Weber)
+Copyright 2022, 2023 Anypodetos (Michael Weber)
 
 This file is part of Qonvert.
 
@@ -30,7 +30,6 @@ import android.view.MotionEvent
 import android.view.SoundEffectConstants
 import android.view.View
 import android.view.inputmethod.EditorInfo
-import androidx.core.content.ContextCompat
 import java.util.*
 import kotlin.concurrent.schedule
 import kotlin.math.*
@@ -62,7 +61,6 @@ class KeyboardView(context: Context, attrs: AttributeSet) : View(context, attrs)
     private var touchX  = -1
     private var touchY  = -1
 
-    private var landscape = true
     private var buttonCols = 12
     private val buttonRows = 4
     private var buttonW = 1f
@@ -70,27 +68,28 @@ class KeyboardView(context: Context, attrs: AttributeSet) : View(context, attrs)
     private var padding = 0f
     private val buttonRects = Array(buttonCols) { Array(buttonRows) { RectF(0f, 0f, 0f, 0f) } }
     private val buttonTextX = Array(buttonCols) { Array(buttonRows) { arrayOf(0f, 0f) } }
-    private val buttonTextY = Array(buttonCols) { Array(buttonRows) { 0f } }
+    private val buttonTextY = Array(buttonCols) { Array(buttonRows) { arrayOf(0f, 0f) } }
     private val buttonTexts = Array(buttonCols) { Array(buttonRows) { arrayOf(' ', ' ') } }
     private var showPopup = ' '
     private var popupX = 0
     private var popupY = 0
     private var popupLong = 0
     private val popupWidths = Array(buttonCols) { Array(buttonRows) { arrayOf(0, 0) } }
+    private val popupValues = Array(buttonCols) { 0 }
     private var popupRect = RectF(0f, 0f, 0f, 0f)
 
     private val paintEmpty = 0
     private val paintNormal = 1
     private val paintClose = 2
     private val paintHighlight = 3
-    private val highlightColor = ContextCompat.getColor(context, MainActivity.resolveColor(R.attr.colorSecondary))
+    private val highlightColor = resolveColor(context, R.attr.colorSecondary)
     private val buttonPaints = List(4) {
         Paint().apply {
             style = Paint.Style.FILL
             color = listOf(0x30808080, 0x60808080, highlightColor and 0xa0ffffff.toInt(), highlightColor)[it]
         }
     }
-    private val textColor = ContextCompat.getColor(context, MainActivity.resolveColor(R.attr.editTextColor))
+    private val textColor = resolveColor(context, R.attr.editTextColor)
     private val textPaints = listOf(
         Paint(Paint.ANTI_ALIAS_FLAG).apply {
             textSize = 18 * resources.displayMetrics.scaledDensity
@@ -101,7 +100,17 @@ class KeyboardView(context: Context, attrs: AttributeSet) : View(context, attrs)
             textSize = 13 * resources.displayMetrics.scaledDensity
             textAlign = Paint.Align.RIGHT
             color = textColor and 0xa0ffffff.toInt()
+        },
+        Paint(Paint.ANTI_ALIAS_FLAG).apply { /* Enter font */
+            textSize = 15 * resources.displayMetrics.scaledDensity
+            textAlign = Paint.Align.RIGHT
+            color = textColor
         })
+    private val decimalPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        textSize = 11 * resources.displayMetrics.scaledDensity
+        textAlign = Paint.Align.RIGHT
+        color = textColor
+    }
     private val popupPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE
         strokeWidth = 2 * resources.displayMetrics.scaledDensity
@@ -190,11 +199,14 @@ class KeyboardView(context: Context, attrs: AttributeSet) : View(context, attrs)
         if (!always) showPopup = ' '
         base = abs(baseAndSystem.first)
         system = baseAndSystem.second
+        val landscape = resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE ||
+            mainActivity?.keyboardId in setOf(KeyboardId.DIGITS_LEFT_TABLET, KeyboardId.DIGITS_RIGHT_TABLET)
         val oldButtonCols = buttonCols
         buttonCols = if (landscape) 12 else if (system == NumSystem.GREEK && showPopup != '½') 9 else 8
         if (oldButtonCols != buttonCols || always) positionButtons()
         for (i in 0 until buttonCols) for (j in 0 until buttonRows) for (k in 0..1) buttonTexts[i][j][k] = ' '
         for (i in 0 until buttonCols) for (j in 0 until buttonRows) for (k in 0..1) popupWidths[i][j][k] = 0
+        for (i in 0 until buttonCols) popupValues[i] = 0
         for (i in 0..1) textPaints[i].typeface = Typeface.DEFAULT
         if (showPopup == '½') {
             val left = (buttonCols - 8) / 2
@@ -204,76 +216,84 @@ class KeyboardView(context: Context, attrs: AttributeSet) : View(context, attrs)
             invalidate()
             return
         }
+        val digitsLeft = mainActivity?.keyboardId in setOf(KeyboardId.DIGITS_LEFT, KeyboardId.DIGITS_LEFT_TABLET)
+        val bijectiveAdd = if (system == NumSystem.BIJECTIVE_A) 9 else 0
         val bottomRow = arrayOf("", "")
         when (system) {
             NumSystem.GREEK -> {
                 var block = 0
                 for ((d, digit) in GREEK_DIGITS.withIndex()) if (digit == '\u0000') block++ else
-                    buttonTexts[((d - block) % 3 + 3 * block) % buttonCols][2 - ((d - block) / 3 % 3)][0] = digit
-                for (d in 1..9) buttonTexts[(d - 1) % 3 + 3][(9 - d) / 3][1] = d.digitToChar()
-                bottomRow[0] = if (landscape) "○.˙͵∞無␣" else "○.˙͵"
-                bottomRow[1] = if (landscape) "0½ ʹ    " else "0½ ʹ␣"
+                    buttonTexts[((d - block) % 3 + 3 * block - if (digitsLeft) 3 else 0) % buttonCols][2 - ((d - block) / 3 % 3)][0] = digit
+                for (d in 1..9) buttonTexts[(d - 1) % 3 + if (digitsLeft) 0 else 3][(9 - d) / 3][1] = d.digitToChar()
+                bottomRow[0] = if (digitsLeft) ("○.˙͵-␣" + (if (landscape) "°'\"" else "") + ",/") else (",/-○.˙͵" + (if (landscape) "∞無␣" else "") + "⏎")
+                bottomRow[1] = if (digitsLeft) ("0½ ʹ" + (if (landscape) "      " else "°'\"") + "⏎") else ("°'\"0½ ʹ" + (if (landscape) "    " else "␣"))
                 for (i in 0..1) textPaints[i].typeface = Typeface.SERIF
             }
             NumSystem.ROMAN -> {
-                for ((d, digit) in ROMAN_DIGITS.keys.withIndex()) buttonTexts[d % 4 + if (landscape) 6 else 3][(11 - d) / 4][0] = digit
+                val romanStart = if (digitsLeft) 0 else (if (landscape) 6 else 3)
+                for ((d, digit) in ROMAN_DIGITS.keys.withIndex()) buttonTexts[d % 4 + romanStart][(11 - d) / 4][0] = digit
                 if (APOSTROPHUS_OPTIONS[MainActivity.apostrophus][1] == '+' || APOSTROPHUS_OPTIONS[MainActivity.apostrophus][4] == '+')
-                    buttonTexts[if (landscape) 8 else 5][1][0] = 'ↀ'
-                buttonTexts[if (landscape) 9 else 6][0][0] = '|'
-                buttonTexts[if (landscape) 9 else 6][1][1] = 'ↄ'
-                for (j in 0..2) for (k in 0..1) buttonTexts[if (landscape) 11 - k else 7][j][if (landscape) 0 else k] = "∷⁙s·∶∴"[2 - j + 3 * k]
-                for (d in 1..9) buttonTexts[(d - 1) % 3 + 3][(9 - d) / 3][if (landscape) 0 else 1] = d.digitToChar()
-                bottomRow[0] = if (landscape) "0.˙n∞無␣" else "n.˙"
-                bottomRow[1] = if (landscape) " ½      " else "0½ ␣"
+                    buttonTexts[romanStart + 2][1][0] = 'ↀ'
+                buttonTexts[romanStart + 3][0][0] = '|'
+                buttonTexts[romanStart + 3][1][1] = 'ↄ'
+                for (j in 0..2) for (k in 0..1) buttonTexts[(if (landscape) 11 - k else 7) - if (digitsLeft) 3 else 0][j][if (landscape) 0 else k] =
+                    "∷⁙s·∶∴"[2 - j + 3 * k]
+                for (d in 1..9) buttonTexts[(d - 1) % 3 + if (digitsLeft) (if (landscape) 4 else 0) else 3][(9 - d) / 3][if (landscape) 0 else 1] =
+                    d.digitToChar()
+                bottomRow[0] = if (digitsLeft) ("n" + if (landscape) "°'\"0" else "") + ".˙-␣,/" else (",/-" + (if (landscape) "0.˙n∞無␣" else "n.˙") + "⏎")
+                bottomRow[1] = if (digitsLeft) (if (landscape) "∞    ½    " else "0½ °'\"") + "⏎" else (if (landscape) "°'\" ½      " else "°'\"0½ ␣")
                 for (i in 0..1) textPaints[i].typeface = Typeface.SERIF
             }
             else -> {
-                val bijectiveAdd = if (system == NumSystem.BIJECTIVE_A) 9 else 0
+                val digitsStart = if (digitsLeft) 0 else buttonCols - 5
                 val digitRange = digitRange(base, system, bijectiveAdd)
                 if (system != NumSystem.BIJECTIVE_A) for (d in digitRange.first.coerceAtLeast(1)..digitRange.last.coerceAtMost(9))
-                    buttonTexts[(d - 1) % 3 + buttonCols - 5][(9 - d) / 3][0] = d.digitToChar()
+                    buttonTexts[(d - 1) % 3 + digitsStart][(9 - d) / 3][0] = d.digitToChar()
                 for (d in digitRange.first.coerceAtLeast(10)..digitRange.last.coerceAtMost(39)) {
-                    val i = (d - bijectiveAdd + 3 * buttonCols - 16) / 3 % buttonCols + if (landscape && d - bijectiveAdd >= 52) 3 else 0
+                    val i = (d - bijectiveAdd - 1 + 3 * digitsStart) / 3 % buttonCols
                     val j = (d + 2) % 3
-                    val k = (d - bijectiveAdd) / (3 * buttonCols + 1)
+                    val k = if (buttonTexts[i][j][0] == ' ') 0 else 1
                     buttonTexts[i][j][k] = DIGITS[d]
-                    popupWidths[i][j][k] = if (d < 40) (digitRange.last - d) / 30 + 2 else 0
+                    popupWidths[i][j][k] = (digitRange.last - d) / 30 + 2
                 }
                 for (d in digitRange.first..-1) {
-                    val i = (d - 3 * buttonCols + 57) / 3 % buttonCols
+                    val i = (d + 3 * ((if (digitsLeft) 21 else 19) - buttonCols)) / 3 % buttonCols
                     val j = (d + 18) % 3
-                    buttonTexts[i][j][if (i == 0 || buttonTexts[i][j][0] == ' ') 0 else 1] = (d + 123).toChar()
+                    buttonTexts[i][j][if (buttonTexts[i][j][0] == ' ' || (!digitsLeft && i == 0)) 0 else 1] = (d + 123).toChar()
                 }
-                if (!landscape && system == NumSystem.BALANCED) for (d in 16..digitRange.last) buttonTexts[3][d - 16][1] = (d + 87).toChar()
-                bottomRow[0] = (if (landscape) "°'\"␣0.˙" else "0.˙").let {
-                    if (digitRange.first <= 0) it else it.replace('0', '∞')
+                if (system == NumSystem.BALANCED && !digitsLeft && !landscape) for (d in 16..digitRange.last) buttonTexts[3][d - 16][1] = (d + 87).toChar()
+                bottomRow[0] = (if (digitsLeft) ("0.˙-␣" + (if (landscape) " °'\"" else "") +  ",/") else (",/-" + (if (landscape) "°'\"␣" else "") + "0.˙⏎")).
+                        let {
+                    if (digitRange.first <= 0) it else it.replaceFirst('0', '∞')
                 }
-                bottomRow[1] = if (landscape) "    ∞½  ".let {
-                    if (digitRange.first <= 0) it else it.replace('∞', ' ')
-                } else " ½ ␣"
+                bottomRow[1] = if (landscape) (if (digitsLeft) "∞½        ⏎" else "       ∞½  ").let {
+                    if (digitRange.first <= 0) it else it.replaceFirst('∞', ' ')
+                } else (if (digitsLeft) " ½ °'\"⏎" else "°'\" ½ ␣")
             }
         }
-        popupWidths[if (!landscape || system in setOf(NumSystem.GREEK, NumSystem.ROMAN)) 4 else 8][3][1] = 24
-        for (i in 0..2) {
-            for (j in 0..3) buttonTexts[i][j][if (buttonTexts[i][j][0] == ' ') 0 else 1] = "[{;,@#_/\$%&-"[4 * i + j]
-            if (!landscape || system in setOf(NumSystem.GREEK, NumSystem.ROMAN)) buttonTexts[i][3][1] = "°'\""[i]
-        }
+        popupWidths[if (digitsLeft) (if (!landscape || system != NumSystem.ROMAN) 1 else 5) else
+            (if (!landscape || system in setOf(NumSystem.GREEK, NumSystem.ROMAN)) 4 else 8)][3][1] = 24 /* fraction chars popup */
+        val brackets = "[{;@#_\$%&"
+        val bracketsStart = if (digitsLeft) buttonCols - 3 else 0
+        for (i in 0..2) for (j in 0..2) buttonTexts[i + bracketsStart][j][if (buttonTexts[i + bracketsStart][j][0] == ' ') 0 else 1] = brackets[3 * i + j]
         for (k in 0..1) {
-            bottomRow[k] += listOf("⏎⌫", "\u200A")[k]
-            for (i in 3 until buttonCols) buttonTexts[i][3][k] = bottomRow[k].getOrNull(i - 3) ?: '☹'
+            bottomRow[k] += if (k == 0) "⌫" else "\u200A"
+            for (i in 0 until buttonCols) buttonTexts[i][3][k] = bottomRow[k].getOrNull(i) ?: '☹'
         }
         if (showPopup !in " ½") {
-            val shiftLeft = (popupX + popupWidths[popupX][popupY][popupLong] - buttonCols).coerceAtLeast(0)
-            popupRect = buttonRects[popupX - shiftLeft][popupY].let {
+            val leftEdge = popupX - (popupX + popupWidths[popupX][popupY][popupLong] - buttonCols).coerceAtLeast(0)
+            popupRect = buttonRects[leftEdge][popupY].let {
                 RectF(it.left - padding / 2, it.top - padding / 2,
-                    buttonRects[popupX - shiftLeft + popupWidths[popupX][popupY][popupLong] - 1][popupY].right + padding / 2, it.bottom + padding / 2)
+                    buttonRects[leftEdge + popupWidths[popupX][popupY][popupLong] - 1][popupY].right + padding / 2, it.bottom + padding / 2)
             }
-            for (i in 0 until popupWidths[popupX][popupY][popupLong]) {
-                buttonTexts[popupX - shiftLeft + i][popupY][0] = DIGITS.getOrNull(DIGITS.indexOf(showPopup) + 30 * i) ?: '☹'
-                buttonTexts[popupX - shiftLeft + i][popupY][1] = ' '
+            for (i in 0 until popupWidths[popupX][popupY][popupLong] - 1) {
+                buttonTexts[leftEdge + i][popupY][0] = DIGITS.getOrNull(DIGITS.indexOf(showPopup) + 30 * i) ?: '☣'
+                buttonTexts[leftEdge + i][popupY][1] = ' '
+                popupValues[leftEdge + i] = DIGITS.indexOf(showPopup) + 30 * i - bijectiveAdd
             }
-            buttonTexts[popupX - shiftLeft + popupWidths[popupX][popupY][popupLong] - 1][popupY][0] = '×'
-            for (i in 0 until popupWidths[popupX][popupY][popupLong]) for (k in 0..1) popupWidths[popupX - shiftLeft + i][popupY][k] = 0
+            buttonTexts[leftEdge + popupWidths[popupX][popupY][popupLong] - 1][popupY][0] = '×'
+            buttonTexts[leftEdge + popupWidths[popupX][popupY][popupLong] - 1][popupY][1] = ' '
+            for (i in 0 until popupWidths[popupX][popupY][popupLong]) for (k in 0..1) popupWidths[leftEdge + i][popupY][k] = 0
         }
         if (!MainActivity.lowerDigits) for (i in 0 until buttonCols) for (j in 0 until buttonRows) for (k in 0..1)
             buttonTexts[i][j][k] = buttonTexts[i][j][k].uppercaseChar()
@@ -286,17 +306,16 @@ class KeyboardView(context: Context, attrs: AttributeSet) : View(context, attrs)
         padding = height / 50f
         for (i in 0 until buttonCols) for (j in 0 until buttonRows) {
             buttonRects[i][j] = RectF(i * buttonW + padding, j * buttonH + padding, (i + 1) * buttonW - padding, (j + 1) * buttonH - padding)
-            for (k in 0..1) {
+            for (k in 0..1)
                 buttonTextX[i][j][k] = if (k == 0) buttonRects[i][j].centerX() - (if (system == NumSystem.GREEK && showPopup != '½') padding else 0f)
                     else buttonRects[i][j].right - padding
-                buttonTextY[i][j]    = buttonRects[i][j].centerY() + padding
-            }
+            buttonTextY[i][j][0] = buttonRects[i][j].centerY() + padding
+            buttonTextY[i][j][1] = buttonRects[i][j].bottom - padding
         }
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldW: Int, oldH: Int) {
         super.onSizeChanged(w, h, oldW, oldH)
-        landscape = resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
         fillButtons(always = true)
     }
 
@@ -310,10 +329,14 @@ class KeyboardView(context: Context, attrs: AttributeSet) : View(context, attrs)
                     buttonTexts[i][j][0] == '×' -> paintClose
                     else -> paintNormal
                 }])
-                for (k in 0..1) if (buttonTexts[i][j][k] != ' ')
-                    it.drawText(buttonTexts[i][j][k].toString(), buttonTextX[i][j][k], buttonTextY[i][j], textPaints[k])
+                for (k in 0..1) if (buttonTexts[i][j][k] != ' ') it.drawText(buttonTexts[i][j][k].toString(), buttonTextX[i][j][k], buttonTextY[i][j][0],
+                    textPaints[if (k == 1 && buttonTexts[i][j][k] == '⏎') 2 else k])
             }
-            if (showPopup != ' ') it.drawRoundRect(popupRect, padding, padding, popupPaint)
+            if (showPopup != ' ') {
+                if (showPopup != '½') for (i in 0 until buttonCols) if (popupValues[i] > 0)
+                    it.drawText(popupValues[i].toString(), buttonTextX[i][popupY][1], buttonTextY[i][popupY][1], decimalPaint)
+                it.drawRoundRect(popupRect, padding, padding, popupPaint)
+            }
         }
     }
 

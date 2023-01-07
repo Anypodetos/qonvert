@@ -31,7 +31,6 @@ converted to Kotlin, with minor modifications, by Anypodetos.
 */
 
 import android.content.Context
-import android.content.res.Resources
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Path
@@ -40,11 +39,6 @@ import android.media.AudioManager
 import android.media.AudioTrack
 import android.view.MotionEvent
 import android.view.View
-import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat
-import java.math.BigInteger
-import java.util.*
-import kotlin.concurrent.schedule
 import kotlin.concurrent.thread
 import kotlin.math.*
 
@@ -132,12 +126,12 @@ class WaveView(context: Context) : View(context) {
 
     private val linePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE
-        color = ContextCompat.getColor(context, MainActivity.resolveColor(R.attr.editTextColor))
+        color = resolveColor(context, R.attr.editTextColor)
     }
     private val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         textSize = 12 * resources.displayMetrics.scaledDensity
         textAlign = Paint.Align.CENTER
-        color = ContextCompat.getColor(context, MainActivity.resolveColor(android.R.attr.textColorHint))
+        color = resolveColor(context, android.R.attr.textColorHint)
     }
 
     init {

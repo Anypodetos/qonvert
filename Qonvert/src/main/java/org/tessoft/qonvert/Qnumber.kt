@@ -1,7 +1,7 @@
 package org.tessoft.qonvert
 
 /*
-Copyright 2020, 2021, 2022 Anypodetos (Michael Weber)
+Copyright 2020, 2021, 2022, 2023 Anypodetos (Michael Weber)
 
 This file is part of Qonvert.
 
@@ -108,10 +108,6 @@ val complementSystems = setOf(NumSystem.STANDARD, NumSystem.GREEK, NumSystem.ROM
 
 enum class EgyptianMethod {
     GREEDY, BINARY, GOLOMB /* same results as continued fractions method */, PAIRING, OFF
-}
-
-enum class DisplayMode {
-    STANDARD, PRETTY, COMPATIBLE
 }
 
 class QNumber {
@@ -497,16 +493,17 @@ class QNumber {
             QFormat.EGYPTIAN       -> toEgyptian(aEgyptianMethod)
             QFormat.GREEK_NATURAL, QFormat.ROMAN_NATURAL -> "" /* handled in constructor */
             QFormat.UNICODE        -> toUnicode()
-        } + if (withBaseSystem && mode == DisplayMode.STANDARD && aFormat !in setOf(QFormat.GREEK_NATURAL, QFormat.ROMAN_NATURAL, QFormat.UNICODE) &&
-                    system !in setOf(NumSystem.GREEK, NumSystem.ROMAN))
+        }
+        return when (mode) {
+            DisplayMode.STANDARD   -> result
+            DisplayMode.DISSECT   -> makeDissect(result, base, system).first
+            DisplayMode.PRETTY     -> makePretty(result).first
+            DisplayMode.COMPATIBLE -> makeCompatible(result, base, system).first
+        } + if (withBaseSystem && mode in setOf (DisplayMode.STANDARD, DisplayMode.DISSECT) && system !in setOf(NumSystem.GREEK, NumSystem.ROMAN) &&
+                    aFormat !in setOf(QFormat.GREEK_NATURAL, QFormat.ROMAN_NATURAL, QFormat.UNICODE))
             (if (base > 0) "" else "₋") + (if (abs(base) > 1) abs(base).toString().map { SUBSCRIPT_DIGITS[it.digitToInt()] }.joinToString("") else "ᵩ") +
                 MainActivity.numSystemsSuper[system.ordinal]
                     else ""
-        return when (mode) {
-            DisplayMode.STANDARD   -> result
-            DisplayMode.PRETTY     -> makePretty(result).first
-            DisplayMode.COMPATIBLE -> makeCompatible(result, base, system).first
-        }
     }
 
     private fun toDms(format: QFormat) = if (denominator > ZERO) {
@@ -719,16 +716,17 @@ class QNumber {
             var found = false
             iterations++
             for (entry in denomMap) if (entry.value > ONE) {
+                val valueDiv = entry.value.divideAndRemainder(TWO)
                 if (entry.key % TWO == ZERO) {
                     val newKey = entry.key / TWO
-                    denomMap[newKey] = (denomMap[newKey] ?: ZERO) + entry.value / TWO
+                    denomMap[newKey] = (denomMap[newKey] ?: ZERO) + valueDiv[0]
                 } else {
                     val newKey1 = (entry.key + ONE) / TWO
                     val newKey2 = ((entry.key + ONE) * entry.key) / TWO
-                    denomMap[newKey1] = (denomMap[newKey1] ?: ZERO) + entry.value / TWO
-                    denomMap[newKey2] = (denomMap[newKey2] ?: ZERO) + entry.value / TWO
+                    denomMap[newKey1] = (denomMap[newKey1] ?: ZERO) + valueDiv[0]
+                    denomMap[newKey2] = (denomMap[newKey2] ?: ZERO) + valueDiv[0]
                 }
-                if (entry.value % TWO == ZERO) denomMap.remove(entry.key) else denomMap[entry.key] = ONE
+                if (valueDiv[1] == ZERO) denomMap.remove(entry.key) else denomMap[entry.key] = ONE
                 found = true
                 break
             }
@@ -925,14 +923,13 @@ class QNumber {
             in GREEK_CHARS -> R.string.err_onlyGreek
             in ROMAN_CHARS -> R.string.err_onlyRoman
             '\u0015' -> R.string.err_load
-            ' ' -> when (error.lastOrNull()) {
+            else -> when (error.lastOrNull()) {
                 GREEK_ID_CHAR -> R.string.err_noGreek
                 ROMAN_ID_CHAR -> R.string.err_noRoman
                 'ᵩ' -> R.string.err_irrational
                 // error.startsWith('℅') -> R.string.err_notInHistory
-                else -> 0
+                else -> R.string.err_generic
             }
-            else -> R.string.err_generic
         })
 }
 
@@ -946,7 +943,7 @@ fun BigInteger.toStringBuilder(base: Int, digits: Int): StringBuilder {
 /* The following thanks to Sweeper @ https://stackoverflow.com/questions/74679019/converting-a-biginteger-to-a-string-in-some-base-speed-issue-kotlin ! */
 val LOG_TWO = ln(2.0)
 
-fun BigInteger.largeToStringBuilder(s: StringBuilder, base: Int, digits: Int) {
+private fun BigInteger.largeToStringBuilder(s: StringBuilder, base: Int, digits: Int) {
     val bitLength = bitLength()
     if (bitLength <= 640) {
         val bigBase = base.toBigInteger()

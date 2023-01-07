@@ -33,7 +33,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
-import androidx.core.content.ContextCompat
 import androidx.core.view.MenuCompat
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.DefaultItemAnimator
@@ -47,6 +46,10 @@ import java.math.BigInteger.*
 import kotlin.math.*
 
 val MIN_PIE = Build.VERSION.SDK_INT >= Build.VERSION_CODES.P
+
+enum class DisplayMode {
+    STANDARD, DISSECT, PRETTY, COMPATIBLE
+}
 
 class QNumberEntry(val inputString: String, val number: QNumber, val egyptianMethod: EgyptianMethod = EgyptianMethod.OFF) {
 
@@ -98,8 +101,7 @@ class RecyclerAdapter internal constructor(private val activity: ListActivity?, 
         if (holder.extraButton.visibility == View.VISIBLE) holder.extraButton.text = if (holder.listWhatToken == "I") "♫" else "🌐\uFE0E"
 
         activity?.let {
-            holder.backView.setBackgroundColor(if (items[position].selected)
-                ContextCompat.getColor(it, MainActivity.resolveColor(android.R.attr.colorMultiSelectHighlight)) else 0)
+            holder.backView.setBackgroundColor(if (items[position].selected) resolveColor(it, android.R.attr.colorMultiSelectHighlight) else 0)
         }
     }
 
@@ -239,7 +241,7 @@ class RecyclerAdapter internal constructor(private val activity: ListActivity?, 
                     outputText.setBackgroundColor(0)
                 }
                 activity?.let {
-                    outputText.setBackgroundColor(ContextCompat.getColor(it, MainActivity.resolveColor(android.R.attr.colorMultiSelectHighlight)))
+                    outputText.setBackgroundColor(resolveColor(it, android.R.attr.colorMultiSelectHighlight))
                     it.snackbar?.dismiss()
                 }
                 popupMenu.show()
@@ -308,7 +310,7 @@ class ListActivity : AppCompatActivity() {
     private lateinit var recycler: RecyclerView
     private lateinit var adapter: RecyclerAdapter
     lateinit var outputRadioGroup: RadioGroup
-    var outputRadioIds = listOf(R.id.defaultRadio, R.id.prettyRadio, R.id.compatibleRadio)
+    var outputRadioIds = listOf(R.id.defaultRadio, R.id.dissectRadio, R.id.prettyRadio, R.id.compatibleRadio)
     var snackbar: Snackbar? = null
     private lateinit var preferences: SharedPreferences
     private val items = mutableListOf<QNumberEntry>()
@@ -320,7 +322,6 @@ class ListActivity : AppCompatActivity() {
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
-        MainActivity.setQonvertTheme(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_list)
 

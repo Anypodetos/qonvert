@@ -24,15 +24,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
 import java.math.BigInteger
 import java.math.BigInteger.*
 import java.util.*
-import kotlin.math.max
-import kotlin.math.min
-import kotlin.math.sign
-import kotlin.math.sqrt
-
-/*typealias BigFraction = Pair<BigInteger, BigInteger>
-val FRACTION_ZERO = Pair(ZERO, ONE)
-val FRACTION_ONE = Pair(ONE, ONE)
-val FRACTION_INFINITY = Pair(ONE, ZERO)*/
+import kotlin.math.*
 
 val PHI_ZERO = PhiNumber(ZERO)
 val PHI_ONE = PhiNumber(ONE)
@@ -49,12 +41,6 @@ const val IS_EGYPTIAN = 0x0020
 const val IS_ANY_FRACTION = IS_FRACTION or IS_MIXED or IS_CONTINUED or IS_EGYPTIAN
 const val NONSTANDARD_DIGIT = 0x0100
 const val INVALID_CHAR = 0x0200
-
-//val DIGITS = "0123456789abcdefghijklmnopqrstuvwxyz"
-/*val FRACTION_CHARS = mapOf('½' to Pair(1, 2), '⅓' to Pair(1, 3), '¼' to Pair(1, 4), '⅕' to Pair(1, 5), '⅙' to Pair(1, 6),
-    '⅐' to Pair(1, 7), '⅛' to Pair(1, 8), '⅑' to Pair(1, 9),'⅒' to Pair(1, 10), '⅔' to Pair(2, 3), '¾' to Pair(3, 4),
-    '⅖' to Pair(2, 5), '⅗' to Pair(3, 5), '⅘' to Pair(4, 5), '⅚' to Pair(5, 6), '⅜' to Pair(3, 8), '⅝' to Pair(5, 8),
-    '⅞' to Pair(7, 8), '↉' to Pair(0, 1)).mapValues { Pair(it.value.first.toBigInteger(), it.value.second.toBigInteger()) }*/
 
 class PhiNumber(var aNumer: BigInteger, var bNumer: BigInteger = ZERO, var denom: BigInteger = ONE, root5: Boolean = false) {
 
@@ -74,8 +60,6 @@ class PhiNumber(var aNumer: BigInteger, var bNumer: BigInteger = ZERO, var denom
         reduce()
     }
 
-    constructor(aNumer: Int, bNumer: Int = 0, denom: Int = 1, root5: Boolean = false):
-        this(aNumer.toBigInteger(), bNumer.toBigInteger(), denom.toBigInteger(), root5)
     constructor(p: PhiNumber): this(p.aNumer, p.bNumer, p.denom)
     constructor(a: BigFraction): this(a.first, ZERO, a.second)
 
@@ -146,6 +130,29 @@ class PhiNumber(var aNumer: BigInteger, var bNumer: BigInteger = ZERO, var denom
             if (noRep) n else (n - parseFinitePhinary(st.substring(0, rep).filterIndexed { i, _ -> i != point }, negative)) /
                 (phiPower(st.length - point - if (point < rep) 2 else 1, negative) - phiPower(rep - point + if (point < rep) -1 else +1, negative))
         } + (if (fraction?.second != TEN) PhiNumber(fraction ?: BigFraction(ZERO, ONE)) else INV_PHI)
+    }
+
+    private fun parseFinitePhinary(s: String, negative: Boolean = false): PhiNumber {
+        val st = s.filterNot { it.isWhitespace() }
+        val minus = st.startsWith('-')
+        val complement = st.startsWith("..")
+        if (complement && negative) return PHI_INFINITY.also { it.parseResult = IS_NUMBER }
+        var parseResult = if (complement) IS_NUMBER or IS_COMPLEMENT else 0
+        val negMarker = if (minus) 1 else if (complement) 2 else 0
+        val point = with(st.indexOf('.', negMarker)) { if (this == -1) st.length else this }
+        var result = PHI_ZERO
+        val firstPlace = point - negMarker - 1
+        var power = phiPower(firstPlace, negative)
+        for (i in negMarker until st.length) with(DIGITS.indexOf(st[i], ignoreCase = true)) {
+            if (this > -1) {
+                parseResult = parseResult or IS_NUMBER
+                result += power * toBigInteger()
+                power *= if (negative) -INV_PHI else INV_PHI
+                if (this > 1) parseResult = parseResult or NONSTANDARD_DIGIT
+            } else if (i != point) parseResult = parseResult or INVALID_CHAR
+        }
+        if (complement) result -= phiPower(firstPlace + 1, negative)
+        return (result * if (minus) -ONE else ONE).also { it.parseResult = parseResult }
     }
 
     operator fun plus(other: PhiNumber) = PhiNumber(aNumer * other.denom + other.aNumer * denom,
@@ -337,11 +344,8 @@ class PhiNumber(var aNumer: BigInteger, var bNumer: BigInteger = ZERO, var denom
 }
 
 fun String.toPhiNumber(continuedOrEgyptian: Int = 0, negative: Boolean = false) = PhiNumber(this, continuedOrEgyptian, negative)
-fun Int.toPhiNumber() = PhiNumber(this)
-fun BigInteger.toPhiNumber() = PhiNumber(this)
 fun BigFraction.toPhiNumber() = PhiNumber(this)
 
-fun BigFraction.toBasePhi() = toPhiNumber().toBasePhi()
 fun BigFraction.toFractionString(radix: Int = 10) = first.toString(radix) + (if (second == ONE) "" else "/" + second.toString(radix))
 
 fun phiPower(n: Int) = if (n >= 1) matrixFibonacci(n).let {
@@ -352,12 +356,6 @@ fun phiPower(n: Int) = if (n >= 1) matrixFibonacci(n).let {
 
 fun phiPower(n: Int, negative: Boolean) = if (negative && n % 2 != 0) -phiPower(n) else phiPower(n)
 
-fun fibonacci(n: Int): BigInteger = when (n.sign) {
-    1 -> matrixFibonacci(n).second
-   -1 -> matrixFibonacci(-n).second * if (n % 2 == 0) -ONE else ONE
-    else -> ZERO
-}
-
 fun matrixFibonacci(n: Int): Pair<BigInteger, BigInteger> { /* https://stackoverflow.com/questions/24438655/ruby-fibonacci-algorithm/24439070 */
     if (n == 1) return FRACTION_ZERO
     val f = matrixFibonacci(n / 2)
@@ -365,36 +363,6 @@ fun matrixFibonacci(n: Int): Pair<BigInteger, BigInteger> { /* https://stackover
     val d = f.second * (f.second + TWO * f.first)
     return if (n % 2 == 0) Pair(c, d) else Pair(d, c + d)
 }
-
-private fun parseFinitePhinary(s: String, negative: Boolean = false): PhiNumber {
-    val st = s.filterNot { it.isWhitespace() }
-    val minus = st.startsWith('-')
-    val complement = st.startsWith("..")
-    if (complement && negative) return PHI_INFINITY.also { it.parseResult = IS_NUMBER }
-    var parseResult = if (complement) IS_NUMBER or IS_COMPLEMENT else 0
-    val negMarker = if (minus) 1 else if (complement) 2 else 0
-    val point = with(st.indexOf('.', negMarker)) { if (this == -1) st.length else this }
-    var result = PHI_ZERO
-    val firstPlace = point - negMarker - 1
-    var power = phiPower(firstPlace, negative)
-    for (i in negMarker until st.length) with(DIGITS.indexOf(st[i], ignoreCase = true)) {
-        if (this > -1) {
-            parseResult = parseResult or IS_NUMBER
-            result += power * toBigInteger()
-            power *= if (negative) -INV_PHI else INV_PHI
-            if (this > 1) parseResult = parseResult or NONSTANDARD_DIGIT
-        } else if (i != point) parseResult = parseResult or INVALID_CHAR
-    }
-    if (complement) result -= phiPower(firstPlace + 1, negative)
-    return (result * if (minus) -ONE else ONE).also { it.parseResult = parseResult }
-}
-
-/*fun reduceFraction(numer: BigInteger, denom: BigInteger): BigFraction {
-    if (denom == ONE) return Pair(numer, ONE)
-    var gcd = numer.gcd(denom).coerceAtLeast(ONE)
-    if (denom < ZERO || (denom == ZERO && numer < ZERO)) gcd = -gcd
-    return Pair(numer / gcd, denom / gcd)
-}*/
 
 fun formatNumberPair(a: String, b: String, symbol: String) = (if (a == "0" && b != "0") "" else a) +
     if (b == "0") "" else ((if (b.startsWith('-')) "-" else if (a == "0") "" else "+") + (if (b == "1" || b == "-1") "" else b.removePrefix("-")) + symbol)

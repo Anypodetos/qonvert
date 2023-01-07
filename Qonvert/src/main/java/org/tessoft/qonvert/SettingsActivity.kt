@@ -1,7 +1,7 @@
 package org.tessoft.qonvert
 
 /*
-Copyright 2020, 2021, 2022 Anypodetos (Michael Weber)
+Copyright 2020, 2021, 2022, 2023 Anypodetos (Michael Weber)
 
 This file is part of Qonvert.
 
@@ -41,7 +41,6 @@ class SettingsActivity : AppCompatActivity(), PreferenceFragmentCompat.OnPrefere
     private lateinit var toolbar: Toolbar
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        MainActivity.setQonvertTheme(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
@@ -127,7 +126,7 @@ class SettingsActivity : AppCompatActivity(), PreferenceFragmentCompat.OnPrefere
                 "natural" -> naturalSummary()
                 "lowercase", "apostrophus" -> apostrophusSummary()
                 "buttons" -> buttonSummary()
-                "theme" -> MainActivity.setQonvertTheme(activity, findPreference<ListPreference>("theme")?.value ?: "")
+                "theme" -> setTheme(findPreference<ListPreference>("theme")?.value ?: "")
             }
         }
 
@@ -182,7 +181,8 @@ class SettingsActivity : AppCompatActivity(), PreferenceFragmentCompat.OnPrefere
             }
 
             for (i in 0..4) basePreferences[i]?.let { preference ->
-                preference.dialogTitle = TOKENS[i].toString() + " – " + preference.title
+                preference.dialogTitle = TOKENS[i].toString() + " – " + (context?.getString(R.string.base_dialogTitle)?.replace("%d", MAX_BASE.toString()) ?:
+                    preference.title)
                 preference.setOnPreferenceClickListener {
                     snackbar?.dismiss()
                     false

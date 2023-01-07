@@ -44,6 +44,7 @@ private const val SECTION_NUMBER = "section_number"
 class PageViewModel : ViewModel() {
 
     val index = MutableLiveData<Int>()
+
     fun setIndex(index: Int) {
         this.index.value = index
     }
@@ -66,7 +67,6 @@ class HelpFragment : Fragment() {
             root.findViewById<WebView>(R.id.webView).loadData(
                 getString(R.string.css) +
                 (if (isNightModeActive()) getString(R.string.css_dark) else "") +
-                (if (MainActivity.themeId == R.style.Theme_QonvertBlue) getString(R.string.css_blue) else "") +
                 "<h1>" + when(it) {
                     0 -> getString(R.string.menu_help)
                     1 -> getString(R.string.menu_cheatSheet)
@@ -107,7 +107,6 @@ class Adapter(activity: FragmentActivity) : FragmentStateAdapter(activity) {
 class HelpActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        MainActivity.setQonvertTheme(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_help)
 
