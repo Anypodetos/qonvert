@@ -1,5 +1,5 @@
 <!--
-Copyright 2021, 2022 Anypodetos (Michael Weber)
+Copyright 2021, 2022, 2023 Anypodetos (Michael Weber)
 
 This file is part of Qonvert.
 
@@ -153,6 +153,14 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
         <item>Sexagesimal (60)</item>
     </string-array>
 
+    <string-array name="keyboard_entries">
+        <item>Ziffern links</item>
+        <item>Ziffern rechts</item>
+        <item>Ziffern links (Tablet)</item>
+        <item>Ziffern rechts (Tablet)</item>
+        <item>Android</item>
+    </string-array>
+
     <string-array name="size_entries">
         <item>Winzig</item>
         <item>Klein</item>
@@ -165,8 +173,5 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
         <item>Hell</item>
         <item>Dunkel</item>
         <item>System</item>
-    <!--    <item>Hellblau</item>
-        <item>Dunkelblau</item>
-        <item>System blau</item>-->
     </string-array>
 </resources>

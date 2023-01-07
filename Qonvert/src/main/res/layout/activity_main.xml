@@ -463,18 +463,21 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
 
     <TextView
             android:id="@+id/inBaseText"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
             android:layout_marginStart="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginEnd="8dp"
             android:textColor="?colorSecondary"
             android:textSize="14sp"
             app:layout_constraintBottom_toTopOf="@+id/inLinearLayout"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             android:background="?attr/selectableItemBackground"
             android:focusable="true"
             android:clickable="true"
-            android:gravity="center" />
+            android:gravity="start" />
 
     <LinearLayout
             android:id="@+id/inLinearLayout"
@@ -680,7 +683,6 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
             app:layout_constraintEnd_toStartOf="@+id/clearButton"
             app:layout_constraintStart_toStartOf="parent"
             android:inputType="textNoSuggestions|text">
-
         <requestFocus />
     </org.tessoft.qonvert.EditInput>
 

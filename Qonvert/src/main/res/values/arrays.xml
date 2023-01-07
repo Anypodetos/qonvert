@@ -1,5 +1,5 @@
 <!--
-Copyright 2020, 2021, 2022 Anypodetos (Michael Weber)
+Copyright 2020, 2021, 2022, 2023 Anypodetos (Michael Weber)
 
 This file is part of Qonvert.
 
@@ -244,6 +244,21 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
         <item>16</item>
     </string-array>
 
+    <string-array name="keyboard_entries">
+        <item>Digits on the left</item>
+        <item>Digits on the right</item>
+        <item>Digits on the left (tablet)</item>
+        <item>Digits on the right (tablet)</item>
+        <item>Android’s</item>
+    </string-array>
+    <string-array name="keyboard_values" translatable="false">
+        <item>DIGITS_LEFT</item>
+        <item>DIGITS_RIGHT</item>
+        <item>DIGITS_LEFT_TABLET</item>
+        <item>DIGITS_RIGHT_TABLET</item>
+        <item>ANDROID</item>
+    </string-array>
+
     <string-array name="size_entries">
         <item>Tiny</item>
         <item>Small</item>
@@ -263,17 +278,11 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
         <item>Light</item>
         <item>Dark</item>
         <item>System</item>
-        <!--   <item>Light blue</item>
-        <item>Dark blue</item>
-        <item>System blue</item>-->
     </string-array>
     <string-array name="theme_values" translatable="false">
         <item>LA</item>
         <item>DA</item>
         <item>SA</item>
-        <item>LB</item>
-        <item>DB</item>
-        <item>SB</item>
     </string-array>
 
 </resources>

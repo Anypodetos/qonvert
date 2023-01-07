@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <!--
-Copyright 2021, 2022 Anypodetos (Michael Weber)
+Copyright 2021, 2022, 2023 Anypodetos (Michael Weber)
 
 This file is part of Qonvert.
 
@@ -90,6 +90,12 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/defaultRadio" />
+
+        <RadioButton
+                android:text="@string/dissect_output"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/dissectRadio" />
 
         <RadioButton
                 android:text="@string/pretty_output"

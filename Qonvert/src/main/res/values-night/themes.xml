@@ -39,23 +39,4 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
         <item name="buttonBarNeutralButtonStyle">@style/AlertButtonStyle</item>
         <item name="buttonBarPositiveButtonStyle">@style/AlertButtonStyle</item>
    </style>
-
-    <style name="Theme.QonvertBlue" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <!-- Status bar color -->
-        <item name="android:statusBarColor" tools:targetApi="l">@color/blue_dark</item>
-        <!-- Primary brand colors -->
-        <item name="colorPrimary">@color/blue_medium</item>
-        <item name="colorPrimaryVariant">@color/blue_light</item>
-        <item name="colorOnPrimary">@color/white</item>
-        <!-- Secondary brand colors -->
-        <item name="colorSecondary">@color/azure_light</item>
-        <item name="colorSecondaryVariant">@color/azure_dark</item>
-        <item name="colorOnSecondary">@color/white</item>
-        <item name="android:colorMultiSelectHighlight">@color/azure_semi_transparent</item>
-        <!-- Other -->
-        <item name="editTextColor">@color/white</item>
-        <item name="buttonBarNegativeButtonStyle">@style/AlertButtonStyleBlue</item>
-        <item name="buttonBarNeutralButtonStyle">@style/AlertButtonStyleBlue</item>
-        <item name="buttonBarPositiveButtonStyle">@style/AlertButtonStyleBlue</item>
-   </style>
 </resources>

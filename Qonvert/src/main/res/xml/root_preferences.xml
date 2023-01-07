@@ -1,5 +1,5 @@
 <!--
-Copyright 2020, 2021, 2022 Anypodetos (Michael Weber)
+Copyright 2020, 2021, 2022, 2023 Anypodetos (Michael Weber)
 
 This file is part of Qonvert.
 
@@ -118,12 +118,14 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
                 app:iconSpaceReserved="false"
                 app:key="buttons"
                 app:title="@string/buttons_title" />
-        <SwitchPreference
-                android:defaultValue="true"
-                android:key="customKeyboard"
-                android:title="@string/keyboard_title"
-                android:summary="@string/keyboard_hint"
-                app:iconSpaceReserved="false" />
+        <ListPreference
+                app:defaultValue="DIGITS_RIGHT"
+                app:entries="@array/keyboard_entries"
+                app:entryValues="@array/keyboard_values"
+                app:iconSpaceReserved="false"
+                app:key="keyboard"
+                app:title="@string/keyboard_title"
+                app:useSimpleSummaryProvider="true" />
         <SwitchPreference
                 android:defaultValue="false"
                 android:title="@string/moreSpace_title"
@@ -138,7 +140,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
                 app:title="@string/size_title"
                 app:useSimpleSummaryProvider="true" />
         <ListPreference
-                app:defaultValue="LA"
+                app:defaultValue="SA"
                 app:entries="@array/theme_entries"
                 app:entryValues="@array/theme_values"
                 app:iconSpaceReserved="false"

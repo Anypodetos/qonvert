@@ -1,5 +1,5 @@
 <!--
-Copyright 2020, 2021, 2022 Anypodetos (Michael Weber)
+Copyright 2020, 2021, 2022, 2023 Anypodetos (Michael Weber)
 
 This file is part of Qonvert.
 
@@ -46,6 +46,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     <string name="bare_base">base %1$s, %2$s</string>
     <string name="base_message">For base φ (the golden ratio) type 1.</string>
     <string name="clipboard_asIs">Copy to clipboard as is</string>
+    <string name="clipboard_dissect">… with dissected digits</string>
     <string name="clipboard_rep">… with overlined repeating part</string>
     <string name="clipboard_fraction">… as pretty fraction</string>
     <string name="clipboard_withUnicodeName">… with Unicode name</string>
@@ -133,6 +134,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     <string name="cancel">Cancel</string>
     <string name="close">Close</string>
     <string name="default_output">default</string>
+    <string name="dissect_output">dissect</string>
     <string name="pretty_output">pretty</string>
     <string name="compatible_output">compatible</string>
 
@@ -191,13 +193,13 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     <string name="tokens_reset_ok">Tokens reset</string>
     <string name="tokens_dollar">$ (and also €, £, ¥)</string>
     <string name="base_title">Base</string>
+    <string name="base_dialogTitle">Base (±2…%d)</string>
     <string name="numSystem_title">Numeral system</string>
 
     <string name="appearance_header">Appearance</string>
     <string name="buttons_title">Show base buttons</string>
     <string name="moreSpace_title">More space above base buttons</string>
-    <string name="keyboard_title">Use custom keyboard</string>
-    <string name="keyboard_hint">instead of Android’s default keyboard</string>
+    <string name="keyboard_title">Keyboard</string>
     <string name="size_title">Text size</string>
     <string name="theme_title">Theme</string>
 
@@ -226,12 +228,6 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     h2 {background: rgb(64, 64, 64)}
     code {border-color: rgb(64, 64, 64); border-bottom-color: rgb(168, 62, 0)} /* orange_dark */
     .roman-frame {border-color: white}
-</style>
-    ]]></string>
-    <string name="css_blue" translatable="false"><![CDATA[
-<style>
-    a {color: rgb(0, 157, 224)} /* azure_light */
-    code {border-bottom-color: rgb(0, 118, 168)} /* azure_dark */
 </style>
     ]]></string>
 
@@ -476,11 +472,18 @@ Qonvert is your <strong>only</strong> source. (The answer is 1YX&nbsp;215.)</p>
 
     <!-- What’s new -->
     <string name="whatsNew"><![CDATA[
+<h2>Version 1.7.1 <small>– 7 Jan 2023</small></h2>
+<p>There are three <strong>additional keyboard layouts</strong>: with the digits starting on the left edge, for tablets (with 12 columns even in portrait mode),
+and a combination of the two. You can choose in the settings, in the “Appearance” section. The keyboard pop-ups now show the <strong>digits’ values</strong>.</p>
+<p>The list screens (All formats, History, Musical intervals) have got a new display option, “<strong>dissect</strong>”, which shows digits with values
+outside the range 0…9 as decimal numbers (such as Z5Ţ₆₀ as 35&nbsp;5&nbsp;59₆₀).</p>
+<p>A crash on input of a character with a Unicode code point &gt;&nbsp;FFFF₁₆ has been fixed, as well as some minor issues.</p>
+
 <h2>Version 1.7.0 <small>– 25 Dec 2022</small></h2>
 <p><strong>Phinary</strong>, the golden ratio base, is now supported. On the sliders, it is located on the leftmost tick. Also, <strong>bases up to
 ±100</strong> are supported.</p>
 <p>Qonvert can now <strong>count digits</strong> – as well as <strong>denominators</strong> of continued and Egyptian fractions – of the list screens’
-(All formats, History, Musical intervals) individual entries. Tap the ⋮ on the right edge to bring up the new menu items.</p>
+individual entries. Tap the ⋮ on the right edge to bring up the new menu items.</p>
 <p>“½” on Qonvert’s keyboard (long-tap the radix point) brings up a pop-up with <strong>fraction characters</strong>.</p>
 <p>Setting a negative base <i>italicises</i> the base buttons for added clarity.</p>
 <p>Speed has been improved (again), especially for repeating digits and for large bases. And needless to say: bugfixes.</p>
@@ -511,8 +514,8 @@ DMS- and complement-switches and the “in: base” and “out: base” texts. A
 <p><strong>Greek (Milesian) numerals</strong> are now fully supported.</p>
 <p>Playing a musical interval now also shows a <strong>waveform</strong> of this interval. (These are examples; for different phase shifts
 waveforms of the same interval look different.)</p>
-<p>On the list screens (All formats, History, Musical intervals) you can now <strong>select a whole range</strong> of entries at once by long-tapping
-the one at the start of the range and then long-tapping the one at the end.</p>
+<p>On the list screens you can now <strong>select a whole range</strong> of entries at once by long-tapping the one at the start of the range and then
+long-tapping the one at the end.</p>
 <p>… and bugfixes, as usual.</p>
 
 <h2>Version 1.3.0 <small>– 2 Apr 2022</small></h2>
@@ -558,6 +561,8 @@ and playing musical intervals (by tapping ♫).</p>
 <p>This is a toy and maybe an educational tool, and it’s free. It was written by me, Anypodetos. If you have any suggestions or questions, or you want to report
 a bug, or you just want to tell me whether you like this app, please <a href="https://lemizh.conlang.org/home/contact.php?about=qonvert">contact me</a>.</p>
 <p>Source code:<br><a href="https://github.com/Anypodetos/qonvert">https://github.com/Anypodetos/qonvert</a></p>
+<p>Standalone code for calculations in the field ℚ[√5] and with base φ:<br>
+<a href="https://github.com/Anypodetos/BasePhi">https://github.com/Anypodetos/BasePhi</a></p>
 <p>My Wikipedia page:<br><a href="https://en.wikipedia.org/wiki/User:Anypodetos">https://en.wikipedia.org/wiki/User:Anypodetos</a></p>
 <p>My conlanging homepage:<br><a href="https://lemizh.conlang.org">https://lemizh.conlang.org</a></p>
 
@@ -569,7 +574,7 @@ see there for explanations on how they work.</p>
 <a href="https://stackoverflow.com/>stackoverflow</a>. Special thanks to Sweeper and leonbloy!</p>
 
 <h2>GNU General Public License</h2>
-<p>Copyright 2020, 2021, 2022 Anypodetos (Michael Weber)</p>
+<p>Copyright 2020, 2021, 2022, 2023 Anypodetos (Michael Weber)</p>
 <p>Qonvert is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or (at your option) any later version.</p>
 <p>Qonvert is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of

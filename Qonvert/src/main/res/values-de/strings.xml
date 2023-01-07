@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <!--
-Copyright 2021, 2022 Anypodetos (Michael Weber)
+Copyright 2021, 2022, 2023 Anypodetos (Michael Weber)
 
 This file is part of Qonvert.
 
@@ -31,6 +31,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     <string name="bare_base">Basis %1$s, %2$s</string>
     <string name="base_message">Für Basis φ (den Goldenen Schnitt) 1 eingeben.</string>
     <string name="clipboard_asIs">In die Zwischenablage kopieren</string>
+    <string name="clipboard_dissect">… mit zerlegten Ziffern</string>
     <string name="clipboard_rep">… mit Überstrich für Periode</string>
     <string name="clipboard_fraction">… als formatierten Bruch</string>
     <string name="clipboard_withUnicodeName">… mit dem Unicode-Namen</string>
@@ -116,6 +117,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     <string name="cancel">Abbrechen</string>
     <string name="close">Schließen</string>
     <string name="default_output">Standard</string>
+    <string name="dissect_output">zerlegt</string>
     <string name="pretty_output">formatiert</string>
     <string name="compatible_output">kompatibel</string>
 
@@ -174,13 +176,13 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     <string name="tokens_reset_ok">Kürzel zurückgesetzt</string>
     <string name="tokens_dollar">$ (und auch €, £, ¥)</string>
     <string name="base_title">Basis</string>
+    <string name="base_dialogTitle">Basis (±2…%d)</string>
     <string name="numSystem_title">Zahlensystem</string>
 
     <string name="appearance_header">Aussehen</string>
     <string name="buttons_title">Tasten für Basen</string>
     <string name="moreSpace_title">Mehr Platz über den Tastenreihen</string>
-    <string name="keyboard_title">Qonvert-Tastatur verwenden</string>
-    <string name="keyboard_hint">statt der Standard-Tastatur</string>
+    <string name="keyboard_title">Tastatur</string>
     <string name="size_title">Textgröße</string>
     <string name="theme_title">Farbschema</string>
 
@@ -438,11 +440,19 @@ im balancierten Undezimalsystem benötigst, ist Qonvert deine <strong>einzige</s
 
     <!-- What’s new -->
     <string name="whatsNew"><![CDATA[
+<h2>Version 1.7.1 <small>– 7. Jän. 2023</small></h2>
+<p>Es gibt drei <strong>zusätzliche Tastatur-Layouts</strong>: eines, bei dem die Ziffern am linken Rand beginnen, eines für Tablets (mit 12 Spalten auch im
+Hochformat), und eine Kombination von beidem. Sie lassen sich in den Einstellungen auswählen, in der Sektion „Aussehen“. Die Tastatur-Pop-ups zeigen jetzt
+<strong>die Werte der Ziffern</strong> an.</p>
+<p>Die Listen-Bildschirme („Alle Formate, Verlauf, Musik-Intervalle“) haben die neue Option „<strong>zerlegt</strong>“, um Ziffern außerhalb des Bereichs 0…9
+als Dezimalzahlen anzuzeigen (wie etwa Z5Ţ₆₀ als 35&nbsp;5&nbsp;59₆₀).</p>
+<p>Der Absturz bei Eingabe eines Zeichens mit Unicode-Codepoint über FFFF₁₆ wurde behoben, so wie einige kleinere Probleme.</p>
+
 <h2>Version 1.7.0 <small>– 25. Dez. 2022</small></h2>
 <p><strong>Phinär</strong>, also der Goldene Schnitt φ als Basis, wird jetzt unterstützt; auf den Schiebereglern ist er ganz links zu finden.
 Weiters werden <strong>Basen bis ±100</strong> unterstützt.</p>
-<p>Qonvert kann jetzt die <strong>Ziffern</strong> einzelner Einträge auf den Listen-Bildschirmen („Alle Formate, Verlauf, Musik-Intervalle“)
-<strong>zählen</strong> – und auch Nenner von Ketten- und ägyptischen Brüchen. Die neuen Menüpunkte sind über die ⋮ am rechten Rand verfügbar.</p>
+<p>Qonvert kann jetzt die <strong>Ziffern</strong> einzelner Einträge auf den Listen-Bildschirmen <strong>zählen</strong> – und auch Nenner von Ketten- und
+ägyptischen Brüchen. Die neuen Menüpunkte sind über die ⋮ am rechten Rand verfügbar.</p>
 <p>Über „½“ auf der Qonvert-Tastatur (die Punkt-Taste lang antippen) erscheint ein Pop-up mit <strong>Brüchen</strong>.</p>
 <p>Für negative Basen werden die Basis-Tasten jetzt <i>kursiv</i> dargestellt.</p>
 <p>Periodische Zahlen und Zahlen in großen Basen werden schneller berechnet. Und, unnötig zu erwähnen: Fehlerkorrekturen.</p>
@@ -475,8 +485,8 @@ Die Phasenverschiebung lässt sich jetzt durch Wischen ändern.</p>
 <p><strong>Griechische (milesische) Zahlen</strong> werden jetzt voll unterstützt.</p>
 <p>Beim Abspielen eines musikalischen Intervalls wird nun auch eine <strong>Wellenform</strong> dieses Intervalls angezeigt. (Als Beispiel;
 je nach Phasenverschiebung sehen Wellenformen desselben Intervalls unterschiedlich aus.)</p>
-<p>In den Listen-Bildschirmen („Alle Formate, Verlauf, Musik-Intervalle“) kannst du jetzt <strong>einen zusammenhängenden Bereich auf einmal auswählen</strong>,
-indem du den ersten Eintrag des Bereichs lang antippst und dann den letzten lang antippst.</p>
+<p>In den Listen-Bildschirmen kannst du jetzt <strong>einen zusammenhängenden Bereich auf einmal auswählen</strong>, indem du den ersten Eintrag des Bereichs
+lang antippst und dann den letzten lang antippst.</p>
 <p>… und Fehlerkorrekturen, wie üblich.</p>
 
 <h2>Version 1.3.0 <small>– 2. Apr. 2022</small></h2>
@@ -524,6 +534,8 @@ und das Abspielen von Intervallen (mit der Taste ♫).</p>
 <p>Dies ist ein Spielzeug und vielleicht ein Lernwerkzeug, und es ist freie Software. Für Vorschläge, Fragen und Fehlermeldungen oder
 jede andere Rückmeldung zu dieser App kannst du mich <a href="https://lemizh.conlang.org/home/contact.php?about=qonvert">hier kontaktieren</a>.</p>
 <p>Quellcode:<br><a href="https://github.com/Anypodetos/qonvert">https://github.com/Anypodetos/qonvert</a></p>
+<p>Eigenständiger Code für Berechnungen im Körper ℚ[√5] und mit der Basis φ:
+<br><a href="https://github.com/Anypodetos/BasePhi">https://github.com/Anypodetos/BasePhi</a></p>
 <p>Meine Wikipedia-Seite:<br><a href="https://en.wikipedia.org/wiki/User:Anypodetos">https://en.wikipedia.org/wiki/User:Anypodetos</a> (englisch)</p>
 <p>Meine Kunstsprache Lemizh:<br><a href="https://lemizh.conlang.org">https://lemizh.conlang.org</a> (englisch)</p>
 
@@ -535,7 +547,7 @@ dort werden sie auch näher erklärt.</p>
 Besonderer Dank geht an Sweeper und leonbloy!</p>
 
 <h2>GNU General Public License (englisch)</h2>
-<p>Copyright 2020, 2021, 2022 Anypodetos (Michael Weber)</p>
+<p>Copyright 2020, 2021, 2022, 2023 Anypodetos (Michael Weber)</p>
 <p>Qonvert is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or (at your option) any later version.</p>
 <p>Qonvert is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
