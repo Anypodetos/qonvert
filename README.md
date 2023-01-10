@@ -14,4 +14,6 @@ Qonvert is an Android app available on [Google Play](https://play.google.com/sto
 * Playing musical intervals with a given frequency ratio
 * Highly customizable, including light and dark colour schemes
 
+➤ See the app’s **[help pages](https://lemizh.conlang.org/home/qonvert.php)** for more information (also **[in German](https://lemizh.conlang.org/home/qonvert.php?lang=de)**).
+
 <img src="screenshots/integer.png" width="250px" alt="Converting an integer number"> <img src="screenshots/rational.png" width="250px" alt="Converting a rational number"> <img src="screenshots/greek.png" width="250px" alt="Converting a Greek numeral"> <img src="screenshots/allformats.png" width="250px" alt="Display all formats"> <img src="screenshots/settings.png" width="250px" alt="App settings"> <img src="screenshots/cheatsheet.png" width="250px" alt="Cheat sheet"> <img src="screenshots/tablet.png" width="633px" alt="Tablet">
