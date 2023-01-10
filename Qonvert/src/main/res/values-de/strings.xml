@@ -189,7 +189,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     <!-- Help -->
     <string name="share_app">Rationale Zahlen zwischen verschiedenen Basen und Darstellungen konvertieren:
         \n\nhttps://play.google.com/store/apps/details?id=org.tessoft.qonvert\n\noder\n\nhttps://f-droid.org/packages/org.tessoft.qonvert/</string>
-    <string name="title_about">Über Qonvert V %s</string>
+    <string name="title_about">Über Qonvert V %1$s &lt;small&gt;(%2$d)&lt;/small&gt;</string>
 
     <string name="help"><![CDATA[
 <h2>Überblick</h2>
@@ -440,6 +440,9 @@ im balancierten Undezimalsystem benötigst, ist Qonvert deine <strong>einzige</s
 
     <!-- What’s new -->
     <string name="whatsNew"><![CDATA[
+<h2>Version 1.7.2 <small>–</small></h2>
+<p>Fehlerkorrektur.</p>
+
 <h2>Version 1.7.1 <small>– 7. Jän. 2023</small></h2>
 <p>Es gibt drei <strong>zusätzliche Tastatur-Layouts</strong>: eines, bei dem die Ziffern am linken Rand beginnen, eines für Tablets (mit 12 Spalten auch im
 Hochformat), und eine Kombination von beidem. Sie lassen sich in den Einstellungen auswählen, in der Sektion „Aussehen“. Die Tastatur-Pop-ups zeigen jetzt
@@ -543,7 +546,7 @@ jede andere Rückmeldung zu dieser App kannst du mich <a href="https://lemizh.co
 <p>Die Algorithmen für ägyptische Brüche sind von <a href="https://www.ics.uci.edu/~eppstein/numth/egypt/intro.html">David Eppsteins Seiten</a>
 und <a href="https://ami.uni-eszterhazy.hu/uploads/papers/finalpdf/AMI_42_from129to134.pdf">einer Arbeit von Gyimesi und Nyul</a>;
 dort werden sie auch näher erklärt.</p>
-<p>Diese App würde ohne die vielen tapferen Android-Programmierer auf <a href="https://stackoverflow.com/>stackoverflow</a> nicht existieren.
+<p>Diese App würde ohne die vielen tapferen Android-Programmierer auf <a href="https://stackoverflow.com/">stackoverflow</a> nicht existieren.
 Besonderer Dank geht an Sweeper und leonbloy!</p>
 
 <h2>GNU General Public License (englisch)</h2>
@@ -553,7 +556,7 @@ the Free Software Foundation, either version 3 of the License, or (at your optio
 <p>Qonvert is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</p>
 <p>You should have received a copy of the GNU General Public License along with Qonvert.
-If not, see <a href="https://www.gnu.org/licenses/licenses.de.html%23GPL">https://www.gnu.org/licenses/licenses.de.html%23GPL</a>.</p>
+If not, see <a href="https://www.gnu.org/licenses/gpl-3.0-standalone.html">https://www.gnu.org/licenses/gpl-3.0-standalone.html</a>.</p>
 
 <h2>GNU Lesser General Public License</h2>
 <p>Ich habe Maddie Abbouds praktischen <a href="https://github.com/m-abboud/android-tone-player">Tone/Buzzer Generator</a> zum Abspielen
