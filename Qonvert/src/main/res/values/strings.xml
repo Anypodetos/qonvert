@@ -206,7 +206,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     <!-- Help -->
     <string name="share_app">Convert rational numbers between different bases and different representations:
         \n\nhttps://play.google.com/store/apps/details?id=org.tessoft.qonvert\n\nor\n\nhttps://f-droid.org/packages/org.tessoft.qonvert/</string>
-    <string name="title_about">About Qonvert v%s</string>
+    <string name="title_about">About Qonvert v%1$s &lt;small&gt;(%2$d)&lt;/small&gt;</string>
 
     <!-- CSS -->
     <string name="css" translatable="false"><![CDATA[
@@ -216,6 +216,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     h1 {font-size: 140%}
     h2 {font-size: 125%; border-radius: 0.2em; background: rgb(224, 224, 224)}
     h3 {font-size: 115%}
+    small {color: silver}
     ul {padding-left: 1.5em}
     a {color: rgb(224, 83, 0)} /* orange_light */
     code {font-family: inherit; border: 1px solid rgb(224, 224, 224); border-bottom-color: rgb(224, 83, 0); border-radius: 2px}
@@ -472,6 +473,9 @@ Qonvert is your <strong>only</strong> source. (The answer is 1YX&nbsp;215.)</p>
 
     <!-- What’s new -->
     <string name="whatsNew"><![CDATA[
+<h2>Version 1.7.2 <small>–</small></h2>
+<p>Bugfix.</p>
+
 <h2>Version 1.7.1 <small>– 7 Jan 2023</small></h2>
 <p>There are three <strong>additional keyboard layouts</strong>: with the digits starting on the left edge, for tablets (with 12 columns even in portrait mode),
 and a combination of the two. You can choose in the settings, in the “Appearance” section. The keyboard pop-ups now show the <strong>digits’ values</strong>.</p>
@@ -570,8 +574,8 @@ a bug, or you just want to tell me whether you like this app, please <a href="ht
 <p>The algorithms for calculating Egyptian fractions are from <a href="https://www.ics.uci.edu/~eppstein/numth/egypt/intro.html">David Eppstein’s page</a>
 and <a href="https://ami.uni-eszterhazy.hu/uploads/papers/finalpdf/AMI_42_from129to134.pdf">a paper by Gyimesi and Nyul</a>;
 see there for explanations on how they work.</p>
-<p>The development of this app wouldn‘t have been possible without the many valiant Android programmers at
-<a href="https://stackoverflow.com/>stackoverflow</a>. Special thanks to Sweeper and leonbloy!</p>
+<p>The development of this app wouldn’t have been possible without the many valiant Android programmers at
+<a href="https://stackoverflow.com/>stackoverflow"</a>. Special thanks to Sweeper and leonbloy!</p>
 
 <h2>GNU General Public License</h2>
 <p>Copyright 2020, 2021, 2022, 2023 Anypodetos (Michael Weber)</p>
@@ -580,7 +584,7 @@ the Free Software Foundation, either version 3 of the License, or (at your optio
 <p>Qonvert is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.</p>
 <p>You should have received a copy of the GNU General Public License along with Qonvert.
-If not, see <a href="https://www.gnu.org/licenses/licenses.en.html%23GPL">https://www.gnu.org/licenses/licenses.en.html%23GPL</a>.</p>
+If not, see <a href="https://www.gnu.org/licenses/gpl-3.0-standalone.html">https://www.gnu.org/licenses/gpl-3.0-standalone.html</a>.</p>
 
 <h2>GNU Lesser General Public License</h2>
 <p>I used Maddie Abboud’s really neat <a href="https://github.com/m-abboud/android-tone-player">Tone/Buzzer Generator</a> for playing intervals.
