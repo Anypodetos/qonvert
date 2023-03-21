@@ -140,6 +140,14 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
                 app:title="@string/size_title"
                 app:useSimpleSummaryProvider="true" />
         <ListPreference
+                android:defaultValue="DEFAULT"
+                android:title="@string/font_title"
+                android:entries="@array/font_entries"
+                android:entryValues="@array/font_values"
+                android:key="font"
+                app:iconSpaceReserved="false"
+                app:useSimpleSummaryProvider="true" />
+        <ListPreference
                 app:defaultValue="SA"
                 app:entries="@array/theme_entries"
                 app:entryValues="@array/theme_values"

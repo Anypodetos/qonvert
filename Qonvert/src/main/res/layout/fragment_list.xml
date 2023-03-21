@@ -28,7 +28,8 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
         tools:context=".ListActivity"
         android:clickable="true"
         android:focusable="true"
-        android:background="?attr/selectableItemBackground">
+        android:background="?attr/selectableItemBackground"
+        android:id="@+id/layout">
 
     <View
             android:layout_width="0dp"
