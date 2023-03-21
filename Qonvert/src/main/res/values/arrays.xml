@@ -146,6 +146,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
         <item>10 000 (may be slow for base φ)</item>
         <item>30 000 (may be slow)</item>
         <item>100 000 (may freeze the app)</item>
+        <item>300 000 (may melt the device)</item>
     </string-array>
     <string-array name="digits_values" translatable="false">
         <item>10</item>
@@ -157,6 +158,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
         <item>10000</item>
         <item>30000</item>
         <item>100000</item>
+        <item>300000</item>
     </string-array>
 
     <string-array name="natural_entries">
@@ -272,6 +274,19 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
         <item>20</item>
         <item>27</item>
         <item>36</item>
+    </string-array>
+
+    <string-array name="font_entries">
+        <item>Serif</item>
+        <item>Serif for Greek and Roman</item>
+        <item>Sans-serif</item>
+        <item>Monospace</item>
+    </string-array>
+    <string-array name="font_values" translatable="false">
+        <item>SERIF</item>
+        <item>DEFAULT</item>
+        <item>SANS_SERIF</item>
+        <item>MONOSPACE</item>
     </string-array>
 
     <string-array name="theme_entries">
