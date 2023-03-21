@@ -122,6 +122,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
         <item>10 000 (langsam für Basis φ)</item>
         <item>30 000 (langsam)</item>
         <item>100 000 (kann abstürzen)</item>
+        <item>300 000 (kann schmelzen)</item>
     </string-array>
 
     <string-array name="natural_entries">
@@ -167,6 +168,13 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
         <item>Mittel</item>
         <item>Groß</item>
         <item>Riesig</item>
+    </string-array>
+
+    <string-array name="font_entries">
+        <item>Serif</item>
+        <item>Serif für griechisch und römisch</item>
+        <item>Sans Serif</item>
+        <item>Feste Breite</item>
     </string-array>
 
     <string-array name="theme_entries">
