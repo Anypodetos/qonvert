@@ -71,7 +71,9 @@ class HelpFragment : Fragment() {
                     0 -> getString(R.string.menu_help)
                     1 -> getString(R.string.menu_cheatSheet)
                     2 -> getString(R.string.menu_whatsNew)
-                    3 -> getString(R.string.title_about, context?.packageManager?.getPackageInfo(context?.packageName ?: "", 0)?.versionName ?: "…")
+                    3 -> with(context?.packageManager?.getPackageInfo(context?.packageName ?: "", 0)) {
+                        getString(R.string.title_about, this?.versionName ?: "…", this?.versionCode)
+                    }
                     else -> ""
                 } + "</h1>" +
                 getString(listOf(R.string.help, R.string.cheatSheet, R.string.whatsNew, R.string.about)[it]),

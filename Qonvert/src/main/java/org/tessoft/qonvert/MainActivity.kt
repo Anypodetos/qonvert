@@ -64,6 +64,10 @@ enum class KeyboardId {
     DIGITS_LEFT, DIGITS_RIGHT, DIGITS_LEFT_TABLET, DIGITS_RIGHT_TABLET, ANDROID
 }
 
+enum class FontType {
+    SERIF, DEFAULT, SANS_SERIF, MONOSPACE
+}
+
 @SuppressLint("UseSwitchCompatOrMaterialCode")
 class MainActivity : AppCompatActivity() {
 
@@ -196,23 +200,24 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        val buttonGestureDetectors = arrayOfNulls<GestureDetector>(2)
-        for (i in 0..1) buttonGestureDetectors[i] = GestureDetector(this, object : GestureDetector.SimpleOnGestureListener() {
-            override fun onFling(e1: MotionEvent, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
-                setBaseAndSystem(i, bases[i] + (velocityX * bases[i]).sign.toInt(), numSystems[i], recalculate = true)
-                return true
-            }
-            override fun onLongPress(e: MotionEvent) {
-                super.onLongPress(e)
-                baseDialog(i)
-            }
-        })
+        val buttonGestureDetectors = Array(2) { i ->
+            GestureDetector(this, object : GestureDetector.SimpleOnGestureListener() {
+                override fun onFling(e1: MotionEvent, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
+                    setBaseAndSystem(i, bases[i] + (velocityX * bases[i]).sign.toInt(), numSystems[i], recalculate = true)
+                    return true
+                }
+                override fun onLongPress(e: MotionEvent) {
+                    super.onLongPress(e)
+                    baseDialog(i)
+                }
+            })
+        }
 
         for (i in 0..1) negaButtons[i].setOnClickListener {
             setBaseAndSystem(i, abs(bases[i]) * if (negaButtons[i].isChecked) (if (bases[i] == 1) -2 else -1) else 1, numSystems[i], recalculate = true)
         }
         for (i in 0..1) negaButtons[i].setOnTouchListener { _, event ->
-            buttonGestureDetectors[i]?.onTouchEvent(event)
+            buttonGestureDetectors[i].onTouchEvent(event)
             false
         }
 
@@ -221,7 +226,7 @@ class MainActivity : AppCompatActivity() {
             toggleButtons[BUTTON_BASES.size * i + j].isChecked = true /* push down again in case it was down before */
         }
         for (i in 0..1) for (j in BUTTON_BASES.indices) toggleButtons[BUTTON_BASES.size * i + j].setOnTouchListener { _, event ->
-            buttonGestureDetectors[i]?.onTouchEvent(event)
+            buttonGestureDetectors[i].onTouchEvent(event)
             false
         }
 
@@ -416,7 +421,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         /* SETTINGS */
-        getOutputSettings(preferences)
+        getOutputSettingsAndFont(preferences)
         showNatural = preferences.getStringSet("natural", null) ?: showNaturalStrings.toSet()
         showRange = preferences.getBoolean("range", true)
         autoScrollOutput = preferences.getBoolean("scrollOutput", true)
@@ -446,7 +451,7 @@ class MainActivity : AppCompatActivity() {
             window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
         } else keyboard.hide()
             /* sizes */
-        val textSize = (preferences.getString("size", null))?.toFloatOrNull() ?: 20f
+        val textSize = preferences.getString("size", null)?.toFloatOrNull() ?: 20f
         editInput.textSize = textSize
         for (i in 0..4) textOutputs[i].textSize = textSize
         complementSwitch.textSize = textSize * 0.7f
@@ -570,13 +575,13 @@ class MainActivity : AppCompatActivity() {
             else -> ""
         } else ""
         for (i in 0..4) {
-            textOutputs[i].typeface = if (when (i) {
+            textOutputs[i].typeface = resolveFont(when (i) {
                 0, 4 -> q.system in setOf(NumSystem.GREEK, NumSystem.ROMAN)
                 1 -> q.system in setOf(NumSystem.GREEK, NumSystem.ROMAN) || !fractionUseful
                 2 -> q.system in setOf(NumSystem.GREEK, NumSystem.ROMAN) || !mixedUseful
                 3 -> q.system in setOf(NumSystem.GREEK, NumSystem.ROMAN) && q.denominator > ONE /* Unicode */
                 else -> false
-            }) Typeface.SERIF else Typeface.DEFAULT
+            })// Typeface.SERIF else Typeface.DEFAULT
             textOutputs[i].visibility = if (textOutputs[i].text == "") View.GONE else View.VISIBLE
         }
     }
@@ -605,7 +610,7 @@ class MainActivity : AppCompatActivity() {
         }
         systemButtons[i].setBackgroundColor(if (baseAllowed) resolveColor(this, R.attr.colorPrimaryVariant) else ContextCompat.getColor(this,R.color.grey))
         if (i == 0) {
-            editInput.typeface = if (useSystem in setOf(NumSystem.GREEK, NumSystem.ROMAN)) Typeface.SERIF else Typeface.DEFAULT
+            editInput.typeface = resolveFont(useSystem in setOf(NumSystem.GREEK, NumSystem.ROMAN))
             updateKeyboardToCaretPos(base, useSystem)
         } else complementSwitch.isEnabled = useSystem in complementSystems && base > 0
         toastRangeHint(i, base, system)
@@ -629,8 +634,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun outBaseAndSystem(i: Int): Pair<Int, NumSystem> =
-        if (i in 1..2 && textOutputs[i].typeface == Typeface.SERIF && '/' !in textOutputs[i].text)
-            Pair(10, if (i == 1) NumSystem.GREEK else NumSystem.ROMAN) else Pair(bases[1], allowedSystem(bases[1], numSystems[1]).first)
+        if (i in 1..2 && '/' !in textOutputs[i].text) Pair(10, if (i == 1) NumSystem.GREEK else NumSystem.ROMAN) else
+            Pair(bases[1], allowedSystem(bases[1], numSystems[1]).first)
 
     fun updateKeyboardToCaretPos(base: Int = bases[0], actualSystem: NumSystem = allowedSystem(base, numSystems[0]).first, always: Boolean = false) {
         if (keyboardId != KeyboardId.ANDROID) keyboard.fillButtons(tokenBaseSystem(editInput.string.substring(0, editInput.selectionStart).findLast {
@@ -648,9 +653,8 @@ class MainActivity : AppCompatActivity() {
         val outputSt = if (hasToken) q.toString() else st
         val rounded = '…' in outputSt && !outputSt.startsWith('"')
         editInput.string = if (hasToken || rounded) {
-            Toast.makeText(applicationContext,
-                ((if (hasToken) getString(R.string.to_tokenFree) else "") + "\n\n" + (if (rounded) getString(R.string.to_fraction) else "")).trim(),
-                Toast.LENGTH_SHORT).show()
+            Toast.makeText(applicationContext, ((if (hasToken) getString(R.string.to_tokenFree) else "") +
+                "\n\n" + (if (rounded) getString(R.string.to_fraction) else "")).trim(), Toast.LENGTH_SHORT).show()
             q.changeBase(base, system, complement, dms)
             if (rounded) q.toMixed() else outputSt
         } else st
@@ -670,6 +674,7 @@ class MainActivity : AppCompatActivity() {
         var lowerDigits = false
         var apostrophus = 0
         var egyptianMethod = EgyptianMethod.BINARY
+        var fontType = FontType.DEFAULT
         val tokens = Array(DEFAULT_BUTTONS.size - 1) { Pair(DEFAULT_BUTTONS[it + 1], NumSystem.STANDARD) }
         val numSystemsSuper = Array(NumSystem.values().size) { "" }
 
@@ -677,16 +682,24 @@ class MainActivity : AppCompatActivity() {
         var playDialog: AlertDialog? = null
         var playPhaseShift = 0f
 
-        fun getOutputSettings(preferences: SharedPreferences) {
+        fun getOutputSettingsAndFont(preferences: SharedPreferences) {
             maxDigitsAfter = (preferences.getString("digits", null))?.toIntOrNull() ?: 300
             groupDigits = preferences.getBoolean("group", false)
             lowerDigits = preferences.getBoolean("lowercase", false)
             apostrophus = ((preferences.getString("apostrophus", null))?.toIntOrNull() ?: 0).coerceIn(0..3)
             egyptianMethod = try { EgyptianMethod.valueOf(preferences.getString("egyptian", null) ?: "") }
                 catch (e: Exception) { EgyptianMethod.BINARY }
+            fontType = try { FontType.valueOf(preferences.getString("font", null) ?: "") } catch (e: Exception) { FontType.DEFAULT }
         }
 
         fun preferredEgyptianMethod() = if (egyptianMethod == EgyptianMethod.OFF) EgyptianMethod.BINARY else egyptianMethod
+
+        fun resolveFont(GreekOrRoman: Boolean): Typeface = when (fontType) {
+            FontType.SERIF -> Typeface.SERIF
+            FontType.DEFAULT -> if (GreekOrRoman) Typeface.SERIF else Typeface.SANS_SERIF
+            FontType.SANS_SERIF -> Typeface.SANS_SERIF
+            FontType.MONOSPACE -> Typeface.MONOSPACE
+        }
 
         fun getTokenSettings(preferences: SharedPreferences) {
             for (i in tokens.indices) tokens[i] = Pair(preferences.getString("tokenBase$i", null)?.toIntOrNull() ?: tokens[i].first,
@@ -788,13 +801,14 @@ fun makeDissect(text: String, base: Int, system: NumSystem): Pair<String, Int> {
         NumSystem.GREEK, NumSystem.ROMAN -> true
     } || text.startsWith("\"")) return Pair(text, 0)
     val bijectiveSub = if (system == NumSystem.BIJECTIVE_A) 9 else 0
-    val balancedSub = if (system == NumSystem.BALANCED) 36 else 0
+    //val balancedSub = if (system == NumSystem.BALANCED) 36 else 0
     val s = StringBuilder()
-    for (c in text.lowercase()) if (c in DIGITS) s.append((DIGITS.indexOf(c) - bijectiveSub - if (c in 'j'..'z') balancedSub else 0).toString() + ' ') else {
-        if (c != ' ' && s.endsWith(' ')) s.deleteAt(s.lastIndex)
-        s.append(c)
-        if (c =='-') s.append(' ')
-    }
+    for (c in text.lowercase()) if (c in DIGITS)
+        s.append((if (system == NumSystem.BALANCED) BAL_DIGITS.indexOf(c) - MAX_BAL_BASE / 2 else DIGITS.indexOf(c) - bijectiveSub).toString() + ' ') else {
+            if (c != ' ' && s.endsWith(' ')) s.deleteAt(s.lastIndex)
+            s.append(c)
+            if (c =='-') s.append(' ')
+        }
     val dissectText = s.toString().trimEnd()
     return Pair(dissectText, if (dissectText == text) 0 else R.string.clipboard_dissect)
 }
@@ -846,7 +860,7 @@ fun makeCompatible(text: String, base: Int, system: NumSystem): Pair<String, Int
     val seconds = text.endsWith("\"")
     val cutOffPositional = text.endsWith("…") || text.endsWith("…\"")
     var compatText = text.removeSuffix("\"").removeSuffix("…").trimEnd().
-        replace("_", (if (system == NumSystem.GREEK) "ʹ" else "") + (if (text.firstOrNull() == '-') '-' else '+'))
+        replace("_", (if (system == NumSystem.GREEK) "ʹ" else "") + (if (text.startsWith('-') && '°' !in text && '\'' !in text) '-' else '+'))
     /* continued and Egyptian fractions */
     val one = when (system) {
         NumSystem.BIJECTIVE_A -> 'a'
@@ -878,7 +892,7 @@ fun makeCompatible(text: String, base: Int, system: NumSystem): Pair<String, Int
         if (rep > -1) {
             compatText = compatText.removeRange(rep, rep + 1)
             if (!cutOffPositional) {
-                val repPart = compatText.substring(rep).filterNot { it == '.' } // filter necessary??
+                val repPart = compatText.substring(rep)
                 if (repPart.isNotEmpty()) compatText +=
                     repPart.repeat((MainActivity.maxDigitsAfter - (rep - compatText.indexOfLast { it == '.' })) / repPart.length)
             }

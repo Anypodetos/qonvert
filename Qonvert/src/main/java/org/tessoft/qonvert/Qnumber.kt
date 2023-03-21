@@ -23,8 +23,10 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
 
 import android.content.Context
 import android.content.res.Resources
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import java.lang.System.currentTimeMillis
 import java.math.BigInteger
 import java.math.BigInteger.*
 import java.util.*
@@ -37,9 +39,17 @@ val FRACTION_ONE = Pair(ONE, ONE)
 val FRACTION_INFINITY = Pair(ONE, ZERO)
 val FRACTION_MU = Pair(ZERO, ZERO)
 
-const val DIGITS = "0123456789abcdefghijklmnopqrstuvwxyzþчʔʖąḅçḑęƒģḩįʝķļṃņǫꝓɋŗşţųṿẉӽỵẓꝧҷ?¿ⱥƀȼðɇғꞡħɨɉꝁłᵯꞥøᵽꝙꞧꞩŧʉꝟ₩ӿɏƶꝥҹʡƾ"
+const val DIGITS = "0123456789abcdefghijklmnopqrstuvwxyzþчʔʖąḅçḑęƒģḩįʝķļṃņǫꝓɋŗşţųṿẉӽỵẓꝧҷ?¿ⱥƀȼðɇғꞡħɨɉꝁłᵯꞥøᵽꝙꞧꞩŧʉꝟ₩ӿɏƶꝥҹʡƾ" +
+    "ⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩ㊄㊃㊈㊆⒜⒝⒞⒟⒠⒡⒢⒣⒤⒥⒦⒧⒨⒩⒪⒫⒬⒭⒮⒯⒰⒱⒲⒳⒴⒵㈤㈣㈨㈦卂乃㔾刀乇下厶卄工ワ长必从竹口尸㔿尺丂亇凵リ山乂丫乙五四九七" +
+    "ꋬꃃꏸꁕꍠꄙꁍꑛꀤꀮꀘ꒒ꁒꁹꆂꉣꁸꋪꌚ꓅ꐇꏝꅐꇓꐟꁴꃩꐳꃀꐧᗩᙖᘧᗫᕮᒮᘜᖺᖍᖌᐸᘂᗰᑎᘯᖘᕴᖇᔑᗑᙀᐁᗯᔨᖸᔐᘶᖻᕈᘪᚣᛒᚲᚥᛊᚫᛃᚻᛙᛅᛕᚳᛗᚢᛜᚹᛝᚱᛢᛠᛍᛎᛥᚸᛉᛋᚦᚴᚯᚬ"
+const val BAL_DIGITS = "ᚱᛢᛠᛍᛎᛥᚸᛉᛋᚦᚴᚯᚬ" +
+    "ꋬꃃꏸꁕꍠꄙꁍꑛꀤꀮꀘ꒒ꁒꁹꆂꉣꁸꋪꌚ꓅ꐇꏝꅐꇓꐟꁴꃩꐳꃀꐧ⒜⒝⒞⒟⒠⒡⒢⒣⒤⒥⒦⒧⒨⒩⒪⒫⒬⒭⒮⒯⒰⒱⒲⒳⒴⒵㈤㈣㈨㈦ⱥƀȼðɇғꞡħɨɉꝁłᵯꞥøᵽꝙꞧꞩŧʉꝟ₩ӿɏƶꝥҹʡƾąḅçḑęƒģḩįjklmnopqrstuvwxyz" +
+    "0123456789abcdefghiʝķļṃņǫꝓɋŗşţųṿẉӽỵẓꝧҷ?¿ⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩ㊄㊃㊈㊆卂乃㔾刀乇下厶卄工ワ长必从竹口尸㔿尺丂亇凵リ山乂丫乙五四九七" +
+    "ᗩᙖᘧᗫᕮᒮᘜᖺᖍᖌᐸᘂᗰᑎᘯᖘᕴᖇᔑᗑᙀᐁᗯᔨᖸᔐᘶᖻᕈᘪ"
 const val MAX_BASE = DIGITS.length
-const val MAX_BAL_BASE = 35
+const val MAX_BAL_BASE = BAL_DIGITS.length
+val digitsUniqueAndBalanced = DIGITS.lowercase().groupingBy { it }.eachCount().all { it.value == 1 } &&
+    BAL_DIGITS.lowercase().groupingBy { it }.eachCount().all { it.value == 1 } && MAX_BAL_BASE % 2 == 1 && BAL_DIGITS[MAX_BAL_BASE / 2] == '0'
 val powersOfTwo = (0 until Int.SIZE_BITS).map { 1 shl it }
 
 val TWO = 2.toBigInteger()
@@ -300,8 +310,10 @@ class QNumber {
                         if (rep) prePointRep *= bigBase
                         if (leftPad > -1) leftPad++
                     }
-                    digit = DIGITS.indexOf(lowerC) - (if (useSystem == NumSystem.BALANCED && lowerC in 'j'..'z') 36 else 0) -
-                        (if (useSystem == NumSystem.BIJECTIVE_A && lowerC !in '0'..'9') 9 else 0)
+                    digit = if (useSystem == NumSystem.BALANCED) {
+                        if (lowerC !in BAL_DIGITS) error = c.toString()
+                        BAL_DIGITS.indexOf(lowerC) - MAX_BAL_BASE / 2
+                    } else DIGITS.indexOf(lowerC) - (if (useSystem == NumSystem.BIJECTIVE_A && lowerC !in '0'..'9') 9 else 0)
                 }
                 '-' -> if (!isNumber && !neg && !point && !rep && leftPad == -1) neg = true else error = c.toString()
                 '.' -> if (!point) point = true else error = c.toString()
@@ -318,11 +330,9 @@ class QNumber {
             }
             numer += (digit ?: 0).toBigInteger()
             if (useSystem == NumSystem.BIJECTIVE_A && c in '0'..'9') nonstandardInput = true
-            if (digit != null && digit !in digitRange) when {
-                useSystem == NumSystem.BALANCED && isValid && lowerC in DIGITS.substring(36) -> error = c.toString()
-                useSystem in setOf(NumSystem.GREEK, NumSystem.ROMAN) && isValid -> error = st + (if (useSystem == NumSystem.GREEK)
-                    GREEK_ID_CHAR else ROMAN_ID_CHAR)
-                else -> nonstandardInput = true
+            if (digit != null && digit !in digitRange) {
+                if (useSystem in setOf(NumSystem.GREEK, NumSystem.ROMAN) && isValid)
+                    error = st + (if (useSystem == NumSystem.GREEK) GREEK_ID_CHAR else ROMAN_ID_CHAR) else nonstandardInput = true
             }
         }
 
@@ -351,7 +361,7 @@ class QNumber {
         if (neg) numer = -numer
             else if (leftPad > -1) numer -= denom * bigBase.pow(leftPad)
         with(reduceFraction(numer, denom)) {
-            if (st.firstOrNull() == '℅') {
+            if (st.startsWith('℅')) {
                 if (this.first in ONE..MainActivity.historyList.size.toBigInteger() && this.second == ONE)
                     MainActivity.historyList[MainActivity.historyList.size - this.first.toInt()].number.let {
                         format = it.format
@@ -579,7 +589,7 @@ class QNumber {
         var remainder = ONE
         if (d > ONE && nPre <= MainActivity.maxDigitsAfter) do {
             nRep++
-            remainder = remainder * bigBase % d
+            remainder = (remainder * bigBase) % d
         } while (remainder != ONE && remainder != oneMinusD && nRep <= MainActivity.maxDigitsAfter - nPre)
         if (base < 0 && nRep == 1 && usefulFormat(QFormat.POSITIONAL_ALT)) nRep = 2
         val cutOff = nRep > MainActivity.maxDigitsAfter - nPre
@@ -628,8 +638,8 @@ class QNumber {
                     digit += abs(base)
                     roll = if (negPlace) +1 else -1
                 } else roll = 0
-                val balancedXor = system == NumSystem.BALANCED && ((a < ZERO) != (base < 0 && negPlace != (a < ZERO)))
-                if (balancedXor) digit = -digit
+                val negateBalanced = system == NumSystem.BALANCED && ((a < ZERO) != (base < 0 && negPlace != (a < ZERO)))
+                if (negateBalanced) digit = -digit
                 if (base < 0 && system != NumSystem.BALANCED) {
                     if (negPlace && digit in 1 until -base) {
                         digit = -base - digit
@@ -639,7 +649,8 @@ class QNumber {
                         roll += 1
                     }
                 }
-                if (changed || roll != 0 || balancedXor || system == NumSystem.BIJECTIVE_A) s[i] = digitToChar(digit, base, system)
+                if (changed || roll != 0 || negateBalanced || (system == NumSystem.BALANCED && digit !in 0..18) || system == NumSystem.BIJECTIVE_A)
+                    s[i] = digitToChar(digit, base, system)
             }
             when (roll) {
                  1 -> if (s.firstOrNull() == digitToChar(abs(base), base, system)) s.deleteAt(0) else
@@ -648,6 +659,7 @@ class QNumber {
                 -1 -> s.deleteAt(0)
             }
         }
+        val t = currentTimeMillis()
         if (MainActivity.groupDigits) {
             val nDigits = s.length
             for (i in s.length - fracDigits % groupSize downTo 1 step groupSize) s.insert(i, ' ')
@@ -658,6 +670,7 @@ class QNumber {
             if (fracDigits in 1..s.length) s.insert(s.length - fracDigits, '.')
             if (repDigits in 0..s.length) s.insert(s.length - repDigits, '˙')
         }
+        Log.d("groupDigits time", (currentTimeMillis() - t).toString())
         return (if (complement && a < ZERO) ".." else if (system != NumSystem.BALANCED && base > 0 && (a < ZERO || forceMinus)) "-" else "") +
             s.trim().toString().let {
                 if (MainActivity.lowerDigits) it else it.uppercase()
@@ -770,7 +783,7 @@ class QNumber {
             pipes++
             bigIntValue /= (if (intValue < 100_000) 100_000 else 400_000).toBigInteger()
         }
-        if (s.firstOrNull() == '|') s.deleteAt(0)
+        if (s.startsWith('|')) s.deleteAt(0)
         s.insert(0, "|".repeat(pipes.coerceAtLeast(0)))
         if (numer % denom != ZERO) s.append(ROMAN_1_12[(numer.abs() % denom * TWELVE / denom).toInt().let {
             if (!complement || numer >= ZERO) it else 12 - it - if (TWELVE % denom == ZERO) 0 else 1
@@ -980,9 +993,10 @@ fun reduceFraction(numer: BigInteger, denom: BigInteger): BigFraction {
 }
 
 fun digitToChar(digit: Int, base: Int, system: NumSystem) =
-    (if (digit >= 0) DIGITS[digit + if (system != NumSystem.BIJECTIVE_A || abs(base) > MAX_BASE - 10) 0 else 9] else (digit + 123).toChar()).let {
-        if (MainActivity.lowerDigits) it else it.uppercaseChar()
-    }
+    (if (system == NumSystem.BALANCED && base % 2 != 0 && abs(base) <= MAX_BAL_BASE) BAL_DIGITS.getOrNull(digit + MAX_BAL_BASE / 2) ?: '\u0000' else
+        DIGITS.getOrNull(digit + if (system == NumSystem.BIJECTIVE_A && abs(base) <= MAX_BASE - 10) 9 else 0) ?: '\u0000').let {
+            if (MainActivity.lowerDigits) it else it.uppercaseChar()
+        }
 
 fun digitRange(base: Int, system: NumSystem, add: Int = 0): IntRange {
     val min = when (system) {

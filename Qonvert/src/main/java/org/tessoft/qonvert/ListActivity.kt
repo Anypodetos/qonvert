@@ -1,7 +1,7 @@
 package org.tessoft.qonvert
 
 /*
-Copyright 2021, 2022 Anypodetos (Michael Weber)
+Copyright 2021, 2022, 2023 Anypodetos (Michael Weber)
 
 This file is part of Qonvert.
 
@@ -23,7 +23,8 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
 
 import android.annotation.SuppressLint
 import android.content.*
-import android.graphics.Typeface
+import android.graphics.Canvas
+import android.graphics.Paint
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -31,6 +32,7 @@ import android.view.*
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.Toolbar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.MenuCompat
@@ -88,9 +90,8 @@ class RecyclerAdapter internal constructor(private val activity: ListActivity?, 
             holder.inputText.text = first
             holder.outputText.text = second
         }
-        holder.outputText.typeface = if (items[position].number.system in setOf(NumSystem.GREEK, NumSystem.ROMAN) &&
+        holder.outputText.typeface = MainActivity.resolveFont(items[position].number.system in setOf(NumSystem.GREEK, NumSystem.ROMAN) &&
             items[position].number.format != QFormat.UNICODE || items[position].number.format in setOf(QFormat.GREEK_NATURAL, QFormat.ROMAN_NATURAL))
-                Typeface.SERIF else Typeface.DEFAULT
 
         if (!MIN_PIE) items[position].expanded = true
         holder.outputText.post { holder.expandButton.visibility = if (holder.outputText.lineCount > 3 && MIN_PIE) View.VISIBLE else View.GONE }
@@ -108,6 +109,7 @@ class RecyclerAdapter internal constructor(private val activity: ListActivity?, 
     override fun getItemCount() = items.size
 
     inner class ViewHolder internal constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
         val listWhatToken = activity?.listWhatToken(merge = false) ?: ""
         val backView: View = itemView.findViewById(R.id.backView)
         private val listFormatsButton: FloatingActionButton = itemView.findViewById(R.id.listFormatsButton)
@@ -171,7 +173,7 @@ class RecyclerAdapter internal constructor(private val activity: ListActivity?, 
                                 MainActivity.preferredEgyptianMethod() else items[adapterPosition].egyptianMethod).lowercase()
                 val countDenominators = (countSt.firstOrNull() ?: ' ') in "[{"
                 with(popupMenu.menu.findItem(R.id.countItem)) {
-                    isVisible = countSt.firstOrNull() != '"'
+                    isVisible = !countSt.startsWith('"')
                     setTitle(if (countDenominators) R.string.count_denominators else R.string.count_digits)
                 }
                 popupMenu.setOnMenuItemClickListener { item: MenuItem ->
@@ -202,7 +204,7 @@ class RecyclerAdapter internal constructor(private val activity: ListActivity?, 
                                 val list = text.substring(1, text.lastIndex).split(";", ",").let { if (cutOff) it.dropLast(1) else it }
                                 val n = list.size - 1
                                 it.resources.getQuantityString(R.plurals.denominators, n, if (cutOff) "> $n" else "$n") + "\n\u2003—\n" +
-                                    if (phinary && countSt.firstOrNull() == '{') it.resources.getString(R.string.digits_not_supported) else
+                                    if (phinary && countSt.startsWith('{')) it.resources.getString(R.string.digits_not_supported) else
                                         (it.getString(rDigitsInt[if (phinary) 1 else 0], list.firstOrNull()?.let { st ->
                                             formatDigits(st.length, st.startsWith(".."))
                                         }) +
@@ -351,11 +353,35 @@ class ListActivity : AppCompatActivity() {
         }
         adapter = RecyclerAdapter(this, items)
         recycler.adapter = adapter
+
+
         if (listWhat == "H") ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.END) {
-            override fun onMove(view: RecyclerView, holder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean = false
-            override fun onSwiped(holder: RecyclerView.ViewHolder, direction: Int) {
-                if (direction == ItemTouchHelper.END) delete(holder.adapterPosition)
+
+            private val deletePaint = Paint().apply {
+                style = Paint.Style.FILL
+                color = resolveColor(this@ListActivity, R.attr.colorSecondary)
             }
+
+            override fun onMove(view: RecyclerView, holder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean = false
+
+            override fun onChildDraw(c: Canvas, recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, dX: Float, dY: Float, actionState: Int,
+                                     isCurrentlyActive: Boolean) {
+                viewHolder.itemView.findViewById<View>(R.id.layout)?.let { layout ->
+                    c.drawRect(layout.left.toFloat(), layout.top.toFloat(), layout.left.toFloat() + dX, layout.bottom.toFloat(), deletePaint)
+                    AppCompatResources.getDrawable(this@ListActivity, R.drawable.ic_delete)?.let {
+                        val left = min(layout.left + it.intrinsicWidth, dX.toInt() - 2 * it.intrinsicWidth)
+                        val top = layout.top + (layout.height - it.intrinsicHeight) / 2
+                        it.setBounds(left, top, left + it.intrinsicWidth, top + it.intrinsicHeight)
+                        it.draw(c)
+                    }
+                }
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                if (direction == ItemTouchHelper.END) delete(viewHolder.adapterPosition)
+            }
+
         }).attachToRecyclerView(recycler)
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this)
@@ -489,7 +515,7 @@ class ListActivity : AppCompatActivity() {
     @SuppressLint("NotifyDataSetChanged")
     override fun onResume() {
         super.onResume()
-        MainActivity.getOutputSettings(preferences)
+        MainActivity.getOutputSettingsAndFont(preferences)
         for (listItem in items) listItem.outputBuffer = ""
         adapter.notifyDataSetChanged()
         lastPlayedInterval = preferences.getInt("playDialog", -2)
