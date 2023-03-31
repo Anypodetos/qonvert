@@ -1,0 +1,1 @@
+Supports bases up to ±280 (standard) and ±259 (balanced) including base phi; new digit input method; new musical intervals; minor improvements and bugfixes
