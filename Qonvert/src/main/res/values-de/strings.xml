@@ -196,7 +196,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
         \n\nhttps://play.google.com/store/apps/details?id=org.tessoft.qonvert\n\noder\n\nhttps://f-droid.org/packages/org.tessoft.qonvert/</string>
     <string name="title_about">Über Qonvert V %1$s &lt;small&gt;(♯%2$d)&lt;/small&gt;</string>
 
-    <string name="help" tools:ignore="Typos"><![CDATA[
+    <string name="help"><![CDATA[
 <h2>Überblick</h2>
 <p>Diese App konvertiert Zahlen aus der Menge ℚ der rationalen Zahlen zwischen verschiedenen Basen (einschließlich nicht-Standard-Zahlensystemen)
 und zwischen verschiedenen Formaten wie Stellenwertnotation und Brüchen (einschließlich unechten, gemischten, ägyptischen und Kettenbrüchen).
@@ -482,7 +482,7 @@ und dann die Leertaste ␣ antippen. (Bei manchen Android-Tastaturen sind zwei L
     <!-- What’s new -->
     <string name="whatsNew"><![CDATA[
 <h2>Version 1.8.0 <small>– 3. Apr. 2023</small></h2>
-<p><strong>Basen bis ±280</strong> werden mit Hilfe immer exotischerer ziffern unterstützt, und balancierte Basen bis <strong>±259</strong>.
+<p><strong>Basen bis ±280</strong> werden mit Hilfe immer exotischerer Ziffern unterstützt, und balancierte Basen bis <strong>±259</strong>.
 Auch <strong>Phinär balanciert</strong> wird jetzt unterstützt; du kannst hier <code>Z</code>&nbsp;=&nbsp;−1 als Ziffer für die Eingabe verwenden.</p>
 <p>Die Einstellungen wurden etwas umsortiert. Die neue Sektion „Tastatur“ enthält einen Punkt „<strong>Leertaste setzt Ziffern zusammen</strong>“;
 wenn er eingeschaltet ist, kannst du eine Ziffer eingeben, indem du ihren dezimalen Wert und dann die Leertaste (␣) eintippst.
