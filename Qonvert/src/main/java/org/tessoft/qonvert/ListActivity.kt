@@ -170,7 +170,7 @@ class RecyclerAdapter internal constructor(private val activity: ListActivity?, 
                     with(items[adapterPosition].number) { abs(numerator.toDouble() / denominator.toDouble()).toFloat() } in 1/128.0..128.0
                 popupMenu.menu.findItem(R.id.settingsListItem).isVisible = false
                 var countSt = items[adapterPosition].number.toString(aEgyptianMethod = if (items[adapterPosition].egyptianMethod == EgyptianMethod.OFF)
-                                MainActivity.preferredEgyptianMethod() else items[adapterPosition].egyptianMethod).lowercase()
+                    MainActivity.preferredEgyptianMethod() else items[adapterPosition].egyptianMethod).lowercase()
                 val countDenominators = (countSt.firstOrNull() ?: ' ') in "[{"
                 with(popupMenu.menu.findItem(R.id.countItem)) {
                     isVisible = !countSt.startsWith('"')
@@ -354,6 +354,19 @@ class ListActivity : AppCompatActivity() {
         adapter = RecyclerAdapter(this, items)
         recycler.adapter = adapter
 
+/*        if (listWhat != "H") recycler.addOnScrollListener(object : RecyclerView.OnScrollListener() { ///
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val oldShowBaseSelector = showBaseSelector
+                showBaseSelector = dy < 0 //((recycler.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition() == 0)
+                if (showBaseSelector != oldShowBaseSelector) with(baseSelector.animate()) {
+                    duration = 150
+                    if (showBaseSelector) withStartAction { baseSelector.visibility = View.VISIBLE } else withEndAction { baseSelector.visibility = View.GONE }
+                    translationY(if (showBaseSelector) 0f else -baseSelector.layoutParams.height.toFloat() / 2)
+                    alpha(if (showBaseSelector) 1f else 0f)
+                }
+            }
+        })*/
 
         if (listWhat == "H") ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.END) {
 
@@ -393,7 +406,7 @@ class ListActivity : AppCompatActivity() {
             'H' -> getHistory(preferences, items)
             'I' -> {
                 base = preferences.getInt("inBase", 10)
-                system = try { NumSystem.valueOf(preferences.getString("inSystem",  null) ?: "") } catch (e: Exception) { NumSystem.STANDARD }
+                system = try { NumSystem.valueOf(preferences.getString("inSystem",  null) ?: "") } catch (_: Exception) { NumSystem.STANDARD }
                 for (i in listOf(ONE, TWO)) for (interval in INTERVALS)
                     with(QNumber(interval.first * i, interval.second, base, system, format = QFormat.FRACTION)) {
                         items.add(QNumberEntry(toInterval(resources), this))
@@ -428,6 +441,7 @@ class ListActivity : AppCompatActivity() {
             baseText.text = textList.joinToString()
             View.VISIBLE
         }
+
         if (prefsMapping.size == 0) prefsMapping = MutableList(items.size) { it }
         adapter.selectedItems = 0
         listSel = preferences.getString("listSel${listWhatToken(merge = true)}", null) ?: ""
@@ -440,7 +454,7 @@ class ListActivity : AppCompatActivity() {
             items[prefsMapping[i]].expanded = true
         }
         outputRadioGroup.check(outputRadioIds[(try { DisplayMode.valueOf(preferences.getString("listDisplay", null) ?: "") }
-            catch(e: Exception) { DisplayMode.STANDARD }).ordinal])
+            catch (_: Exception) { DisplayMode.STANDARD }).ordinal])
         for (r in outputRadioIds) findViewById<RadioButton>(r).setOnClickListener {
             snackbar?.dismiss()
             for (listItem in items) listItem.outputBuffer = ""
@@ -518,7 +532,7 @@ class ListActivity : AppCompatActivity() {
         MainActivity.getOutputSettingsAndFont(preferences)
         for (listItem in items) listItem.outputBuffer = ""
         adapter.notifyDataSetChanged()
-        lastPlayedInterval = preferences.getInt("playDialog", -2)
+        lastPlayedInterval = preferences.getInt("playDialog", PLAY_DIALOG_CLOSED)
         if (lastPlayedInterval >= 0) {
             MainActivity.playPhaseShift = preferences.getFloat("playPhaseShift", 0f)
             items[lastPlayedInterval].number.play(this, onlyRecreate = true)
@@ -549,7 +563,7 @@ class ListActivity : AppCompatActivity() {
         editor.putInt("playDialog", if (MainActivity.playDialog?.isShowing == true) {
             editor.putFloat("playPhaseShift", MainActivity.playPhaseShift)
             lastPlayedInterval
-        } else -2)
+        } else PLAY_DIALOG_CLOSED)
         MainActivity.playDialogTimer?.cancel()
         editor.apply()
     }

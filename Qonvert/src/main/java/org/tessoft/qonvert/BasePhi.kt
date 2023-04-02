@@ -1,7 +1,7 @@
 package org.tessoft.qonvert
 
 /*
-Copyright 2022 Anypodetos (Michael Weber)
+Copyright 2022, 2023 Anypodetos (Michael Weber)
 
 This file is part of Qonvert.
 
@@ -25,6 +25,8 @@ import java.math.BigInteger
 import java.math.BigInteger.*
 import java.util.*
 import kotlin.math.*
+
+const val PHI_ID_CHAR = '\uFE02'
 
 val PHI_ZERO = PhiNumber(ZERO)
 val PHI_ONE = PhiNumber(ONE)
@@ -63,23 +65,23 @@ class PhiNumber(var aNumer: BigInteger, var bNumer: BigInteger = ZERO, var denom
     constructor(p: PhiNumber): this(p.aNumer, p.bNumer, p.denom)
     constructor(a: BigFraction): this(a.first, ZERO, a.second)
 
-    constructor(phinary: String, continuedOrEgyptian: Int = 0, negative: Boolean = false): this(ZERO) {
+    constructor(phinary: String, continuedOrEgyptian: Int = 0, balanced: Boolean = false, negative: Boolean = false): this(ZERO) {
         val st = phinary.filterNot { it.isWhitespace() }
         val semi = st.indexOf(';')
         when {
-            semi == -1 -> parseFraction(st, negative)
+            semi == -1 -> parseFraction(st, balanced, negative)
             continuedOrEgyptian and IS_EGYPTIAN != 0 -> { /* Egyptian fraction */
                 parseResult = parseResult or IS_NUMBER or IS_EGYPTIAN
-                var x = parseFraction(st.substring(0, semi), negative)
+                var x = parseFraction(st.substring(0, semi), balanced, negative)
                 for ((i, subSt) in st.substring(semi + 1).split(',').reversed().withIndex())
-                    x += parseFraction(subSt, negative, if (i > 0) FRACTION_ZERO else FRACTION_INFINITY).inv()
+                    x += parseFraction(subSt, balanced, negative, if (i > 0) FRACTION_ZERO else FRACTION_INFINITY).inv()
                 x
             }
             else -> { /* continued fraction */
                 parseResult = parseResult or IS_NUMBER or IS_CONTINUED
                 var x = PHI_INFINITY
                 for ((i, subSt) in ((st.substring(semi + 1).split(',')).reversed() + st.substring(0, semi)).withIndex()) {
-                    x = parseFraction(subSt, negative, if (i > 0) FRACTION_ZERO else FRACTION_INFINITY) + x.inv()
+                    x = parseFraction(subSt, balanced, negative, if (i > 0) FRACTION_ZERO else FRACTION_INFINITY) + x.inv()
                 }
                 x
             }
@@ -91,22 +93,22 @@ class PhiNumber(var aNumer: BigInteger, var bNumer: BigInteger = ZERO, var denom
         }
     }
 
-    private fun parseFraction(s: String, negative: Boolean, default: BigFraction = FRACTION_ZERO): PhiNumber {
+    private fun parseFraction(s: String, balanced: Boolean = false, negative: Boolean, default: BigFraction = FRACTION_ZERO): PhiNumber {
         var under = s.indexOf('_')
         var slash = s.indexOf('/')
         if (slash > -1 && under > slash) under = -1
         if (under > -1) parseResult = parseResult or IS_NUMBER or IS_MIXED
         if (slash > -1) parseResult = parseResult or IS_NUMBER or IS_FRACTION
-        return if (slash == -1 && under == -1) parsePositional(s, negative, default) else {
+        return if (slash == -1 && under == -1) parsePositional(s, balanced, negative, default) else {
             if (slash == -1) slash = s.length
-            parsePositional(s.substring(0, max(under, 0)), negative) +
-                parsePositional(s.substring(under + 1, slash), negative) /
-                parsePositional(s.substring(min(slash + 1, s.length)), negative, default = FRACTION_ONE) *
+            parsePositional(s.substring(0, max(under, 0)), balanced, negative) +
+                parsePositional(s.substring(under + 1, slash), balanced, negative) /
+                parsePositional(s.substring(min(slash + 1, s.length)), balanced, negative, default = FRACTION_ONE) *
                     if (under > -1 && s.startsWith("-")) -ONE else ONE
         }
     }
 
-    private fun parsePositional(s: String, negative: Boolean = false, default: BigFraction = FRACTION_ZERO): PhiNumber {
+    private fun parsePositional(s: String, balanced: Boolean = false, negative: Boolean = false, default: BigFraction = FRACTION_ZERO): PhiNumber {
         with(mapOf("∞" to ONE, "-∞" to ONE, "無" to ZERO, "-無" to ZERO)[s]) {
             if (this != null) {
                 parseResult = parseResult or IS_NUMBER
@@ -122,35 +124,38 @@ class PhiNumber(var aNumer: BigInteger, var bNumer: BigInteger = ZERO, var denom
         val point = st.indexOf('.', complementTrim)
         val rep = st.indexOf(':')
         val noRep = rep == -1 || rep == st.length - if (point < rep) 1 else 2
-        val n = parseFinitePhinary((if (noRep) st else st.filterIndexed { i, _ -> i != point }).replaceFirst(":", ""), negative)
+        val n = parseFinitePhinary((if (noRep) st else st.filterIndexed { i, _ -> i != point }).replaceFirst(":", ""), balanced, negative)
         parseResult = parseResult or n.parseResult or
             (if (fraction != null) IS_NUMBER or (if (n.parseResult and IS_NUMBER == 0) IS_FRACTION else IS_MIXED) else 0)
 
         return if (n.parseResult and IS_NUMBER == 0 && fraction == null) default.toPhiNumber() else {
-            if (noRep) n else (n - parseFinitePhinary(st.substring(0, rep).filterIndexed { i, _ -> i != point }, negative)) /
+            if (noRep) n else (n - parseFinitePhinary(st.substring(0, rep).filterIndexed { i, _ -> i != point }, balanced, negative)) /
                 (phiPower(st.length - point - if (point < rep) 2 else 1, negative) - phiPower(rep - point + if (point < rep) -1 else +1, negative))
         } + (if (fraction?.second != TEN) PhiNumber(fraction ?: BigFraction(ZERO, ONE)) else INV_PHI)
     }
 
-    private fun parseFinitePhinary(s: String, negative: Boolean = false): PhiNumber {
+    private fun parseFinitePhinary(s: String, balanced: Boolean = false, negative: Boolean = false): PhiNumber {
         val st = s.filterNot { it.isWhitespace() }
         val minus = st.startsWith('-')
         val complement = st.startsWith("..")
         if (complement && negative) return PHI_INFINITY.also { it.parseResult = IS_NUMBER }
         var parseResult = if (complement) IS_NUMBER or IS_COMPLEMENT else 0
-        val negMarker = if (minus) 1 else if (complement) 2 else 0
+        val negMarker = if (minus) {
+            if (balanced) parseResult = parseResult or NONSTANDARD_DIGIT
+            1
+        } else if (complement) 2 else 0
         val point = with(st.indexOf('.', negMarker)) { if (this == -1) st.length else this }
         var result = PHI_ZERO
         val firstPlace = point - negMarker - 1
         var power = phiPower(firstPlace, negative)
-        for (i in negMarker until st.length) with(DIGITS.indexOf(st[i], ignoreCase = true)) {
-            if (this > -1) {
-                parseResult = parseResult or IS_NUMBER
-                result += power * toBigInteger()
-                power *= if (negative) -INV_PHI else INV_PHI
-                if (this > 1) parseResult = parseResult or NONSTANDARD_DIGIT
-            } else if (i != point) parseResult = parseResult or INVALID_CHAR
-        }
+        val (digits, offset) = if (balanced) Pair(BAL_DIGITS, MAX_BAL_BASE / 2) else Pair(DIGITS, 0)
+        for (i in negMarker until st.length) if (digits.contains(st[i], ignoreCase = true)) with(digits.indexOf(st[i], ignoreCase = true) - offset) {
+            parseResult = parseResult or IS_NUMBER
+            result += power * toBigInteger()
+            power *= if (negative) -INV_PHI else INV_PHI
+            if (this !in (if (balanced) -1 else 0)..1) parseResult = parseResult or NONSTANDARD_DIGIT
+        } else if (i != point) parseResult = parseResult or INVALID_CHAR
+
         if (complement) result -= phiPower(firstPlace + 1, negative)
         return (result * if (minus) -ONE else ONE).also { it.parseResult = parseResult }
     }
@@ -232,7 +237,7 @@ class PhiNumber(var aNumer: BigInteger, var bNumer: BigInteger = ZERO, var denom
         formatNumberPair(r.toFractionString(radix), first.toString(radix), "√5̅" + (if (second == ONE) "" else "/" + second.toString(radix)))
     } else formatNumberPair(a.toFractionString(radix), b.first.toString(radix), "φ" + (if (b.second == ONE) "" else "/" + b.second.toString(radix)))
 
-    fun toBasePhi(groupDigits: Boolean = false, maxDigits: Int = Int.MAX_VALUE, alt: Boolean = false, complement: Boolean = false): String {
+    fun toBasePhi(groupDigits: Boolean = false, maxDigits: Int = Int.MAX_VALUE, alt: Boolean = false, complement: Boolean = false, balanced: Char = '1'): String {
         var (result, x) = phintegerPart(complement)
         val point = if (x > ZERO) result.length else -1
         if (point > -1) {
@@ -257,13 +262,13 @@ class PhiNumber(var aNumer: BigInteger, var bNumer: BigInteger = ZERO, var denom
                 if (result.startsWith("01")) result.deleteAt(0)
             }
         }
-        return insertSpaces(result, groupDigits, point)
+        return finalize(result, groupDigits, complement, balanced, point)
     }
 
-    fun toBasePhiFraction(groupDigits: Boolean = false, complement: Boolean = false): String {
+    fun toBasePhiFraction(groupDigits: Boolean = false, complement: Boolean = false, balanced: Char = '1'): String {
         if (denom == ZERO) return if (aNumer == ZERO && bNumer == ZERO) "0/0" else "1/0"
         val numerString = StringBuilder(PhiNumber(aNumer, bNumer).toBasePhi(complement = complement))
-        if (denom == ONE && '.' !in numerString.removePrefix("..")) return insertSpaces(numerString, groupDigits)
+        if (denom == ONE && '.' !in numerString.removePrefix("..")) return finalize(numerString, groupDigits, complement, balanced)
         val denomString = StringBuilder(PhiNumber(denom).toBasePhi())
         val fractionalDiff = with(numerString.indexOf('.', if (numerString.startsWith("..")) 2 else 0)) { if (this > -1) {
             numerString.deleteAt(this)
@@ -272,24 +277,25 @@ class PhiNumber(var aNumer: BigInteger, var bNumer: BigInteger = ZERO, var denom
             denomString.deleteAt(this)
             denomString.length - this
         } else 0 }
-        return insertSpaces(numerString.append("0".repeat((-fractionalDiff).coerceAtLeast(0))), groupDigits).trimStart('0', ' ') + "/" +
-               insertSpaces(denomString.append("0".repeat(  fractionalDiff .coerceAtLeast(0))), groupDigits).trimStart('0', ' ')
+        return finalize(numerString.append("0".repeat((-fractionalDiff).coerceAtLeast(0))), groupDigits, complement, balanced).trimStart('0', ' ') + "/" +
+               finalize(denomString.append("0".repeat(  fractionalDiff .coerceAtLeast(0))), groupDigits).trimStart('0', ' ')
     }
 
-    fun toBasePhiMixed(groupDigits: Boolean = false, complement: Boolean = false): String {
-        if (abs() <= ONE || denom == ZERO) return toBasePhiFraction(groupDigits, complement)
+    fun toBasePhiMixed(groupDigits: Boolean = false, complement: Boolean = false, balanced: Char = '1'): String {
+        if (abs() <= ONE || denom == ZERO) return toBasePhiFraction(groupDigits, complement, balanced)
         val (phinteger, fraction) = phintegerPart(complement)
-        return insertSpaces(phinteger, groupDigits) + if (fraction > ZERO) '_' + fraction.toBasePhiFraction(groupDigits) else ""
+        return finalize(phinteger, groupDigits, complement, balanced) + if (fraction > ZERO) '_' +
+            (if (this >= ZERO || balanced == '1') fraction else -fraction).toBasePhiFraction(groupDigits, balanced = balanced) else ""
     }
 
-    fun toBasePhiContinued(groupDigits: Boolean = false, complement: Boolean = false) =
-        continuedFraction(this, groupDigits, complement)
+    fun toBasePhiContinued(groupDigits: Boolean = false, complement: Boolean = false, balanced: Char = '1') =
+        continuedFraction(this, groupDigits, complement, balanced)
 
-    private tailrec fun continuedFraction(x: PhiNumber, groupDigits: Boolean = false, complement: Boolean = false, pre: String = ""): String {
+    private tailrec fun continuedFraction(x: PhiNumber, groupDigits: Boolean, complement: Boolean, balanced: Char, pre: String = ""): String {
         val (phinteger, fraction) = x.phintegerFloorPart(complement)
-        val st = "$pre, ${insertSpaces(phinteger, groupDigits)}"
+        val st = "$pre, ${finalize(phinteger, groupDigits, complement, balanced)}"
         return if (fraction == PHI_ZERO) st.substring(2).replaceFirst(',', ';') else
-            continuedFraction(fraction.inv(), groupDigits, complement, st)
+            continuedFraction(fraction.inv(), groupDigits, complement, '1', st)
     }
 
     private fun phintegerPart(complement: Boolean = false): Pair<StringBuilder, PhiNumber> {
@@ -317,11 +323,15 @@ class PhiNumber(var aNumer: BigInteger, var bNumer: BigInteger = ZERO, var denom
         return Pair(phinteger, fraction)
     }
 
-    private fun insertSpaces(s: StringBuilder, groupDigits: Boolean, point: Int = -1): String {
+    private fun finalize(s: StringBuilder, groupDigits: Boolean, complement: Boolean = false, balanced: Char = '1', point: Int = -1): String {
         if (groupDigits) {
             val cutOffPos = s.length - if (s.endsWith('…')) 1 else 0
             var pos = if (point > -1) point - cutOffPos + (if (':' in s) 2 else 1) else (if (".:" in s) -2 else 0)
             for (i in cutOffPos - 2 downTo 0) if (s[i] in "01" && ++pos % 4 == 0 && pos != 0) s.insert(i + 1, ' ')
+        }
+        if (this < ZERO && !complement && balanced != '1') {
+            if (s.getOrNull(0) == '-') s.deleteAt(0)
+            for (i in s.indices) if (s[i] == '1') s[i] = balanced
         }
         return s.toString()
     }
@@ -343,7 +353,8 @@ class PhiNumber(var aNumer: BigInteger, var bNumer: BigInteger = ZERO, var denom
     }
 }
 
-fun String.toPhiNumber(continuedOrEgyptian: Int = 0, negative: Boolean = false) = PhiNumber(this, continuedOrEgyptian, negative)
+fun String.toPhiNumber(continuedOrEgyptian: Int = 0, balanced: Boolean = false, negative: Boolean = false) =
+    PhiNumber(this, continuedOrEgyptian, balanced, negative)
 fun BigFraction.toPhiNumber() = PhiNumber(this)
 
 fun BigFraction.toFractionString(radix: Int = 10) = first.toString(radix) + (if (second == ONE) "" else "/" + second.toString(radix))

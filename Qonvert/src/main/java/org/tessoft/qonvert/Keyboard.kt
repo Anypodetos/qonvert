@@ -29,10 +29,11 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.SoundEffectConstants
 import android.view.View
-import android.view.inputmethod.EditorInfo
 import java.util.*
 import kotlin.concurrent.schedule
 import kotlin.math.*
+
+const val THORN_CLUSTER = "ꝥҹʡƾ"
 
 class EditInput(context: Context, attrs: AttributeSet) : androidx.appcompat.widget.AppCompatEditText(context, attrs) {
 
@@ -41,10 +42,43 @@ class EditInput(context: Context, attrs: AttributeSet) : androidx.appcompat.widg
         set(value) { setText(value) }
 
     private val mainActivity = if (context is MainActivity) context else null
+    var composeBackup = ""
+    var composeBackupCaret = 0
 
     override fun onSelectionChanged(selStart: Int, selEnd: Int) {
         super.onSelectionChanged(selStart, selEnd)
         mainActivity?.updateKeyboardToCaretPos()
+    }
+
+    fun keyStroke(c: Char) {
+        val caret = selectionStart
+        string = string.substring(0, caret) + c + string.substring(selectionEnd)
+        setSelection(caret + 1)
+    }
+
+    fun composeDigit(system: NumSystem, handleKeystroke: Boolean = true) {
+        composeBackup = ""
+        if (system !in setOf(NumSystem.GREEK, NumSystem.ROMAN)) {
+            var pos = selectionStart - 1
+            var spaces = 0
+            if (!hasSelection()) {
+                while (string.getOrNull(pos) == ' ') { pos--; spaces++ }
+                while (string.getOrNull(pos) in '0'..'9') pos--
+                if (system == NumSystem.BALANCED && string.getOrNull(pos) == '-') pos--
+            }
+            val decimal = string.substring(pos + 1, selectionEnd).trim().toIntOrNull() ?: Int.MAX_VALUE
+            if ((if (system != NumSystem.BALANCED) DIGITS.getOrNull(decimal + if (system == NumSystem.BIJECTIVE_A && decimal != 0) 9 else 0) else
+                BAL_DIGITS.getOrNull(decimal + MAX_BAL_BASE / 2))?.let {
+                    if (!handleKeystroke) spaces = (spaces - 1).coerceAtLeast(0)
+                    if (it in '0'..'9') spaces++ else {
+                        composeBackup = string
+                        composeBackupCaret = selectionEnd
+                    }
+                    string = string.substring(0, pos + 1) + (if (MainActivity.lowerDigits) it else it.uppercaseChar()) + " ".repeat(spaces) +
+                        string.substring(selectionEnd)
+                    setSelection(pos + spaces + 2)
+                } == null && handleKeystroke && !hasSelection()) keyStroke(' ')
+        } else if (handleKeystroke) keyStroke(' ')
     }
 }
 
@@ -148,18 +182,20 @@ class KeyboardView(context: Context, attrs: AttributeSet) : View(context, attrs)
         if (touchX > -1 && touchY > -1) {
             var t = buttonTexts[touchX][touchY][long]
             if (long == 1 && t == ' ') t = buttonTexts[touchX][touchY][0]
-            val hasPopup = popupSizes[touchX][touchY][long] > 2
+            val hasPopup = popupSizes[touchX][touchY][long] > 1
             if (showPopup != ' ') {
                 showPopup = ' '
                 fillButtons(always = true)
             }
-            mainActivity?.editInput?.let {
+            mainActivity?.editInput?.let { edit ->
                 when (t) {
-                    '⏎' -> {
-                        it.onEditorAction(EditorInfo.IME_ACTION_DONE)
+                    '⏎' -> mainActivity?.addInputToHistory()
+                    '␣' -> if (mainActivity?.spaceComposes == true) edit.composeDigit(system) else edit.keyStroke(' ')
+                    '⌫' -> if (edit.composeBackup == "") backspace(edit, repeat = false) else {
+                        edit.string = edit.composeBackup.substring(0, edit.composeBackupCaret) + " " + edit.composeBackup.substring(edit.composeBackupCaret)
+                        edit.setSelection(edit.composeBackupCaret + 1)
                     }
-                    '⌫' -> backspace(it, repeat = false)
-                    '\u200A' -> backspace(it, repeat = true)
+                    '\u200A' -> backspace(edit, repeat = true)
                     ' ', '×' -> Unit
                     else -> if (hasPopup) {
                         showPopup = t.lowercaseChar()
@@ -167,12 +203,9 @@ class KeyboardView(context: Context, attrs: AttributeSet) : View(context, attrs)
                         popupY = touchY
                         popupLong = long
                         fillButtons(always = true)
-                    } else {
-                        val caret = it.selectionStart
-                        it.string = it.string.substring(0, caret) + (if (t == '␣') ' ' else t) + it.string.substring(it.selectionEnd)
-                        it.setSelection(caret + 1)
-                    }
+                    } else edit.keyStroke(t)
                 }
+                if (t != '␣') edit.composeBackup = ""
             }
         }
     }
@@ -245,34 +278,41 @@ class KeyboardView(context: Context, attrs: AttributeSet) : View(context, attrs)
             }
             else -> {
                 val digitsStart = if (digitsLeft) 0 else buttonCols - 5
-                if (system != NumSystem.BIJECTIVE_A) for (d in digitRange.first.coerceAtLeast(1)..digitRange.last.coerceAtMost(9))
-                    buttonTexts[(d - 1) % 3 + digitsStart][(9 - d) / 3][0] = d.digitToChar()
+                if (system != NumSystem.BIJECTIVE_A || mainActivity?.spaceComposes == true)
+                    for (d in (digitRange.first - bijectiveAdd).coerceAtLeast(1)..(digitRange.last - bijectiveAdd).coerceAtMost(9))
+                        buttonTexts[(d - 1) % 3 + digitsStart][(9 - d) / 3][0] = d.digitToChar()
                 for (d in digitRange.first.coerceAtLeast(10)..digitRange.last.coerceAtMost(if (system != NumSystem.BALANCED) 39 else 18)) {
-                    val i = (d - bijectiveAdd - 1 + 3 * digitsStart) / 3 % buttonCols
+                    val i = if (d in 16..18 && system == NumSystem.BALANCED && !digitsLeft && !landscape) 3 else
+                        ((d - 1 - if (mainActivity?.spaceComposes == true) 0 else bijectiveAdd) / 3 + digitsStart) % buttonCols
                     val j = (d + 2) % 3
                     val k = if (buttonTexts[i][j][0] == ' ') 0 else 1
                     buttonTexts[i][j][k] = DIGITS[d]
-                    popupSizes[i][j][k] = if (system != NumSystem.BALANCED) (digitRange.last - d) / 30 + 2 else
-///                        ((d - 36) - digitRange.first) / 30 + (digitRange.last - d) / 30 + 3
-                        if ((d - 36) >= digitRange.first) max((d - 36) - digitRange.first / 30 * 2 + 2, (digitRange.last - d) / 30 * 2 + 3) else 0
+                    popupSizes[i][j][k] = if (system != NumSystem.BALANCED) (if (d + 30 > digitRange.last) 0 else (digitRange.last - d) / 30 + 2) else
+                        max(digitRange.last - d, (d - 6) - digitRange.first) / 30 + 1
                 }
                 for (d in digitRange.first.coerceAtLeast(-17)..-1) {
                     val i = (d + 3 * ((if (digitsLeft) 21 else 19) - buttonCols)) / 3 % buttonCols
                     val j = (d + 18) % 3
-                    val k = if (buttonTexts[i][j][0] == ' ' || (!digitsLeft && i == 0)) 0 else 1   /////// CHECK FOR DIGITS_LEFT/RIGHT
+                    val k = if (buttonTexts[i][j][0] == ' ') 0 else 1
                     buttonTexts[i][j][k] = (d + 123).toChar()
-                    ///popupSizes[i][j][k] = (d - digitRange.first) / 30 + (digitRange.last - (d + 36)) / 30 + 3
-                    popupSizes[i][j][k] =
-                        if (d + 36 <= digitRange.last) max((d - digitRange.first) / 30 * 2 + 2, (digitRange.last - (d + 36)) / 30 * 2 + 3) else 0
+                    popupSizes[i][j][k] = if (d + 36 > digitRange.last && d - 30 < digitRange.first) 0 else
+                        max((digitRange.last - (d + 36)) / 30 + 1, ((d - digitRange.first) / 30 + 2))
                 }
-                if (system == NumSystem.BALANCED && !digitsLeft && !landscape) for (d in 16..digitRange.last) buttonTexts[3][d - 16][1] = (d + 87).toChar()
+                if (system == NumSystem.BALANCED) for (d in digitRange.first.coerceAtLeast(-30)..-27) {
+                    val i = (d + 30) / 3 + (if (digitsLeft) 6 else 4) + (if (landscape) 3 else 0)
+                    val j = (d + 30) % 3
+                    val k = if (digitsLeft) 0 else 1
+                    buttonTexts[i][j][k] = THORN_CLUSTER[d + 30]
+                    popupSizes[i][j][k] = if (d + 66 > digitRange.last) 0 else ((d + 30) - digitRange.first) / 30 + 2
+                }
                 bottomRow[0] = (if (digitsLeft) ("0.˙-␣" + (if (landscape) " °'\"" else "") +  ",/") else (",/-" + (if (landscape) "°'\"␣" else "") + "0.˙⏎")).
-                        let {
-                    if (digitRange.first <= 0) it else it.replaceFirst('0', '∞')
-                }
-                bottomRow[1] = if (landscape) (if (digitsLeft) "∞½        ⏎" else "       ∞½  ").let {
-                    if (digitRange.first <= 0) it else it.replaceFirst('∞', ' ')
-                } else (if (digitsLeft) " ½ °'\"⏎" else "°'\" ½ ␣")
+                    let {
+                        if (digitRange.first <= 0 || mainActivity?.spaceComposes == true) it else it.replaceFirst('0', '∞')
+                    }
+                bottomRow[1] = if (landscape) (if (digitsLeft) "∞½        ⏎" else "       ∞½  ").
+                    let {
+                        if (digitRange.first <= 0 || mainActivity?.spaceComposes == true) it else it.replaceFirst('∞', ' ')
+                    } else (if (digitsLeft) " ½ °'\"⏎" else "°'\" ½ ␣")
             }
         }
         popupSizes[if (digitsLeft) (if (!landscape || system != NumSystem.ROMAN) 1 else 5) else
@@ -286,19 +326,20 @@ class KeyboardView(context: Context, attrs: AttributeSet) : View(context, attrs)
         }
         if (showPopup !in " ½") {
             val popupWidth = popupSizes[popupX][popupY][popupLong].coerceAtMost(8)
-            val popupHeight = (popupSizes[popupX][popupY][popupLong] + 7) / 8
+            val popupHeight = if (system != NumSystem.BALANCED) (popupSizes[popupX][popupY][popupLong] + 7) / 8 else 2
             val leftEdge = popupX - (popupX + popupWidth - buttonCols).coerceAtLeast(0)
             val topEdge = popupY - (popupY + popupHeight - buttonRows).coerceAtLeast(0)
             popupRect = RectF(buttonRects[leftEdge][topEdge].left - padding / 2, buttonRects[leftEdge][topEdge].top - padding / 2,
                 buttonRects[leftEdge + popupWidth - 1][topEdge].right + padding / 2, buttonRects[leftEdge][topEdge + popupHeight - 1].bottom + padding / 2)
+            val digitIndexStart = if (system != NumSystem.BALANCED) DIGITS.indexOf(showPopup) else
+                if (showPopup in 'a'..'z') showPopup.code - 87 else THORN_CLUSTER.indexOf(showPopup) + 36
             for (i in 0 until popupWidth) for (j in 0 until popupHeight) {
-                val n = i + popupWidth * j
-                val digitIndex = //////if (n >= popupSizes[popupX][popupY][popupLong] - 1) 0 else
-                    if (system != NumSystem.BALANCED) DIGITS.indexOf(showPopup) + 30 * n else showPopup.code + if (n % 2 == 0) -15 * n - 123 else 15 * n - 102
-                buttonTexts[leftEdge + i][topEdge + j][0] = if (digitIndex in digitRange)
+                val digitIndex = digitIndexStart + if (system != NumSystem.BALANCED) 30 * (i + popupWidth * j) else if (j % 2 == 0) 30 * i else -30 * i - 36
+                val displayDigit = digitIndex in digitRange && digitIndex !in 0..3 /* exclude bottom left button for thorn cluster popups */
+                buttonTexts[leftEdge + i][topEdge + j][0] = if (displayDigit)
                     (if (system != NumSystem.BALANCED) DIGITS.getOrNull(digitIndex) else BAL_DIGITS.getOrNull(digitIndex + MAX_BAL_BASE / 2)) ?: ' ' else ' '
                 buttonTexts[leftEdge + i][topEdge + j][1] = ' '
-                popupValues[leftEdge + i][topEdge + j] = if (digitIndex in digitRange) digitIndex - bijectiveAdd else 0
+                popupValues[leftEdge + i][topEdge + j] = if (displayDigit) digitIndex - bijectiveAdd else 0
             }
             buttonTexts[leftEdge + popupWidth - 1][topEdge + popupHeight - 1][0] = '×'
             for (i in leftEdge until leftEdge + popupWidth) for (j in topEdge until topEdge + popupHeight) for (k in 0..1) popupSizes[i][j][k] = 0

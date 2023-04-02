@@ -78,13 +78,13 @@ class SettingsActivity : AppCompatActivity(), PreferenceFragmentCompat.OnPrefere
             .replace(R.id.settings, TokenSettingsFragment())
             .addToBackStack(null)
             .commit()
-        toolbar.title = getString(R.string.tokens_header)
+        toolbar.title = getString(R.string.tokens_title)
         return true
     }
 
     override fun onResume() {
         super.onResume()
-        toolbar.title = getString(if (supportFragmentManager.backStackEntryCount == 0) R.string.menu_settings else R.string.tokens_header)
+        toolbar.title = getString(if (supportFragmentManager.backStackEntryCount == 0) R.string.menu_settings else R.string.tokens_title)
     }
 
     class SettingsFragment : PreferenceFragmentCompat() {
@@ -104,10 +104,9 @@ class SettingsActivity : AppCompatActivity(), PreferenceFragmentCompat.OnPrefere
         }
 
         private fun apostrophusSummary() {
-            val lowercase = findPreference<SwitchPreference>("lowercase")
             val apostrophus = findPreference<ListPreference>("apostrophus")
             apostrophus?.entries = resources.getStringArray(R.array.apostrophus_entries).map {
-                if (lowercase?.isChecked == true) it.lowercase() else it
+                if (findPreference<SwitchPreference>("lowercase")?.isChecked == true) it.lowercase() else it
             }.toTypedArray()
             apostrophus?.summary = apostrophus?.entry.toString()
         }
@@ -140,7 +139,7 @@ class SettingsActivity : AppCompatActivity(), PreferenceFragmentCompat.OnPrefere
                 preferenceManager.sharedPreferences?.let { MainActivity.getTokenSettings(it) }
                 MainActivity.tokens[index].let {
                     char.toString() +
-                    (if (it.second !in setOf(NumSystem.GREEK, NumSystem.ROMAN)) baseToString(it.first) else "") +
+                    (if (it.second !in setOf(NumSystem.GREEK, NumSystem.ROMAN)) "\u00A0" + baseToString(it.first) else "") +
                     (if (it.second != NumSystem.STANDARD) "\u00A0" + resources.getStringArray(R.array.num_systems)[it.second.ordinal] else "") }
             }.joinToString(" • ")
          }

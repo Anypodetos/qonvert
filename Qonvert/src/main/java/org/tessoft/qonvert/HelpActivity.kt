@@ -67,7 +67,7 @@ class HelpFragment : Fragment() {
             root.findViewById<WebView>(R.id.webView).loadData(
                 getString(R.string.css) +
                 (if (isNightModeActive()) getString(R.string.css_dark) else "") +
-                "<h1>" + when(it) {
+                "<h1>" + when (it) {
                     0 -> getString(R.string.menu_help)
                     1 -> getString(R.string.menu_cheatSheet)
                     2 -> getString(R.string.menu_whatsNew)

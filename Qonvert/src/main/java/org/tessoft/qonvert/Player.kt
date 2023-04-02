@@ -71,7 +71,7 @@ class OneTimeBuzzer(private var toneFreq: Double, private var volume: Int, priva
             audioTrack?.flush()
             audioTrack?.release()
             audioTrack = null
-        } catch(_: IllegalStateException) {
+        } catch (_: IllegalStateException) {
             /* Likely issue with concurrency, doesn't matter, since means it's stopped anyway; so we just eat the exception */
         }
     }
@@ -88,7 +88,7 @@ class OneTimeBuzzer(private var toneFreq: Double, private var volume: Int, priva
         val rampDown = numSamples / 4
 
         for (i in 0 until numSamples) {
-            val v = (sin(freqInHz * 2 * PI * i / sampleRate) * 32767 * when(i) {
+            val v = (sin(freqInHz * 2 * PI * i / sampleRate) * 32767 * when (i) {
                in 0 until rampUp -> (1 + cos((i - rampUp) * PI / rampUp)) / 2
                in rampUp until numSamples - rampDown -> 1.0
                else -> (1 + cos((i - numSamples + rampDown) * PI / rampDown)) / 2
@@ -106,11 +106,11 @@ class OneTimeBuzzer(private var toneFreq: Double, private var volume: Int, priva
             audioTrack?.setStereoVolume(gain, gain)
             audioTrack?.play()
             audioTrack?.write(soundData, 0, soundData.size)
-        } catch(_: Exception) { }
+        } catch (_: Exception) { }
 
         try {
             tryStopPlayer()
-        } catch(_: Exception) { }
+        } catch (_: Exception) { }
     }
 }
 
@@ -131,7 +131,7 @@ class WaveView(context: Context) : View(context) {
     private val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         textSize = 12 * resources.displayMetrics.scaledDensity
         textAlign = Paint.Align.CENTER
-        color = resolveColor(context, android.R.attr.textColorHint)
+        color = resolveColor(context, android.R.attr.colorForeground)
     }
 
     init {
@@ -158,7 +158,8 @@ class WaveView(context: Context) : View(context) {
     }
 
     private fun calcWave() {
-        if (waveWidth > 0) with(path) {
+        isClickable = waveWidth > 0 && abs(ratio) in (200f / waveWidth)..(waveWidth / 200f)
+        if (isClickable) with(path) {
             reset()
             moveTo(waveWidth, waveHeight * 0.4f)
             lineTo(0f, waveHeight * 0.4f)
@@ -180,9 +181,11 @@ class WaveView(context: Context) : View(context) {
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
         canvas?.let{
-            it.drawPath(path, linePaint)
-            it.drawText(resources.getString(if (autoClose) R.string.interval_keep else R.string.interval_swipe),
-                waveWidth / 2, waveHeight - textPaint.textSize / 2, textPaint)
+            if (!isClickable) it.drawText(resources.getString(R.string.interval_noWave), waveWidth / 2, waveHeight / 2, textPaint) else {
+                it.drawPath(path, linePaint)
+                it.drawText(resources.getString(if (autoClose) R.string.interval_keep else R.string.interval_swipe),
+                    waveWidth / 2, waveHeight - textPaint.textSize / 2, textPaint)
+            }
         }
     }
 }
