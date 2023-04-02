@@ -69,65 +69,56 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
 
     <string-array name="interval_names">
         <!-- must have a "*" each to separate interval id and qualifier ("minor/major/perfect"; order doesn’t matter) -->
-        <!-- tuning after that, separated by space and in round brackets -->
-        <!-- alternative name after the brackets and separated by a comma: only for intervals < octave -->
+        <!-- tuning after that, separated by Space and in round brackets -->
+        <!-- alternative name after the brackets and separated by a comma: displayed only for intervals smaller than an octave -->
+        <!-- &#x2011 (the non-breaking hyphen) suppresses a following space (as in German "Wolfs-Quinte") -->
         <item>*00</item>
         <item>minor*01 (Pythagorean), Pythagorean limma</item>
         <item>minor*01 (just intonation), diatonic semitone</item>
         <item>major*01 (just intonation), lesser whole tone</item>
         <item>major*01 (Pythagorean), greater whole tone</item>
+        <item>major*01 (septimal)</item>
+        <item>minor*02 (septimal)</item>
         <item>minor*02 (Pythagorean)</item>
         <item>minor*02 (just intonation)</item>
         <item>major*02 (just intonation)</item>
         <item>major*02 (Pythagorean)</item>
         <item>perfect*03</item>
-        <item>*04 (Huygens)</item>
+        <item>wolf*03 (Pythagorean)</item>
+        <item>*04 (Huygens’ or lesser septimal)</item>
         <item>*04 (diatonic)</item>
         <item>*04 (Pythagorean)</item>
-        <item>*04 (Euler)</item>
+        <item>*04 (Euler’s or greater septimal)</item>
+        <item>wolf*05 (Pythagorean)</item>
         <item>perfect*05</item>
         <item>minor*06 (Pythagorean)</item>
         <item>minor*06 (just intonation)</item>
         <item>major*06 (just intonation)</item>
         <item>major*06 (Pythagorean)</item>
+        <item>major*06 (septimal)</item>
+        <item>minor*07 (harmonic or septimal)</item>
         <item>minor*07 (Pythagorean)</item>
         <item>minor*07 (just intonation)</item>
         <item>major*07 (just intonation)</item>
         <item>major*07 (Pythagorean)</item>
     </string-array>
     <string-array name="basic_intervals">
-        <!-- 00 -->
-        <item>unison</item>
-        <!-- 01 -->
-        <item>second</item>
-        <!-- 02 -->
-        <item>third</item>
-        <!-- 03 -->
-        <item>fourth</item>
-        <!-- 04 -->
-        <item>tritone</item>
-        <!-- 05 -->
-        <item>fifth</item>
-        <!-- 06 -->
-        <item>sixth</item>
-        <!-- 07 -->
-        <item>seventh</item>
-        <!-- 00 -->
-        <item>octave</item>
-        <!-- 01 -->
-        <item>ninth</item>
-        <!-- 02 -->
-        <item>tenth</item>
-        <!-- 03 -->
-        <item>eleventh</item>
-        <!-- 04 -->
-        <item>octave + tritone</item>
-        <!-- 05 -->
-        <item>twelfth</item>
-        <!-- 06 -->
-        <item>thirteenth</item>
-        <!-- 07 -->
-        <item>fourteenth</item>
+        <!-- 00 --><item>unison</item>
+        <!-- 01 --><item>second</item>
+        <!-- 02 --><item>third</item>
+        <!-- 03 --><item>fourth</item>
+        <!-- 04 --><item>tritone</item>
+        <!-- 05 --><item>fifth</item>
+        <!-- 06 --><item>sixth</item>
+        <!-- 07 --><item>seventh</item>
+        <!-- 00 --><item>octave</item>
+        <!-- 01 --><item>ninth</item>
+        <!-- 02 --><item>tenth</item>
+        <!-- 03 --><item>eleventh</item>
+        <!-- 04 --><item>octave + tritone</item>
+        <!-- 05 --><item>twelfth</item>
+        <!-- 06 --><item>thirteenth</item>
+        <!-- 07 --><item>fourteenth</item>
     </string-array>
     <string-array name="octaves">
         <item>double octave</item>
@@ -251,7 +242,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
         <item>Digits on the right</item>
         <item>Digits on the left (tablet)</item>
         <item>Digits on the right (tablet)</item>
-        <item>Android’s</item>
+        <item>Android’s keyboard</item>
     </string-array>
     <string-array name="keyboard_values" translatable="false">
         <item>DIGITS_LEFT</item>

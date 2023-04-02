@@ -97,9 +97,23 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     </PreferenceCategory>
 
     <PreferenceCategory
-            android:title="@string/tokens_header"
+            android:title="@string/keyboard_header"
             app:iconSpaceReserved="false">
 
+        <ListPreference
+                app:defaultValue="DIGITS_RIGHT"
+                app:entries="@array/keyboard_entries"
+                app:entryValues="@array/keyboard_values"
+                app:iconSpaceReserved="false"
+                app:key="keyboard"
+                app:title="@string/keyboard_title"
+                app:useSimpleSummaryProvider="true" />
+        <SwitchPreference
+                android:defaultValue="false"
+                android:title="@string/spaceComposes_title"
+                android:key="spaceComposes"
+                app:iconSpaceReserved="false"
+                app:summary="@string/spaceComposes_hint" />
         <Preference
                 android:title="@string/tokens_title"
                 android:key="baseTokens"
@@ -118,14 +132,6 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
                 app:iconSpaceReserved="false"
                 app:key="buttons"
                 app:title="@string/buttons_title" />
-        <ListPreference
-                app:defaultValue="DIGITS_RIGHT"
-                app:entries="@array/keyboard_entries"
-                app:entryValues="@array/keyboard_values"
-                app:iconSpaceReserved="false"
-                app:key="keyboard"
-                app:title="@string/keyboard_title"
-                app:useSimpleSummaryProvider="true" />
         <SwitchPreference
                 android:defaultValue="false"
                 android:title="@string/moreSpace_title"

@@ -44,13 +44,13 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     <string name="clear_hint">Clear input</string>
     <string name="base">%1$s: base %2$s, %3$s</string>
     <string name="bare_base">base %1$s, %2$s</string>
-    <string name="base_message">For base φ (the golden ratio) type 1.</string>
+    <string name="base_message">For base φ (the golden ratio), type ‘1’.</string>
     <string name="clipboard_asIs">Copy to clipboard as is</string>
     <string name="clipboard_dissect">… with dissected digits</string>
     <string name="clipboard_rep">… with overlined repeating part</string>
     <string name="clipboard_fraction">… as pretty fraction</string>
     <string name="clipboard_withUnicodeName">… with Unicode name</string>
-    <string name="clipboard_noQuotes">… without the quotes</string>
+    <string name="clipboard_noQuotes">… without quotes</string>
     <string name="clipboard_compat">… as compatible as possible</string>
     <string name="clipboard_ok">Copied to clipboard</string>
     <string name="to_fraction">Converted to fraction to preserve precision</string>
@@ -75,13 +75,13 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     <string name="err_twoPoints">– the radix point – is only valid once.</string>
     <string name="err_twoReps">– the repetition mark – is only valid once.</string>
     <string name="err_twoDegs">– the degrees symbol – is only valid once.</string>
-    <string name="err_twoMins">– the minutes symbol – is only valid once and after the degrees symbol.</string>
+    <string name="err_twoMins">– the minutes symbol – is only valid once and after any degrees symbol.</string>
     <string name="err_baseTokenOrMinus">is only valid at start of number.</string>
     <string name="err_ellipsis">denotes a number that’s been cut off.</string>
     <string name="err_infinity">[Those having problems with infinities] aren’t nearly appreciative enough of projective geometry. (Grant Sanderson)</string>
     <string name="err_undefined">Does your input have Buddha-nature?</string>
     <string name="err_keraia">– the keraia – is only valid at the end of a Greek numeral.</string>
-    <string name="err_balancedDigit">has no defined value in balanced systems.</string>
+    <string name="err_noBalancedDigit">has no defined value in balanced systems.</string>
     <string name="err_fraction">is only valid at end of number.</string>
     <string name="err_onlyGreek">is only valid in Greek numerals.</string>
     <string name="err_onlyRoman">is only valid in Roman numerals.</string>
@@ -90,6 +90,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     <string name="err_irrational">isn’t rational.</string>
     <string name="err_notInHistory">denotes a history entry that doesn’t exist.</string>
     <string name="err_generic">isn’t a valid character.</string>
+    <string name="err_unknown">caused an unknown error.</string>
     <string name="err_load">error loading number</string>
 
     <string name="menu_formats">All formats</string>
@@ -105,6 +106,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     <string name="interval">Interval</string>
     <string name="interval_keep">tap wave to keep open</string>
     <string name="interval_swipe">swipe wave to shift phase</string>
+    <string name="interval_noWave">wave frequency is too high for this screen’s resolution</string>
     <string name="octaves">%d octaves</string>
     <string name="between_intervals">between %1$s and %2$s</string>
     <string name="interval_grammar_nom" />
@@ -185,9 +187,12 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     <string name="autoScroll_title">Auto-scroll down output area</string>
     <string name="autoScroll_hint">on input change</string>
     <string name="wrongDigits_title">Warn on non-standard input</string>
-    <string name="wrongDigits_hint">turns weird but still interpretable input orange (e.g.&#xA0;digit out of range)</string>
+    <string name="wrongDigits_hint">Turns weird but still interpretable input orange (e.g.&#xA0;digit out of range)</string>
 
-    <string name="tokens_header">Base tokens</string>
+    <string name="keyboard_header">Keyboard</string>
+    <string name="keyboard_title">Keyboard layout</string>
+    <string name="spaceComposes_title">Space key composes digit</string>
+    <string name="spaceComposes_hint">from its decimal representation</string>
     <string name="tokens_title">Customize base tokens</string>
     <string name="tokens_reset">Reset all tokens</string>
     <string name="tokens_reset_ok">Tokens reset</string>
@@ -199,24 +204,24 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     <string name="appearance_header">Appearance</string>
     <string name="buttons_title">Show base buttons</string>
     <string name="moreSpace_title">More space above base buttons</string>
-    <string name="keyboard_title">Keyboard</string>
     <string name="size_title">Text size</string>
+    <string name="font_title">Font type</string>
     <string name="theme_title">Theme</string>
 
     <!-- Help -->
     <string name="share_app">Convert rational numbers between different bases and different representations:
         \n\nhttps://play.google.com/store/apps/details?id=org.tessoft.qonvert\n\nor\n\nhttps://f-droid.org/packages/org.tessoft.qonvert/</string>
-    <string name="title_about">About Qonvert v%1$s &lt;small&gt;(%2$d)&lt;/small&gt;</string>
+    <string name="title_about">About Qonvert v%1$s &lt;small&gt;(♯%2$d)&lt;/small&gt;</string>
 
     <!-- CSS -->
     <string name="css" translatable="false"><![CDATA[
 <style>
     body {padding-top: 1.5em; padding-bottom: 2em}
-    h1, h2, h3 {font-family: serif}
+    h1, h2, h3, h4 {font-family: serif}
     h1 {font-size: 140%}
     h2 {font-size: 125%; border-radius: 0.2em; background: rgb(224, 224, 224)}
     h3 {font-size: 115%}
-    small {color: silver}
+    h1 small {color: silver}
     ul {padding-left: 1.5em}
     a {color: rgb(224, 83, 0)} /* orange_light */
     code {font-family: inherit; border: 1px solid rgb(224, 224, 224); border-bottom-color: rgb(224, 83, 0); border-radius: 2px}
@@ -246,7 +251,7 @@ tap the input line for it to re-emerge.</p>
 <p>Choose an input <a href="https://en.wikipedia.org/wiki/Radix">base</a> via the slider or the shortcut buttons in the lower part of the screen,
 and an output base via the corresponding controls in the upper part. You can choose the displayed shortcut buttons, including ones to switch
 to <a href="https://en.wikipedia.org/wiki/Negative_base">negative bases</a>, in the settings under “Show base buttons”.
-Long-tapping a button or moving a slider all the way to the right brings up a dialog for choosing a base between ±2 and ±100 or φ (the golden ratio).</p>
+Long-tapping a button or moving a slider all the way to the right brings up a dialog for choosing a base between ±2 and ±280 or φ (the golden ratio).</p>
 <p>The coloured buttons on the right let you switch between various kinds of numeral systems (standard, balanced, bijective, Greek, and Roman),
 on which more below. Not every option can be combined with every base; for invalid combinations, the buttons are greyed and the app uses
 the standard numeral system.</p>
@@ -257,9 +262,9 @@ can be changed in the settings; by default, they represent bases 2, 8, 10, 12 an
 <p>If you choose to convert from standard DECimal (base 10) to standard HEXadecimal (base 16), an input of (say) <code>345</code> is interpreted as
 <strong>3</strong>×10<sup>2</sup>+<strong>4</strong>×10<sup>1</sup>+<strong>5</strong>×10<sup>0</sup> and converted to
 <strong>1</strong>×16<sup>2</sup>+<strong>5</strong>×16<sup>1</sup>+<strong>9</strong>×16<sup>0</sup>, which is displayed as 159.</p>
-<p>Digits from <code>0</code> to <code>9</code> work as expected. Those with values higher than 9 are represented by letters, from <code>A</code>&nbsp;=&nbsp;10
-to <code>Z</code>&nbsp;=&nbsp;35, <code>Þ</code>&nbsp;=&nbsp;36, <code>Ч</code>&nbsp;=&nbsp;37, <code>ʔ</code>&nbsp;=&nbsp;38, <code>ʖ</code>&nbsp;=&nbsp;39,
-etc. (Swipe left to see the Cheat sheet for further digits.)</p>
+<p>Digits from <code>0</code> to <code>9</code> work as expected. Those with values higher than 9 are represented by letters and other characters,
+from <code>A</code>&nbsp;=&nbsp;10 to <code>Z</code>&nbsp;=&nbsp;35, <code>Þ</code>&nbsp;=&nbsp;36, <code>Ч</code>&nbsp;=&nbsp;37, <code>ʔ</code>&nbsp;=&nbsp;38,
+<code>ʖ</code>&nbsp;=&nbsp;39, etc. (Swipe left to see the Cheat sheet for further digits and how to type them.)</p>
 <p>The digits are case insensitive; and spaces are ignored.</p>
 
 <h3>Non-integers</h3>
@@ -316,17 +321,18 @@ So, typing <code>..FFD</code> or simply <code>..D</code> in hexadecimal, or <cod
 
 <h2>Non-standard numeral systems</h2>
 <h3>Balanced</h3>
-<p>In balanced numeral systems (the best-known being <a href="https://en.wikipedia.org/wiki/Balanced_ternary">balanced ternary</a>, i.e. base 3), the letters
-<code>J</code> to <code>Z</code> have <em>negative</em> values, with <code>Z</code>&nbsp;=&nbsp;−1, <code>Y</code>&nbsp;=&nbsp;−2, down to
-<code>J</code>&nbsp;=&nbsp;−17. They only work with odd bases up to 35. Thus, in balanced ternary, <code>10Z</code> means
+<p>Balanced numeral systems (the best-known being <a href="https://en.wikipedia.org/wiki/Balanced_ternary">balanced ternary</a>, i.e. base 3) have digits with
+<em>negative</em> values, notably <code>Z</code>&nbsp;=&nbsp;−1, <code>Y</code>&nbsp;=&nbsp;−2, down to <code>J</code>&nbsp;=&nbsp;−17 and below.
+(Swipe left to see the Cheat sheet for further digits as defined for balanced systems.)
+They work with odd bases up to 259. Thus, in balanced ternary, <code>10Z</code> means
 <strong>1</strong>×3<sup>2</sup>+<strong>0</strong>×3<sup>1</sup><strong>−1</strong>×3<sup>0</sup>&nbsp;=&nbsp;8. Negative numbers don’t need a minus sign
 in this notation: <code>Z01</code> means <strong>−1</strong>×3<sup>2</sup>+<strong>0</strong>×3<sup>1</sup>+<strong>1</strong>×3<sup>0</sup>&nbsp;=&nbsp;−8</p>
 
 <h3>Bijective</h3>
 <p>In a <a href="https://en.wikipedia.org/wiki/Bijective_numeration">bijective system</a> of a base b, the digits go from 1 to b instead of 0 to b−1.
 There are two variants: “bijective 1” uses the digits <code>1</code> to <code>9</code> and from <code>A</code> upwards as in standard notation
-and works up to base 99; “bijective A” uses <code>A</code>&nbsp;=&nbsp;1, <code>B</code>&nbsp;=&nbsp;2,&nbsp;… <code>Z</code>&nbsp;=&nbsp;26,
-<code>Þ</code>&nbsp;=&nbsp;27, etc., and only works up to base 90. So, the first natural numbers in decimal bijective 1 are
+and works up to base 279; “bijective A” uses <code>A</code>&nbsp;=&nbsp;1, <code>B</code>&nbsp;=&nbsp;2,&nbsp;… <code>Z</code>&nbsp;=&nbsp;26,
+<code>Þ</code>&nbsp;=&nbsp;27, etc., and only works up to base 270. So, the first natural numbers in decimal bijective 1 are
 1, 2, 3, 4, 5, 6, 7, 8, 9, A&nbsp;(=10), 11, 12,&nbsp;…, 19, 1A, 21,&nbsp;…, and the first natural numbers in hexavigesimal (base 26) bijective A are
 A, B, C, D,&nbsp;…, X, Y, Z, AA, AB, AC,&nbsp;…. Zero is technically an empty string; it is denoted with “/”.</p>
 <p>Numbers with a radix point don’t work well with bijective systems, so non-integers are only displayed as fractions.</p>
@@ -361,13 +367,15 @@ positive integers are <em>also</em> displayed as Roman numerals in the third out
 
 <h2>Special bases</h2>
 <h3>Phinary</h3>
-<p><a href="https://en.wikipedia.org/wiki/Golden_ratio_base">Phinary</a>, base φ&nbsp;=&nbsp;(1+√5̄)/2, is only available in the standard numeral system.
-On the sliders, it is located on the leftmost tick.</p>
+<p><a href="https://en.wikipedia.org/wiki/Golden_ratio_base">Phinary</a>, base φ&nbsp;=&nbsp;(1+√5̄)/2, is available in the standard and balanced
+numeral systems, the difference being that the digit <code>Z</code>&nbsp;=&nbsp;−1 can be used in the latter. On the sliders, phinary is located on the
+leftmost tick.</p>
 <p>Although the golden ratio φ is irrational, integers expressed in base φ always have finite representations (albeit typically with digits after the
 radix point), and non-integer rational numbers have repeating representations. However, the reverse is not true: if you type an arbitrary sequence of digits,
 you will likely get an error message along the lines of “101ᵩ (5/2+√5/2) isn’t rational”.</p>
-<p>The output will only contain the digits 0 and 1, and never two or more 1’s in a row. The parts of fractions, including continued ones, aren’t necessarily
-integers, but they are always numbers without a radix point. (Let’s coin a cheesy term: they are always <i>phintegers</i>.)
+<p>The output will only contain the digits 0 and 1 (Z for negative numbers in balanced), and never two or more 1’s (or Z’s) in a row. The parts of fractions,
+including continued ones, aren’t necessarily integers, but they are always numbers without a radix point. (Let’s coin a cheesy term: they are always
+<i>phintegers</i>.)
 Phinary output currently supports neither Egyptian fractions nor fractions in DMS format.</p>
 
 <h3>Negative bases</h3>
@@ -379,6 +387,16 @@ Since odd powers of negative numbers are negative, and even powers are positive,
 thus, we don’t need a minus sign in negative bases.</p>
 <p>Note that “bijective” systems with negative bases aren’t actually bijective: for example, in nega-decimal, you can always add or remove a leading
 <strong>1A</strong> without changing a number’s value.</p>
+
+<h3>Complex bases</h3>
+<p>Although Qonvert can’t handle <a href="https://en.wikipedia.org/wiki/Complex-base_system">complex bases</a>, there are some hacks:</p>
+<ul>
+ <li>A real number in base 2<i>i</i> is just this number in base −4 with zeroes inserted at every other place:
+ −13.5₁₀&nbsp;=&nbsp;1303.2₋₄&nbsp;=&nbsp;1030003.02₂<i>ᵢ</i>.</li>
+ <li>This also works for higher imaginary bases, always using the negative base that is their square: base −9 for base 3<i>i</i> etc.</li>
+ <li>You can work out base <i>i</i>−1 representations by converting to base −4 and then doing the following digit substitutions:<br>
+ 0&nbsp;→&nbsp;0000, 1&nbsp;→&nbsp;0001, 2&nbsp;→&nbsp;1100, 3&nbsp;→&nbsp;1101</li>
+</ul>
 
 <h2>Unicode characters</h2>
 <p>Inputs that are integers from hexadecimal <code>20</code> to <code>10FFFF</code> (decimal <code>32</code> to <code>1114111</code>) are not only
@@ -412,12 +430,35 @@ Qonvert is your <strong>only</strong> source. (The answer is 1YX&nbsp;215.)</p>
 <h3>Digits</h3>
 <ul>
  <li><code>0</code>…<code>9</code></li>
- <li><code>A</code>…<code>Z</code> and <code>Þ Ч ʔ ʖ</code> : 10…39; in bijective A: 1…30</li>
- <li><code>J</code>…<code>Z</code> in balanced: −17…−1</li>
- <li><code>Ą</code>…<code>Ẓ</code> and <code>Ꝧ Ҷ ? ¿</code> : 40…69; in bijective A: 31…60</li>
- <li><code>Ⱥ</code>…<code>Ƶ</code> and <code>Ꝥ Ҹ ʡ ƾ</code> : 70…99; in bijective A: 61…90</li>
+ <li><code>A</code>…<code>Z</code> and <code>Þ Ч ʔ ʖ</code> : 10…39; bijective A: 1…30</li>
+ <li><code>Ą</code>…<code>Ẓ</code> and <code>Ꝧ Ҷ ? ¿</code> : 40…69; bij.A: 31…60</li>
+ <li><code>Ⱥ</code>…<code>Ƶ</code> and <code>Ꝥ Ҹ ʡ ƾ</code> : 70…99; bij.A: 61…90</li>
+ <li><code>Ⓐ</code>…<code>Ⓩ</code> and <code>㊄ ㊃ ㊈ ㊆</code> : 100…129; bij.A: 91…120</li>
+ <li><code>⒜</code>…<code>⒵</code> and <code>㈤ ㈣ ㈨ ㈦</code> : 130…159; bij.A: 121…150</li>
+ <li><code>卂</code>…<code>乙</code> and <code>五 四 九 七</code> : 160…189; bij.A: 151…180</li>
+ <li><code>ꋬ</code>…<code>ꁴ</code> and <code>ꃩ ꐳ ꃀ ꐧ</code> : 190…219; bij.A: 181…210</li>
+ <li><code>ᗩ</code>…<code>ᔐ</code> and <code>ᘶ ᖻ ᕈ ᘪ</code> : 220…249; bij.A: 211…240</li>
+ <li><code>ᚣ</code>…<code>ᛋ</code> and <code>ᚦ ᚴ ᚯ ᚬ</code> : 250…279; bij.A: 241…270</li>
 </ul>
-<p>(The latter turn up in a pop-up when you tap one of the letters A–ʖ.)</p>
+<p>The latter turn up in a pop-up when you tap one of the letters A–ʖ, depending on the current input system.</p>
+<p>If “Settings&nbsp;> Keyboard&nbsp;> Space key composes digit” is switched on, you can also type a digit’s decimal value and then tap Space ␣.
+(On some Android keyboards, you may need two spaces.)</p>
+
+<h4>In balanced number systems</h4>
+<ul>
+ <li><code>ᚱ</code>…<code>ᛋ</code> and <code>ᚦ ᚴ ᚯ ᚬ</code> : −129…−117</li>
+ <li><code>ꋬ</code>…<code>ꁴ</code> and <code>ꃩ ꐳ ꃀ ꐧ</code> : −116…−87</li>
+ <li><code>⒜</code>…<code>⒵</code> and <code>㈤ ㈣ ㈨ ㈦</code> : −86…−57</li>
+ <li><code>Ⱥ</code>…<code>Ƶ</code> and <code>Ꝥ Ҹ ʡ ƾ</code> : −56…−27</li>
+ <li><code>Ą</code>…<code>Į</code> : −26…−18</li>
+ <li><code>J</code>…<code>Z</code> : −17…−1</li>
+ <li><code>0</code>…<code>9</code></li>
+ <li><code>A</code>…<code>I</code> : 10…18</li>
+ <li><code>Ʝ</code>…<code>Ẓ</code> and <code>Ꝧ Ҷ ? ¿</code> : 19…39</li>
+ <li><code>Ⓐ</code>…<code>Ⓩ</code> and <code>㊄ ㊃ ㊈ ㊆</code> : 40…69</li>
+ <li><code>卂</code>…<code>乙</code> and <code>五 四 九 七</code> : 70…99</li>
+ <li><code>ᗩ</code>…<code>ᔐ</code> and <code>ᘶ ᖻ ᕈ ᘪ</code> : 100…129</li>
+</ul>
 
 <h3>Negative numbers</h3>
 <ul>
@@ -460,7 +501,7 @@ Qonvert is your <strong>only</strong> source. (The answer is 1YX&nbsp;215.)</p>
 <ul>
  <li><code>@</code> : standard binary (2)</li>
  <li><code>%23</code> : standard octal (8)</li>
- <li><code>$</code>, <code>€</code>, <code>£</code>, <code>¥</code> : standard decimal (10)</li>
+ <li><code>$</code> (or <code>€</code>, <code>£</code>, <code>¥</code>): standard decimal (10)</li>
  <li><code>%</code> : standard dozenal (12)</li>
  <li><code>&</code> : standard hexadecimal (16)</li>
 </ul>
@@ -473,8 +514,16 @@ Qonvert is your <strong>only</strong> source. (The answer is 1YX&nbsp;215.)</p>
 
     <!-- What’s new -->
     <string name="whatsNew"><![CDATA[
-<h2>Version 1.7.2 <small>–</small></h2>
-<p>Bugfix.</p>
+<h2>Version 1.8.0 <small>– 3 Apr 2023</small></h2>
+<p><strong>Bases up to ±280</strong> are supported, and balanced bases up to <strong>±259</strong>, using increasingly exotic digits.
+<strong>Phinary balanced</strong> is now also supported, for which you can use <code>Z</code>&nbsp;=&nbsp;−1 as an input digit.</p>
+<p>The settings have been slightly rearranged. They contain a new section “Keyboard” with an option “<strong>Space key composes digit</strong>”;
+if it’s switched on, you can compose a digit by typing its decimal value and then tapping Space (␣). In the “Appearance” section, you can choose between
+serif, sans-serif, and monospace <strong>fonts</strong> for input and output areas and for the keyboard.</p>
+<p>New <strong>musical intervals</strong>: Pythagorean wolf fourth and fifth as examples of dissonant intervals, as well as septimal (7-limit) tuning.
+Interval sizes are also shown in cents.</p>
+<p>The help text now has a chapter on complex bases.</p>
+<p>Minor improvements and a bugfix: A crash on inputting numbers with high digits in large negative bases has been fixed.</p>
 
 <h2>Version 1.7.1 <small>– 7 Jan 2023</small></h2>
 <p>There are three <strong>additional keyboard layouts</strong>: with the digits starting on the left edge, for tablets (with 12 columns even in portrait mode),

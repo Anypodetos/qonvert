@@ -50,7 +50,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/listToolbar"
-            android:background="?attr/colorPrimary"
+            android:background="?attr/colorPrimaryVariant"
             android:textColor="@color/white"
             android:gravity="center" />
 

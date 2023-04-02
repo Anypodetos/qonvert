@@ -62,26 +62,33 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
    <string-array name="interval_names">
         <!-- jeder Eintrag braucht ein "*", dass Intervall-Id und Qualifizierer ("kleine/große/reine") trennt (Reihenfolge egal) -->
         <!-- Stimmung anschließend, getrennt durch ein Leerzeichen und in runden Klammern -->
-        <!-- alternativer Name nach den Klammern und durch Komma getrennt: nur für Intervalle < Oktave -->
+        <!-- alternativer Name nach den Klammern und durch Komma getrennt: wird nur für Intervalle unter der Oktave angezeigt -->
+        <!-- &#x2011 (der geschützte Bindestrich) unterdrückt ein folgendes Leerzeichen -->
         <item>*00</item>
         <item>kleine*01 (pythagoreisch), pythagoreisches Limma</item>
         <item>kleine*01 (reine Stimmung), diatonischer Halbton</item>
         <item>große*01 (reine Stimmung), kleiner Ganzton</item>
         <item>große*01 (pythagoreisch), großer Ganzton</item>
+        <item>große*01 (septimal)</item>
+        <item>kleine*02 (septimal)</item>
         <item>kleine*02 (pythagoreisch)</item>
         <item>kleine*02 (reine Stimmung)</item>
         <item>große*02 (reine Stimmung)</item>
         <item>große*02 (pythagoreisch)</item>
         <item>reine*03</item>
-        <item>*04 (Huygens)</item>
+        <item>Wolfs&#x2011;*03 (pythagoreisch)</item>
+        <item>*04 (Huygens’ oder kleiner septimaler)</item>
         <item>*04 (diatonisch)</item>
         <item>*04 (pythagoreisch)</item>
-        <item>*04 (Euler)</item>
+        <item>*04 (Eulers oder großer septimaler)</item>
+        <item>Wolfs&#x2011;*05 (pythagoreisch)</item>
         <item>reine*05</item>
         <item>kleine*06 (pythagoreisch)</item>
         <item>kleine*06 (reine Stimmung)</item>
         <item>große*06 (reine Stimmung)</item>
         <item>große*06 (pythagoreisch)</item>
+        <item>große*06 (septimal)</item>
+        <item>kleine*07 (Natur- oder septimal)</item>
         <item>kleine*07 (pythagoreisch)</item>
         <item>kleine*07 (reine Stimmung)</item>
         <item>große*07 (reine Stimmung)</item>
@@ -159,7 +166,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
         <item>Ziffern rechts</item>
         <item>Ziffern links (Tablet)</item>
         <item>Ziffern rechts (Tablet)</item>
-        <item>Android</item>
+        <item>Android-Tastatur</item>
     </string-array>
 
     <string-array name="size_entries">
