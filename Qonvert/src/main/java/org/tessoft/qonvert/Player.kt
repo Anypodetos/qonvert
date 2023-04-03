@@ -2,7 +2,7 @@ package org.tessoft.qonvert
 
 /*
 Copyright 2016, 2017 Maddie Abboud
-Copyright 2022 Anypodetos (Michael Weber)
+Copyright 2022, 2023 Anypodetos (Michael Weber)
 
 This file is part of Qonvert.
 
@@ -114,11 +114,15 @@ class OneTimeBuzzer(private var toneFreq: Double, private var volume: Int, priva
     }
 }
 
+enum class AutoClose {
+    FALSE, TRUE, NO_WAVE /* force close */
+}
+
 class WaveView(context: Context) : View(context) {
 
     var ratio = 1f
-        set(value) { field = (if (value > 1) value else 1 / value) }
-    var autoClose = true
+        set(value) { field = (if (abs(value) > 1) abs(value) else 1 / abs(value)) }
+    var autoClose = AutoClose.TRUE
     private var waveWidth = 0f
     private var waveHeight = 0f
     private val path = Path()
@@ -147,19 +151,21 @@ class WaveView(context: Context) : View(context) {
                     calcWave()
                 }
             }
-            if (autoClose) performClick()
+            if (autoClose == AutoClose.TRUE) performClick()
             true
         }
         setOnClickListener {
-            MainActivity.playDialogTimer?.cancel()
-            autoClose = false
-            invalidate()
+            if (autoClose == AutoClose.TRUE) {
+                MainActivity.playDialogTimer?.cancel()
+                autoClose = AutoClose.FALSE
+                invalidate()
+            }
         }
     }
 
     private fun calcWave() {
-        isClickable = waveWidth > 0 && abs(ratio) in (200f / waveWidth)..(waveWidth / 200f)
-        if (isClickable) with(path) {
+        if (waveWidth <= 0 || ratio > waveWidth / 200f) autoClose = AutoClose.NO_WAVE
+        if (autoClose != AutoClose.NO_WAVE) with(path) {
             reset()
             moveTo(waveWidth, waveHeight * 0.4f)
             lineTo(0f, waveHeight * 0.4f)
@@ -180,10 +186,10 @@ class WaveView(context: Context) : View(context) {
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
-        canvas?.let{
-            if (!isClickable) it.drawText(resources.getString(R.string.interval_noWave), waveWidth / 2, waveHeight / 2, textPaint) else {
+        canvas?.let {
+            if (autoClose == AutoClose.NO_WAVE) it.drawText(resources.getString(R.string.interval_noWave), waveWidth / 2, waveHeight / 2, textPaint) else {
                 it.drawPath(path, linePaint)
-                it.drawText(resources.getString(if (autoClose) R.string.interval_keep else R.string.interval_swipe),
+                it.drawText(resources.getString(if (autoClose == AutoClose.TRUE) R.string.interval_keep else R.string.interval_swipe),
                     waveWidth / 2, waveHeight - textPaint.textSize / 2, textPaint)
             }
         }

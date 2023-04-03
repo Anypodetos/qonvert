@@ -892,7 +892,7 @@ class QNumber {
             }
             val wave = WaveView(context)
             wave.ratio = ratio
-            wave.autoClose = !onlyRecreate
+            if (onlyRecreate) wave.autoClose = AutoClose.FALSE
             MainActivity.playDialog?.cancel()
             MainActivity.playDialog = AlertDialog.Builder(context)
                 .setTitle(R.string.interval)
