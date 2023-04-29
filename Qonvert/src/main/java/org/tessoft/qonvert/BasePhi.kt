@@ -109,11 +109,9 @@ class PhiNumber(var aNumer: BigInteger, var bNumer: BigInteger = ZERO, var denom
     }
 
     private fun parsePositional(s: String, balanced: Boolean = false, negative: Boolean = false, default: BigFraction = FRACTION_ZERO): PhiNumber {
-        with(mapOf("∞" to ONE, "-∞" to ONE, "無" to ZERO, "-無" to ZERO)[s]) {
-            if (this != null) {
-                parseResult = parseResult or IS_NUMBER
-                return PhiNumber(this, ZERO, ZERO)
-            }
+        mapOf("∞" to ONE, "-∞" to ONE, "無" to ZERO, "-無" to ZERO)[s]?.let {
+            parseResult = parseResult or IS_NUMBER
+            return PhiNumber(it, ZERO, ZERO)
         }
         val complementTrim = if (s.startsWith("..")) 2 else 0
         val fraction = FRACTION_CHARS[s.lastOrNull()]
@@ -121,6 +119,7 @@ class PhiNumber(var aNumer: BigInteger, var bNumer: BigInteger = ZERO, var denom
             if (fraction.first > ONE || fraction.second in TWO..TEN - ONE) parseResult = parseResult or NONSTANDARD_DIGIT
             s.dropLast(1)                // Kotlin 1.8: in TWO..<TEN
         }) + if ('.' in s.substring(complementTrim)) "" else "."
+        if (st.count { it == '.' } > 1 + complementTrim) parseResult = parseResult or INVALID_CHAR
         val point = st.indexOf('.', complementTrim)
         val rep = st.indexOf(':')
         val noRep = rep == -1 || rep == st.length - if (point < rep) 1 else 2
@@ -135,25 +134,25 @@ class PhiNumber(var aNumer: BigInteger, var bNumer: BigInteger = ZERO, var denom
     }
 
     private fun parseFinitePhinary(s: String, balanced: Boolean = false, negative: Boolean = false): PhiNumber {
-        val st = s.filterNot { it.isWhitespace() }
+        val st = s.filterNot { it.isWhitespace() } /// necessary?
         val minus = st.startsWith('-')
         val complement = st.startsWith("..")
-        if (complement && negative) return PHI_INFINITY.also { it.parseResult = IS_NUMBER }
+        if (complement && negative) return PhiNumber(PHI_INFINITY).also { it.parseResult = IS_NUMBER } /* copy PHI_INFINITY, don't touch the global val! */
         var parseResult = if (complement) IS_NUMBER or IS_COMPLEMENT else 0
         val negMarker = if (minus) {
             if (balanced) parseResult = parseResult or NONSTANDARD_DIGIT
             1
         } else if (complement) 2 else 0
-        val point = with(st.indexOf('.', negMarker)) { if (this == -1) st.length else this }
+        val point = st.indexOf('.', negMarker).let { if (it == -1) st.length else it }
         var result = PHI_ZERO
         val firstPlace = point - negMarker - 1
         var power = phiPower(firstPlace, negative)
         val (digits, offset) = if (balanced) Pair(BAL_DIGITS, MAX_BAL_BASE / 2) else Pair(DIGITS, 0)
-        for (i in negMarker until st.length) if (digits.contains(st[i], ignoreCase = true)) with(digits.indexOf(st[i], ignoreCase = true) - offset) {
+        for (i in negMarker until st.length) if (digits.contains(st[i], ignoreCase = true)) (digits.indexOf(st[i], ignoreCase = true) - offset).let {
             parseResult = parseResult or IS_NUMBER
-            result += power * toBigInteger()
+            result += power * it.toBigInteger()
             power *= if (negative) -INV_PHI else INV_PHI
-            if (this !in (if (balanced) -1 else 0)..1) parseResult = parseResult or NONSTANDARD_DIGIT
+            if (it !in (if (balanced) -1 else 0)..1) parseResult = parseResult or NONSTANDARD_DIGIT
         } else if (i != point) parseResult = parseResult or INVALID_CHAR
 
         if (complement) result -= phiPower(firstPlace + 1, negative)
@@ -233,8 +232,8 @@ class PhiNumber(var aNumer: BigInteger, var bNumer: BigInteger = ZERO, var denom
 
     override fun toString() = toString(root5 = false)
 
-    fun toString(root5: Boolean, radix: Int = 10) = if (root5) with(s) {
-        formatNumberPair(r.toFractionString(radix), first.toString(radix), "√5̅" + (if (second == ONE) "" else "/" + second.toString(radix)))
+    fun toString(root5: Boolean, radix: Int = 10) = if (root5) s.let { s ->
+        formatNumberPair(r.toFractionString(radix), s.first.toString(radix), "√5̅" + (if (s.second == ONE) "" else "/" + s.second.toString(radix)))
     } else formatNumberPair(a.toFractionString(radix), b.first.toString(radix), "φ" + (if (b.second == ONE) "" else "/" + b.second.toString(radix)))
 
     fun toBasePhi(groupDigits: Boolean = false, maxDigits: Int = Int.MAX_VALUE, alt: Boolean = false, complement: Boolean = false, balanced: Char = '1'): String {
@@ -270,12 +269,12 @@ class PhiNumber(var aNumer: BigInteger, var bNumer: BigInteger = ZERO, var denom
         val numerString = StringBuilder(PhiNumber(aNumer, bNumer).toBasePhi(complement = complement))
         if (denom == ONE && '.' !in numerString.removePrefix("..")) return finalize(numerString, groupDigits, complement, balanced)
         val denomString = StringBuilder(PhiNumber(denom).toBasePhi())
-        val fractionalDiff = with(numerString.indexOf('.', if (numerString.startsWith("..")) 2 else 0)) { if (this > -1) {
-            numerString.deleteAt(this)
-            numerString.length - this
-        } else 0 } - with(denomString.indexOf('.')) { if (this > -1) {
-            denomString.deleteAt(this)
-            denomString.length - this
+        val fractionalDiff = numerString.indexOf('.', if (numerString.startsWith("..")) 2 else 0).let { if (it > -1) {
+            numerString.deleteAt(it)
+            numerString.length - it
+        } else 0 } - denomString.indexOf('.').let { if (it > -1) {
+            denomString.deleteAt(it)
+            denomString.length - it
         } else 0 }
         return finalize(numerString.append("0".repeat((-fractionalDiff).coerceAtLeast(0))), groupDigits, complement, balanced).trimStart('0', ' ') + "/" +
                finalize(denomString.append("0".repeat(  fractionalDiff .coerceAtLeast(0))), groupDigits).trimStart('0', ' ')
@@ -296,6 +295,63 @@ class PhiNumber(var aNumer: BigInteger, var bNumer: BigInteger = ZERO, var denom
         val st = "$pre, ${finalize(phinteger, groupDigits, complement, balanced)}"
         return if (fraction == PHI_ZERO) st.substring(2).replaceFirst(',', ';') else
             continuedFraction(fraction.inv(), groupDigits, complement, '1', st)
+    }
+
+    fun toBasePhiEgyptian(method: EgyptianMethod, groupDigits: Boolean = false, maxDigits: Int = Int.MAX_VALUE, complement: Boolean = false,
+            balanced: Char = '1'): String {
+        if (method == EgyptianMethod.OFF) return ""
+        val (phinteger, fraction) = phintegerFloorPart(complement)
+        return finalize(phinteger, groupDigits, complement, balanced) + if (fraction != PHI_ZERO) "; " + when (method) {
+            EgyptianMethod.GREEDY  -> egyptianFractionGreedy(fraction, groupDigits, maxDigits)
+            EgyptianMethod.BINARY  -> egyptianFractionPhinary(fraction, groupDigits)
+            else -> "…"
+        } else ""
+    }
+
+    private fun egyptianFractionGreedy(fractions: PhiNumber, groupDigits: Boolean = false, maxDigits: Int): String {
+        val result = StringBuilder()
+        var remaining = fractions
+        do {
+            var n = remaining.inv()
+            var nPair = n.phintegerPart()
+            if (nPair.second != PHI_ZERO) n += if (nPair.first.endsWith('0')) PHI_ONE else INV_PHI
+            nPair = n.phintegerPart()
+            result.append(", " + finalize(nPair.first, groupDigits))
+            remaining -= (n - nPair.second).inv()
+        } while (remaining > PHI_ZERO && result.length < maxDigits)
+        if (remaining > PHI_ZERO) result.append(", …")
+        return result.removePrefix(", ").toString()
+    }
+
+    private fun egyptianFractionPhinary(fractions: PhiNumber, groupDigits: Boolean = false): String {
+        val denomString = fractions.toBasePhiFraction().substringAfter('/')
+        val denominator = PhiNumber(denomString)
+        val p = phiPower(denomString.length - 1)
+        val s = (fractions * p).phintegerPart()
+        val r = (s.second * denominator).phintegerPart()
+        return if (r.second in listOf(PHI_ZERO, INV_PHI))
+           (egyptianPhinaryList(r.first.toString()) { p / it * denominator } +
+            egyptianPhinaryList(s.first.toString()) { p / it } + if (r.second == INV_PHI) listOf(p * PHI * denominator) else listOf()).sortedWith {
+                p1, p2 -> p1.compareTo(p2)
+            }.joinToString { finalize(it.phintegerPart(groupDigits).first, groupDigits) }
+        else "…" /* If this is ever returned, there’s something wrong with the algorithm. */
+    }
+    private fun egyptianPhinaryList(st: String, map: (PhiNumber) -> PhiNumber) =
+        st.reversed().mapIndexed { i, c -> if (c == '1') phiPower(i) else null }.filterNotNull().map(map)
+
+    fun toBasePhiAll(egyptianMethod: EgyptianMethod, groupDigits: Boolean = false, maxDigits: Int = Int.MAX_VALUE, complement: Boolean = false,
+            balanced: Char = '1'): String {
+        val positional = toBasePhi(groupDigits, maxDigits, alt = false, complement, balanced)
+        val positionalAlt = if (':' in positional || '…' in positional) "" else "\n\n" + toBasePhi(groupDigits, maxDigits, alt = true, complement, balanced)
+        return if ('.' in positional.removePrefix("..")) {
+            val mixed = toBasePhiMixed(groupDigits, complement, balanced)
+            val egyptian = toBasePhiEgyptian(egyptianMethod, groupDigits, maxDigits, complement, balanced)
+            positional + positionalAlt +
+                "\n\n" + toBasePhiFraction(groupDigits, complement, balanced) +
+                (if ('_' in mixed) "\n\n$mixed" else "") +
+                "\n\n[" + toBasePhiContinued(groupDigits, complement, balanced) + "]" +
+                (if (egyptian.isNotEmpty()) "\n\n{$egyptian}" else "")
+        } else positional + positionalAlt
     }
 
     private fun phintegerPart(complement: Boolean = false): Pair<StringBuilder, PhiNumber> {

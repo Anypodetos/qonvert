@@ -1,7 +1,7 @@
 package org.tessoft.qonvert
 
 /*
-Copyright 2021 Anypodetos (Michael Weber)
+Copyright 2021, 2023 Anypodetos (Michael Weber)
 
 This file is part of Qonvert.
 
@@ -30,7 +30,6 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.*
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -63,22 +62,22 @@ class HelpFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val root = inflater.inflate(R.layout.fragment_help, container, false)
-        pageViewModel.index.observe(viewLifecycleOwner, Observer {
+        pageViewModel.index.observe(viewLifecycleOwner) {
             root.findViewById<WebView>(R.id.webView).loadData(
                 getString(R.string.css) +
-                (if (isNightModeActive()) getString(R.string.css_dark) else "") +
-                "<h1>" + when (it) {
+                    (if (isNightModeActive()) getString(R.string.css_dark) else "") +
+                    "<h1>" + when (it) {
                     0 -> getString(R.string.menu_help)
                     1 -> getString(R.string.menu_cheatSheet)
                     2 -> getString(R.string.menu_whatsNew)
-                    3 -> with(context?.packageManager?.getPackageInfo(context?.packageName ?: "", 0)) {
-                        getString(R.string.title_about, this?.versionName ?: "…", this?.versionCode)
-                    }
+                    3 -> context?.packageManager?.getPackageInfo(context?.packageName ?: "", 0)?.let { info ->
+                        getString(R.string.title_about, info.versionName ?: "…", info.versionCode)
+                    } ?: getString(R.string.menu_about)
                     else -> ""
                 } + "</h1>" +
-                getString(listOf(R.string.help, R.string.cheatSheet, R.string.whatsNew, R.string.about)[it]),
+                    getString(listOf(R.string.help, R.string.cheatSheet, R.string.whatsNew, R.string.about)[it]),
                 "text/html", "UTF-8")
-        })
+        }
         return root
     }
 

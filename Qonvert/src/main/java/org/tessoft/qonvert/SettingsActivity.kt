@@ -180,8 +180,7 @@ class SettingsActivity : AppCompatActivity(), PreferenceFragmentCompat.OnPrefere
             }
 
             for (i in 0..4) basePreferences[i]?.let { preference ->
-                preference.dialogTitle = TOKENS[i].toString() + " – " + (context?.getString(R.string.base_dialogTitle)?.replace("%d", MAX_BASE.toString()) ?:
-                    preference.title)
+                preference.dialogTitle = TOKENS[i].toString() + " – " + (context?.getString(R.string.base_dialogTitle, MAX_BASE) ?: preference.title)
                 preference.setOnPreferenceClickListener {
                     snackbar?.dismiss()
                     false
@@ -203,18 +202,17 @@ class SettingsActivity : AppCompatActivity(), PreferenceFragmentCompat.OnPrefere
 
         private val listener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
             val id = key.last().digitToIntOrNull() ?: -1
-            if (key.startsWith("tokenBase")) findPreference<EditBasePreference>(key)?.let {
+            if (key.startsWith("tokenBase")) findPreference<EditBasePreference>(key)?.let { basePreference ->
                 val systemPreference = findPreference<ListPreference>("tokenSystem$id")
-                try {
-                    if (allowedBase(it.value, NumSystem.valueOf(systemPreference?.value ?: "")) != it.value)
-                        systemPreference?.value = NumSystem.STANDARD.toString()
-                } catch (_: Exception) { }
+                NumSystem.values().find { it.name == systemPreference?.value }?.let {
+                    if (allowedBase(basePreference.value, it) != basePreference.value) systemPreference?.value = NumSystem.STANDARD.toString()
+                }
             }
-            if (key.startsWith("tokenSystem")) findPreference<ListPreference>(key)?.let {
+            if (key.startsWith("tokenSystem")) findPreference<ListPreference>(key)?.let { systemPreference ->
                 val basePreference = findPreference<EditBasePreference>("tokenBase$id")
-                try {
-                    basePreference?.value = allowedBase(basePreference?.value ?: DEFAULT_BUTTONS[id + 1], NumSystem.valueOf(it.value ?: ""))
-                } catch (_: Exception) { }
+                NumSystem.values().find { it.name == systemPreference.value }?.let {
+                    basePreference?.value = allowedBase(basePreference?.value ?: DEFAULT_BUTTONS[id + 1], it)
+                }
             }
         }
 

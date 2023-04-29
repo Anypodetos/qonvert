@@ -63,7 +63,8 @@ class EditInput(context: Context, attrs: AttributeSet) : androidx.appcompat.widg
             var spaces = 0
             if (!hasSelection()) {
                 while (string.getOrNull(pos) == ' ') { pos--; spaces++ }
-                while (string.getOrNull(pos) in '0'..'9') pos--
+                var p = pos
+                while (string.getOrNull(p) in '0'..'9') { p--; if (string.getOrNull(p + 1) != '0') pos = p }
                 if (system == NumSystem.BALANCED && string.getOrNull(pos) == '-') pos--
             }
             val decimal = string.substring(pos + 1, selectionEnd).trim().toIntOrNull() ?: Int.MAX_VALUE
@@ -191,7 +192,7 @@ class KeyboardView(context: Context, attrs: AttributeSet) : View(context, attrs)
                 when (t) {
                     '⏎' -> mainActivity?.addInputToHistory()
                     '␣' -> if (mainActivity?.spaceComposes == true) edit.composeDigit(system) else edit.keyStroke(' ')
-                    '⌫' -> if (edit.composeBackup == "") backspace(edit, repeat = false) else {
+                    '⌫' -> if (edit.composeBackup.isEmpty()) backspace(edit, repeat = false) else {
                         edit.string = edit.composeBackup.substring(0, edit.composeBackupCaret) + " " + edit.composeBackup.substring(edit.composeBackupCaret)
                         edit.setSelection(edit.composeBackupCaret + 1)
                     }
@@ -240,7 +241,7 @@ class KeyboardView(context: Context, attrs: AttributeSet) : View(context, attrs)
         for (i in 0 until buttonCols) for (j in 0 until buttonRows) for (k in 0..1) buttonTexts[i][j][k] = ' '
         for (i in 0 until buttonCols) for (j in 0 until buttonRows) for (k in 0..1) popupSizes[i][j][k] = 0
         for (i in 0 until buttonCols) for (j in 0 until buttonRows) popupValues[i][j] = 0
-        with(MainActivity.resolveFont(system in setOf(NumSystem.GREEK, NumSystem.ROMAN))) { for (i in 0..1) textPaints[i].typeface = this }
+        with(MainActivity.resolveFont(greekOrRoman = system in setOf(NumSystem.GREEK, NumSystem.ROMAN))) { for (i in 0..1) textPaints[i].typeface = this }
         if (showPopup == '½') {
             val left = (buttonCols - 8) / 2
             for (i in 0..7) for (j in 0..3) buttonTexts[i + left][j][0] = "½⅓¼⅕⅙⅐⅛⅑ ⅔¾⅖⅚ ⅜⅒   ⅗  ⅝ ∞無 ⅘  ⅞×"[i + 8 * j]
@@ -391,8 +392,8 @@ class KeyboardView(context: Context, attrs: AttributeSet) : View(context, attrs)
 
     fun show() {
         hidden = false
-        fillButtons(always = true)
-        with(animate()) {
+        if (visibility != VISIBLE) with(animate()) {
+            fillButtons(always = true)
             duration = 150
             withStartAction { visibility = VISIBLE }
             translationY(0f)
@@ -402,7 +403,7 @@ class KeyboardView(context: Context, attrs: AttributeSet) : View(context, attrs)
 
     fun hide() {
         hidden = true
-        with(animate()) {
+        if (visibility != GONE) with(animate()) {
             duration = 150
             withEndAction { visibility = GONE }
             translationY(layoutParams.height.toFloat() / 2)

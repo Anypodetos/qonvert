@@ -37,6 +37,7 @@ import android.graphics.Path
 import android.media.AudioFormat
 import android.media.AudioManager
 import android.media.AudioTrack
+import android.os.Build
 import android.view.MotionEvent
 import android.view.View
 import kotlin.concurrent.thread
@@ -103,7 +104,7 @@ class OneTimeBuzzer(private var toneFreq: Double, private var volume: Int, priva
             audioTrack = AudioTrack(AudioManager.STREAM_MUSIC, sampleRate, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT,
                 AudioTrack.getMinBufferSize(sampleRate, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT), AudioTrack.MODE_STREAM)
             val gain = volume / 100f
-            audioTrack?.setStereoVolume(gain, gain)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) audioTrack?.setVolume(gain) else audioTrack?.setStereoVolume(gain, gain)
             audioTrack?.play()
             audioTrack?.write(soundData, 0, soundData.size)
         } catch (_: Exception) { }
@@ -115,7 +116,7 @@ class OneTimeBuzzer(private var toneFreq: Double, private var volume: Int, priva
 }
 
 enum class AutoClose {
-    FALSE, TRUE, NO_WAVE /* force close */
+    FALSE, TRUE, NO_WAVE /* then force close */
 }
 
 class WaveView(context: Context) : View(context) {
@@ -140,6 +141,7 @@ class WaveView(context: Context) : View(context) {
 
     init {
         isClickable = true
+        if (MainActivity.playPhaseShift.isNaN()) MainActivity.playPhaseShift = 0f
         setOnTouchListener { _, event ->
             when (event.actionMasked) {
                 MotionEvent.ACTION_DOWN -> oldX = event.x
@@ -164,7 +166,10 @@ class WaveView(context: Context) : View(context) {
     }
 
     private fun calcWave() {
-        if (waveWidth <= 0 || ratio > waveWidth / 200f) autoClose = AutoClose.NO_WAVE
+        if (waveWidth <= 0 || ratio > waveWidth / 200f) {
+            autoClose = AutoClose.NO_WAVE
+            MainActivity.playPhaseShift = Float.NaN
+        }
         if (autoClose != AutoClose.NO_WAVE) with(path) {
             reset()
             moveTo(waveWidth, waveHeight * 0.4f)
