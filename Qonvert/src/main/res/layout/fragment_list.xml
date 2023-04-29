@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <!--
 Copyright 2021, 2022 Anypodetos (Michael Weber)
 
@@ -81,7 +82,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
             app:layout_constraintEnd_toEndOf="parent"
-            android:textColor="?attr/editTextColor"
+            android:textColor="@color/list_menu"
             android:clickable="true"
             android:focusable="true"
             android:background="?attr/selectableItemBackground"

@@ -21,14 +21,14 @@ along with Qonvert. If not, see <https://www.gnu.org/licenses/>.
 Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
 -->
 
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Main -->
     <string name="complement">Komplement</string>
     <string name="dms">DMS</string>
     <string name="edit_hint">Gib eine Zahl ∈ ℚ ein.</string>
     <string name="clear_hint">Eingabe löschen</string>
     <string name="base">%1$s: Basis %2$s, %3$s</string>
-    <string name="bare_base">Basis %1$s, %2$s</string>
+    <string name="just_base">Basis %s</string>
     <string name="base_message">Für Basis φ (den Goldenen Schnitt) ‘1’ eingeben.</string>
     <string name="clipboard_asIs">In die Zwischenablage kopieren</string>
     <string name="clipboard_dissect">… mit zerlegten Ziffern</string>
@@ -72,16 +72,18 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     <string name="err_onlyRoman">ist nur in römischen Zahlen erlaubt.</string>
     <string name="err_noGreek">ist weder eine gültige griechische noch eine arabische Zahl.</string>
     <string name="err_noRoman">ist weder eine gültige römische noch eine arabische Zahl.</string>
-    <string name="err_irrational">ist nicht rational.</string>
+    <string name="err_irrational">ist nicht rational.\n⛶ zeigt es in allen Formaten an.</string>
     <string name="err_notInHistory">bezeichnet einen Eintrag im Verlauf, der nicht existiert.</string>
     <string name="err_generic">ist kein gültiges Zeichen.</string>
     <string name="err_unknown">verursachte einen unbekannten Fehler.</string>
     <string name="err_load">Fehler beim Laden</string>
 
     <string name="menu_formats">Alle Formate</string>
+    <string name="phi_formats_title">Alle Formate von \"%s\"</string>
     <string name="menu_history">Verlauf</string>
     <string name="menu_interval">Intervall spielen</string>
     <string name="menu_interval_list">Musik-Intervalle</string>
+    <string name="menu_undefined">Was ist das?</string>
     <string name="menu_settings">Einstellungen</string>
     <string name="menu_help">Hilfe</string>
     <string name="menu_cheatSheet">Spickzettel</string>
@@ -91,7 +93,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     <string name="interval">Intervall</string>
     <string name="interval_keep">Welle antippen um offen zu halten</string>
     <string name="interval_swipe">wischen um die Phasenverschiebung zu ändern</string>
-    <string name="interval_noWave">Die Wellenfrequenz ist für diese Bildschirmauflösung zu hoch.</string>
+    <string name="interval_noWave">Wellenfrequenz ist für diese Bildschirmauflösung zu hoch.</string>
     <string name="octaves">%d Oktaven</string>
     <string name="between_intervals">zwischen %1$s und %2$s</string>
     <string name="interval_grammar_nom">kleine,große,reine</string>
@@ -102,6 +104,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     <string name="formats_hint">Alle Formate anzeigen</string>
     <string name="expand_hint">Aus- und einklappen</string>
     <string name="egyptian_method">Ägytischer Bruch: %s</string>
+    <string name="egyptian_phinary">Phinäre Rest-Methode</string>
     <string name="select_all">Alles auswählen</string>
     <string name="clear_selection">Auswahl aufheben</string>
     <string name="copy_my">Kopieren</string>
@@ -127,6 +130,7 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     <string name="count_digits">Ziffern zählen</string>
     <string name="count_denominators_title">Nenner</string>
     <string name="count_digits_title">Ziffern</string>
+    <string name="counting">🕰 Zähle…</string>
     <plurals name="denominators">
         <item quantity="one">%s Nenner</item>
         <item quantity="other">%s Nenner</item>
@@ -153,7 +157,6 @@ Contact: <https://lemizh.conlang.org/home/contact.php?about=qonvert>
     <string name="digits_rep">%s in der Periode</string>
     <string name="digits_numer">%s im Zähler</string>
     <string name="digits_denom">%s im Nenner</string>
-    <string name="digits_not_supported">Anzahl der Ziffern ist für phinäre ägyptische Brüche nicht verfügbar</string>
 
     <!-- Settings -->
     <string name="out_header">Ausgabe</string>
@@ -338,9 +341,9 @@ besteht, dass du in letzterem <code>Z</code>&nbsp;=&nbsp;−1 als Ziffer verwend
 endliche Darstellungen (allerdings meist mit Nachkommastellen), und nicht-ganze rationale Zahlen haben periodische Darstellungen. Das Gegenteil trifft nicht zu:
 Wenn du eine zufällige Ziffenfolge eingibst, bekommst du wahrscheinlich eine Fehlermeldung wie „101ᵩ (5/2+√5/2) ist nicht rational“.</p>
 <p>Die Ausgabe erfolgt ausschließlich mit den Ziffern 0 und 1 (Z für negative Zahlen im balancierten System), und nie mit zwei oder mehr 1en (oder Zs)
-hintereinander. Die Bestandteile von Brüchen, einschließlich Kettenbrüchen, sind nicht notwendigerweise ganze Zahlen, aber es sind immer Zahlen ohne
-Nachkommastellen (englisch: <i>phintegers</i>).
-Derzeit werden phinäre Zahlen weder als ägyptische Brüche noch als Brüche im DMS-Format ausgegeben.</p>
+hintereinander. Die Bestandteile von Brüchen, einschließlich Ketten- und ägyptischer Brüche, sind nicht notwendigerweise ganze Zahlen, aber es sind immer Zahlen
+ohne Nachkommastellen (englisch: <i>phintegers</i>). Ägyptische Brüche können mit der gierigen und der phinären Rest-Methode berechnet werden.
+Brüche im DMS-Format werden derzeit nicht unterstützt.</p>
 
 <h3>Negative Basen</h3>
 <p><a href="https://de.wikipedia.org/wiki/Stellenwertsystem%23Negative_Basen">Negative Basen</a> lassen sich mit allen Standard- und Nicht-Standard-Systemen
@@ -386,8 +389,8 @@ im balancierten Undezimalsystem benötigst, ist Qonvert deine <strong>einzige</s
  <li><strong>Tasten für Zahlensysteme</strong>: lang antippen wechselt zwischen Standard und balanciert.</li>
  <li><strong>Schieberegler</strong>: ganz nach rechts schieben zeigt einen Dialog zur Auswahl der Basis an.</li>
  <li><strong>Löschen (🗑)</strong>: lang antippen setzt Eingabe und Ausgabe auf Standard dezimal.</li>
- <li><strong>Qonvert-Tastatur</strong>: lang antippen für die Zweitbelegungen; ◀ oder runter wischen lässt sie verschwinden,
- und durch Antippen der Eingabezeile taucht sie wieder auf.</li>
+ <li><strong>Qonvert-Tastatur</strong>: lang antippen für die Zweitbelegungen; ◀ oder runter wischen lässt sie verschwinden, und durch Antippen der Eingabezeile
+ taucht sie wieder auf.</li>
  <li><strong>Einträge</strong> im Verlauf etc.: kurz antippen kopiert in die Eingabezeile, lang antippen schaltet Auswahl um. Im Auswahl-Modus wählt
  lang antippen einen zusammenhängenden Bereich aus.</li>
 </ul>
@@ -464,7 +467,7 @@ und dann die Leertaste ␣ antippen. (Bei manchen Android-Tastaturen sind zwei L
 </ul>
 
 <h3>Basis-Kürzel</h3>
-<p>… lassen sich in den Einstellungen definieren. Sie stehen vor einer Zahl. Die Standardwerte sind:</p>
+<p>… lassen sich in den Einstellungen definieren. Sie stehen vor einer Zahl. Die Voreinstellungen sind:</p>
 <ul>
  <li><code>@</code> : Standard binär (2)</li>
  <li><code>%23</code> : Standard oktal (8)</li>
@@ -481,6 +484,14 @@ und dann die Leertaste ␣ antippen. (Bei manchen Android-Tastaturen sind zwei L
 
     <!-- What’s new -->
     <string name="whatsNew"><![CDATA[
+<h2>Version 1.9.0 <small></small></h2>
+<p><strong>Berechnungen werden jetzt im Hintergrund ausgeführt</strong>; damit ist die App reaktionsfähiger.</p>
+<p><strong>Phinärsystem</strong>: Qonvert kann nun ägyptische Brüche mit der gierigen und der phinären Rest-Methode berechnen. Und wenn eine „irrationale“
+Fehlermeldung auftaucht, lässt sich die verantwortliche Eingabe mit ⛶ in standardisierter Form in allen verschiedenen Formaten anzeigen.</p>
+<p><strong>Basis und Zahlensystem</strong> lassen sich jetzt auch direkt auf den Bildschirmen „<strong>Alle Formate</strong>“ und
+„<strong>Musik-Intervalle</strong>“ verändern.</p>
+<p>Und wie immer: kleine Verbesserungen und Korrekturen.</p>
+
 <h2>Version 1.8.0 <small>– 3. Apr. 2023</small></h2>
 <p><strong>Basen bis ±280</strong> werden mit Hilfe immer exotischerer Ziffern unterstützt, und balancierte Basen bis <strong>±259</strong>.
 Auch <strong>Phinär balanciert</strong> wird jetzt unterstützt; du kannst hier <code>Z</code>&nbsp;=&nbsp;−1 als Ziffer für die Eingabe verwenden.</p>
