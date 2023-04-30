@@ -519,7 +519,7 @@ Qonvert is your <strong>only</strong> source. (The answer is 1YX&nbsp;215.)</p>
 
     <!-- What’s new -->
     <string name="whatsNew"><![CDATA[
-<h2>Version 1.9.0 <small></small></h2>
+<h2>Version 1.9.0 <small>– TBD</small></h2>
 <p><strong>Calculations are now done in the background</strong> to improve the app’s responsiveness when calculating very long representations.</p>
 <p><strong>Base phi</strong>: Qonvert can calculate Egyptian fractions for phinary with the greedy and the phinary remainder methods. And when an
 “irrational” error turns up, you can tap ⛶ to show the offending input in standardized form in all different formats.</p>
