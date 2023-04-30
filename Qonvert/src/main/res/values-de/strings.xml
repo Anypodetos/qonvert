@@ -484,7 +484,7 @@ und dann die Leertaste ␣ antippen. (Bei manchen Android-Tastaturen sind zwei L
 
     <!-- What’s new -->
     <string name="whatsNew"><![CDATA[
-<h2>Version 1.9.0 <small></small></h2>
+<h2>Version 1.9.0 <small>– noch im Entstehen</small></h2>
 <p><strong>Berechnungen werden jetzt im Hintergrund ausgeführt</strong>; damit ist die App reaktionsfähiger.</p>
 <p><strong>Phinärsystem</strong>: Qonvert kann nun ägyptische Brüche mit der gierigen und der phinären Rest-Methode berechnen. Und wenn eine „irrationale“
 Fehlermeldung auftaucht, lässt sich die verantwortliche Eingabe mit ⛶ in standardisierter Form in allen verschiedenen Formaten anzeigen.</p>
